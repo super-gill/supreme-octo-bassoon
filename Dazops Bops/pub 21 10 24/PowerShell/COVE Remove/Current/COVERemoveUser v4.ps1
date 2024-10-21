@@ -4,8 +4,6 @@
 
 .DESCRIPTION
     This script removes a user from all Teams teams and SharePoint sites, ensuring the user no longer appears in Cove.
-    It now includes functionality to automatically identify the admin UPN and admin URL for SharePoint sites.
-    It can optionally simulate the removal operation using the -WhatIf parameter, process multiple users from a CSV, and handle both Teams and SharePoint removals.
 
 .PARAMETER UserUPN
     The UPN of the user to be removed. Ignored if the -dir parameter is used.
