@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Neural Network Demo</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		
+		h1 {
+			margin-top: 50px;
+			font-size: 40px;
+		}
+		
+		.container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-top: 50px;
+		}
+		
+		.input {
+			width: 100px;
+			height: 100px;
+			margin: 10px;
+			border-radius: 50%;
+			background-color: #ddd;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 20px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+		
+		.input.active {
+			background-color: #3498db;
+			color: #fff;
+		}
+		
+		.hidden {
+			display: none;
+		}
+		
+		.output {
+			margin-top: 50px;
+			font-size: 20px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<h1>Neural Network Demo</h1>
+	<p>Click on the circles to activate the inputs:</p>
+	<div class="container">
+		<div class="input" id="input1">1</div>
+		<div class="input" id="input2">2</div>
+		<div class="input" id="input3">3</div>
+		<div class="input" id="input4">4</div>
+	</div>
+	<div class="output hidden" id="output"></div>
+	<script>
+		// Define the neural network weights
+		const weights = [0.1, 0.2, 0.3, 0.4];
+		
+		// Define the activation function (sigmoid)
+		function sigmoid(x) {
+			return 1 / (1 + Math.exp(-x));
+		}
+		
+		// Define the function to calculate the output of the neural network
+		function calculateOutput(inputs) {
+			let output = 0;
+			for (let i = 0; i < inputs.length; i++) {
+				output += inputs[i] * weights[i];
+			}
+			return sigmoid(output);
+		}
+		
+		// Add click event listeners to the input circles
+		const inputs = document.querySelectorAll('.input');
+		inputs.forEach(input => {
+			input.addEventListener('click', () => {
+				input.classList.toggle('active');
+				const activeInputs = Array.from(inputs).filter(input => input.classList.contains('active')).map(input => parseInt(input.textContent));
+				if (activeInputs.length > 0) {
+					const output = calculateOutput(activeInputs);
+					document.querySelector('#output').textContent = `Output: ${output.toFixed(2)}`;
+					document.querySelector('#output').classList.remove('hidden');
+				} else {
+					document.querySelector('#output').classList.add('hidden');
+				}
+			});
+		});
+	</script>
+</body>
+</html>

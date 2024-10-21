@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Game Board</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(9, 50px);
+            grid-template-rows: repeat(2, 50px);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            width: 150px;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        .input-word {
+            margin-bottom: 20px;
+        }
+        .input-word input {
+            width: 450px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .player-word {
+            display: grid;
+            grid-template-columns: repeat(9, 50px);
+            gap: 10px;
+        }
+        .player-cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-board">
+        <div class="cell" id="cell-1"></div>
+        <div class="cell" id="cell-2"></div>
+        <div class="cell" id="cell-3"></div>
+        <div class="cell" id="cell-4"></div>
+        <div class="cell" id="cell-5"></div>
+        <div class="cell" id="cell-6"></div>
+        <div class="cell" id="cell-7"></div>
+        <div class="cell" id="cell-8"></div>
+        <div class="cell" id="cell-9"></div>
+        <div class="cell" id="cell-10"></div>
+        <div class="cell" id="cell-11"></div>
+        <div class="cell" id="cell-12"></div>
+        <div class="cell" id="cell-13"></div>
+        <div class="cell" id="cell-14"></div>
+        <div class="cell" id="cell-15"></div>
+        <div class="cell" id="cell-16"></div>
+        <div class="cell" id="cell-17"></div>
+        <div class="cell" id="cell-18"></div>
+    </div>
+    <div class="buttons">
+        <button id="add-consonant">Add Consonant</button>
+        <button id="add-vowel">Add Vowel</button>
+    </div>
+    <div class="input-word">
+        <input type="text" id="typed-word" placeholder="Type your word here">
+    </div>
+    <div class="player-word">
+        <div class="player-cell" id="player-cell-1"></div>
+        <div class="player-cell" id="player-cell-2"></div>
+        <div class="player-cell" id="player-cell-3"></div>
+        <div class="player-cell" id="player-cell-4"></div>
+        <div class="player-cell" id="player-cell-5"></div>
+        <div class="player-cell" id="player-cell-6"></div>
+        <div class="player-cell" id="player-cell-7"></div>
+        <div class="player-cell" id="player-cell-8"></div>
+        <div class="player-cell" id="player-cell-9"></div>
+    </div>
+
+    <script>
+        const consonants = "BCDFGHJKLMNPQRSTVWXYZ";
+        const vowels = "AEIOU";
+
+        document.getElementById('add-consonant').addEventListener('click', () => {
+            addLetter(consonants);
+        });
+
+        document.getElementById('add-vowel').addEventListener('click', () => {
+            addLetter(vowels);
+        });
+
+        function addLetter(letters) {
+            const firstRowCells = [...document.querySelectorAll('.cell')].slice(0, 9).filter(cell => !cell.textContent);
+            if (firstRowCells.length > 0) {
+                const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+                firstRowCells[0].textContent = randomLetter;
+            }
+        }
+
+        document.getElementById('typed-word').addEventListener('input', (event) => {
+            const inputWord = event.target.value.toUpperCase().slice(0, 9);
+            const playerCells = document.querySelectorAll('.player-cell');
+            playerCells.forEach((cell, index) => {
+                cell.textContent = inputWord[index] || '';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="flex-col" lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+
+  <title>Frontend Mentor | Tip calculator app</title>
+
+  <style>
+    /* GLOBAL STYLES */
+
+    * {
+      box-sizing: border-box;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    :root {
+      --Strong-cyan: hsl(172, 67%, 45%);
+      --Very-dark-cyan: hsl(183, 100%, 15%);
+      --Dark-grayish-cyan: hsl(186, 14%, 43%);
+      --Grayish-cyan: hsl(184, 14%, 56%);
+      --Light-grayish-cyan: hsl(185, 41%, 84%);
+      --Very-light-grayish-cyan: hsl(180, 53%, 93%);
+      --White: hsl(0, 0%, 100%);
+      --error: hsl(24, 59%, 53%);
+      min-height: 100vh;
+      font-size: 16px;
+      font-family: 'Space Mono';
+    }
+
+    .flex-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    body {
+      height: 100%;
+      background-color: var(--Light-grayish-cyan);
+    }
+
+    h1 {
+      letter-spacing: 10px;
+      margin-bottom: 60px;
+      font-size: 1.6rem;
+      text-align: center;
+      color: var(--Dark-grayish-cyan);
+    }
+
+    .calc-ctr {
+      align-items: flex-start;
+      background-color: white;
+      height: 480px;
+      width: 920px;
+      border-radius: 20px;
+      padding: 30px;
+      gap: 25px;
+    }
+
+    button {
+      all: unset;
+      cursor: pointer;
+      text-align: center;
+      color: var(--Very-light-grayish-cyan);
+      border: solid;
+    }
+
+    button>p {
+      text-align: center;
+      color: var(--Very-light-grayish-cyan);
+    }
+
+    .zero-error,
+    .answer {
+      text-align: right;
+    }
+
+    /* ERROR STATE */
+
+    .zero-error {
+      display: none;
+      color: var(--error);
+    }
+
+    .input-error {
+      border: solid var(--error);
+    }
+
+    /* LEFT PANE */
+
+    .calc-left-pane {
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .section-title {
+      margin-bottom: 10px;
+    }
+
+    .bill-input-icon {
+      position: relative;
+      width: 10%;
+      border: solid black;
+      height: 54px;
+      background-color: var(--Very-light-grayish-cyan);
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    
+    .bill-input,
+    .people-input {
+      height: 50px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 17px;
+      grid-template-areas:
+        "opt1 opt2 opt3"
+        "opt4 opt5 opt6";
+    }
+
+    .opt {
+      text-align: center;
+      color: white;
+      font-size: 2rem;
+      background-color: var(--Very-dark-cyan);
+      height: 50px;
+      width: 118px;
+      padding: 0;
+      border-radius: 6px;
+      justify-self: center;
+    }
+
+    .opt>input {
+      all: unset;
+      height: 100%;
+    }
+
+    input {
+      all: unset;
+      border: solid var(--Very-light-grayish-cyan);
+      background-color: var(--Very-light-grayish-cyan);
+      border-radius: 5px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.8rem;
+      color: var(--Very-dark-cyan);
+    }
+
+    .opt6 {
+      background-color: var(--Very-light-grayish-cyan);
+      color: var(--Very-dark-cyan);
+    }
+
+    .opt6::-webkit-input-placeholder {
+      font-size: 1.6rem;
+      color: grey;
+      text-align: center;
+      padding: 0;
+    }
+
+    .bill-input::-webkit-input-placeholder {
+      font-size: 1.8rem;
+      color: grey;
+      padding: 0;
+    }
+
+    .people-input::-webkit-input-placeholder {
+      font-size: 1.8rem;
+      color: grey;
+      padding: 0;
+    }
+
+    button>p {
+      font-size: 1.5rem;
+    }
+
+    /* RIGHT PANE */
+
+    .calc-right-pane {
+      height: 100%;
+      background-color: var(--Very-dark-cyan);
+      border-radius: 20px;
+      justify-content: space-between;
+      padding: 50px;
+    }
+
+    .answer-grid {
+      row-gap: 40px;
+    }
+
+    .top-ctr,
+    .bottom-ctr {
+      justify-content: space-between;
+    }
+
+    .total-right {
+      color: var(--Very-light-grayish-cyan);
+    }
+
+    .person {
+      font-size: 0.8rem;
+      font-weight: normal;
+      color: var(--Light-grayish-cyan)
+    }
+
+    .answer {
+      font-size: 2.5rem;
+      color: var(--Strong-cyan);
+    }
+
+    .reset-button {
+      background-color: var(--Strong-cyan);
+      border: solid var(--Strong-cyan);
+      border-radius: 5px;
+      padding: 5px;
+      width: 100%;
+    }
+
+    .reset-button>p {
+      color: var(--Very-dark-cyan);
+      font-size: 1.5rem;
+
+    }
+
+    /* HOVER STATES */
+
+    button:hover {
+      background-color: var(--Strong-cyan);
+    }
+
+    .reset-button:hover {
+      background-color: var(--Light-grayish-cyan);
+      border: solid var(--Light-grayish-cyan);
+    }
+
+    .opt6:hover {
+      border: solid var(--Strong-cyan)
+    }
+
+    input:hover {
+      border: solid var(--Strong-cyan);
+    }
+
+    .bill-input-icon:hover + .bill-input {
+      border: solid var(--Strong-cyan);
+    }
+
+    /* FOOTER */
+
+    .attribution {
+      position: absolute;
+      bottom: 0%;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .attribution a {
+      color: hsl(228, 45%, 44%);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="flex-col">
+    <h1>SPLI<br>TTER</h1>
+    <div class="calc-ctr flex-row">
+      <div class="calc-left-pane flex-col">
+        <div class="bill-ctr">
+          <div class="flex-row">
+            <p class="section-title" id="bill">Bill</p>
+          </div>
+          <input class="bill-input" type="text" placeholder="43.21">
+        </div>
+        <div>
+          <div>
+            <p class="section-title">Select Tip %</p>
+          </div>
+          <div class="tip-ctr option-grid">
+            <button class="opt1 opt">
+              <p class="tip">5%</p>
+            </button>
+            <button class="opt2 opt">
+              <p class="tip">10%</p>
+            </button>
+            <button class="opt3 opt">
+              <p class="tip">15%</p>
+            </button>
+            <button class="opt4 opt">
+              <p class="tip">25%</p>
+            </button>
+            <button class="opt5 opt">
+              <p class="tip">50%</p>
+            </button>
+              <input class="opt6 opt" type="text" placeholder="Custom" onblur="getBillVal()">
+          </div>
+        </div>
+        <div class="people-ctr">
+          <div class="flex-row">
+            <div>
+              <p class="section-title">Number of People</p>
+            </div>
+            <p class="zero-error">Can't be zero</p>
+          </div>
+          <input class="people-input" type="text" placeholder="2">
+        </div>
+      </div>
+      <div class="calc-right-pane flex-col">
+        <div class="answer-grid flex-col">
+          <div class="top-ctr flex-row">
+            <div class="top-left">
+              <p class="total-right">Tip Amount</p>
+              <p class="person">/ person</p>
+            </div>
+            <div>
+              <div class="top-right">
+                <p class="answer total-tip">$00.00</p>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-ctr flex-row">
+            <div class="bottom-left">
+              <p class="total-right">Total</p>
+              <p class="person">/ person</p>
+            </div>
+            <div class="bottom-right">
+              <p class="answer total-bill">$00.00</p>
+            </div>
+          </div>
+        </div><button onclick="billTotalTip()" class="calc-button">
+          <p>calculate</p>
+        </button>
+        <button class="reset-button">
+          <p>RESET</p>
+        </button>
+      </div>
+    </div>
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+      Coded by <a href="#">Jason Mcdill</a>.
+    </div>
+  </main>
+  <script src="java.js"></script>
+</body>
+
+</html>

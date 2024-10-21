@@ -1,0 +1,175 @@
+/* Global */
+
+body {
+    font-family: montserrat;
+    font-weight: bold;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: montserrat;
+    font-weight: bold;
+}
+
+.container-fluid {
+    padding: 7% 15%;
+}
+
+/* Sections */
+
+.coloured {
+    background-color: #ff4c68;
+    color: white;
+}
+
+.white {
+    background-color: #fff;
+}
+
+
+/* Headings */
+
+.big-heading {
+    font-size: 3.5rem;
+    font-family: montserrat;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.section-heading {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+/* Navigation bar */
+
+.navbar {
+    padding: 0 0 4.5rem;
+}
+
+.navbar-brand {
+    font-family: ubuntu;
+    font-size: 2.5rem;
+    font-weight: medium;
+}
+
+.nav-item {
+    padding: 0 18px;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    font-family: montserrat;
+    font-weight: light;
+}
+
+/* Title Section */
+
+#title .container-fluid {
+    padding: 3% 15% 7%;
+    text-align: left;
+}
+
+.download-btn {
+    margin: 5% 3% 5% 0;
+}
+
+.title-img {
+    width: 60%;
+    transform: rotate(25deg);
+    position: absolute;
+    right: 30%;
+}
+
+@media (max-width: 1028px) {
+    .title-img {
+        transform: rotate(0);
+        position: static;
+    }
+
+    #title {
+        text-align: center;
+    }
+}
+
+/* Features Section */
+
+#features {
+    font-size: 1.5rem;
+    position: relative;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+}
+
+.features-text {
+    color: #8f8f8f;
+    font-size: 1.1rem;
+    font-weight: medium;
+}
+
+.features-icon {
+    color: #ef8172;
+}
+
+.features-icon:hover {
+    color: #ff4c68;
+}
+
+.features-col {
+    padding: 1rem 4.5rem;
+    /* margin: 0 30px 0 30px; */
+}
+
+/* Testiesmonial Section */
+
+#testimonials {
+    background-color: #ef8172;
+}
+
+.testimonial-text {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+.testimonial-img {
+    width: 10%;
+    border-radius: 100%;
+}
+
+/* Press Section */
+
+#press {
+    background-color: #ef8172;
+    padding-bottom: 3%;
+}
+
+.press-logo {
+    width: 15%;
+    margin: 20px 20px 50px;
+}
+
+
+/* Pricing Section */
+
+#pricing {
+    padding: 100px;
+}
+
+.price-text {
+    font-size: 3rem;
+    line-height: 1.5;
+}
+
+.pricing-col {
+    padding: 3% 2%;
+}
+
+/* CTA Section */
+
+/* Footer Section */
+
+.footer-icon {
+    padding: 10px;
+}

@@ -1,0 +1,151 @@
+/* Global Classes */
+.global-size {
+    height: 30rem;
+    width: 20rem;      
+  }
+
+  .flex-cc {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .flex-display {
+    display:flex;
+  }
+
+  .light-bg {
+    background: hsl(30, 38%, 92%);
+  }
+
+  .dark-bg {
+    background-color: hsl(158, 36%, 37%)
+  }
+
+
+  /* Main HTML Tags */
+  html {
+    min-height: 90vh;
+  }
+
+  body {
+    flex-direction: column;
+    resize: none;  
+    }
+
+  main {
+    resize: none;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 1rem;
+    width: 40rem;
+    height: 30rem;
+    margin: 1rem;
+    font-family: 'montserrat';
+    color: hsl(228, 12%, 48%);
+  }
+
+  .text-container {
+    resize: none;
+    width: 20rem;
+    height: 30rem;
+    padding: 1rem 2rem 1rem 2rem;
+  }
+
+  picture img {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+  }
+
+  .mobile-picture {
+    display: none;
+    background: hsl(30, 38%, 92%);
+  }
+
+  p {
+    font-size: 0.875em;
+  }
+
+  h1 {
+    padding-top: 1rem;
+    font-family: 'Fraunces';
+    color: black;
+  }
+
+  h2 {
+    padding-top: 1rem;
+    font-size: 0.875em;
+    letter-spacing: 0.3125rem;
+  }
+
+  .price-container {
+    flex-direction: row;
+  }
+
+  .price-container h1 {
+    color: hsl(158, 36%, 37%);
+  }
+  
+  .new-price {
+    padding-top: 0;
+  }
+
+  .old-price {
+    text-decoration: line-through;
+    padding-left: 1.5rem;
+  }
+
+  .button-container {
+    padding-top: 0.5rem;
+    width: 100%;
+  }
+
+  button {
+    background-color: hsl(158, 36%, 37%) !important;
+    color: white !important;
+    width: 100% !important;
+    font-size: 0.8rem !important;
+  }
+
+  footer {
+    display: block;
+    display: block;
+    text-align: center;
+  }
+
+  /* mobile breakpoint */
+  @media only screen and (max-width: 1000px) {
+
+    main {
+      flex-direction: column;
+      width: 20rem;
+
+    }
+
+    .text-container {
+      height: 60rem;
+      background-color: white;
+      border-bottom-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+
+    picture img {
+      content: url(images/image-product-mobile.jpg);
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      border-bottom-left-radius: 0; /* i couldnt find what was causing this radius :( */
+      height: 15rem !important;
+    }
+
+    h1 {
+      line-height: 1;
+      font-size: 1.5rem;
+    }
+
+    footer {
+      display: none;
+    }
+
+  }

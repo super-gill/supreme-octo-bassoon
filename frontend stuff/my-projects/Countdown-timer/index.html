@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>IVA Countdown</title>
+	</head>
+	<title>IVA Countdown</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			font-family: Arial, sans-serif;
+			background-color: #f7f7f7;
+		}
+
+		.root {
+			max-height: 100vh;
+		}
+
+		.timer-container {
+			width: 50%;
+			margin: 0 auto;
+			text-align: center;
+			padding-top: 50px;
+		}
+
+		.timer-container h1 {
+			font-size: 3rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.timer-container p {
+			font-size: 1.5rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.progress-bar {
+			height: 1.8rem;
+			background-color: #ddd;
+			border-radius: 15px;
+			overflow: hidden;
+			margin-bottom: 20px;
+		}
+
+		.progress-bar span {
+			display: block;
+			height: 100%;
+			background-color: #3f51b5;
+			border-radius: 15px;
+			transition: width 1s ease-in-out;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="timer-container">
+		<h1>IVA Countdown</h1>
+		<p>Time left until the end of my IVA:</p>
+		<div class="progress-bar">
+			<span id="progress-bar"></span>
+		</div>
+	</div>
+
+	<script>
+		// Set the end date
+		const endDate = new Date("2024-10-31");
+
+		// Define the bar length
+		const startDate = new Date();
+		startDate.setFullYear(startDate.getFullYear() - 5);
+
+		const durationInDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+		const today = new Date();
+		const timeLeftInDays = Math.floor((endDate - today) / (1000 * 60 * 60 * 24));
+		const progressPercent = ((timeLeftInDays / durationInDays) * 100).toFixed(2);
+		const progressBar = document.getElementById("progress-bar");
+		const timerContainer = document.querySelector(".timer-container");
+		const timeLeft = document.createElement("p");
+
+		progressBar.style.width = `${progressPercent}%`;
+		timeLeft.textContent = `${timeLeftInDays} days left`;
+		timerContainer.appendChild(timeLeft);
+	</script>
+</body>
+
+</html>

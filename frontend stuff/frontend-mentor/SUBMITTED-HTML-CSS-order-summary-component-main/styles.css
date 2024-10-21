@@ -1,0 +1,135 @@
+:root {
+    --pale-blue: hsl(225, 100%, 94%);
+    --very-pale-blue: hsl(225, 100%, 98%);
+    --desat-blue: hsl(252, 53%, 55%);
+    --bright-blue: hsl(245, 75%, 52%);
+    --dark-blue: hsl(223, 47%, 23%);
+    min-height: 100vh;
+    font-family: 'red hat display', sans-serif;
+    text-align: center;
+  }
+
+  h1 {
+    margin-top: 30px;
+    font-weight: 900;
+  }
+
+  h2,
+  h3,
+  a {
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin: 0px;
+  }
+
+  P,
+  a {
+    color: var(--desat-blue);
+    font-size: 0.8rem;
+    margin: 0;
+    text-decoration: none;
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--pale-blue);
+    background-image: url(images/pattern-background-desktop.svg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+
+  main {
+    width: 380px;
+    background-color: white;
+    border-radius: 1rem;
+  }
+
+  .card,
+  .plan-container {
+    padding: 20px;
+  }
+
+  .img-top {
+    width: 100%;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  .card-body {
+    padding: 0 50px 0 50px;
+  }
+
+  .plan-container {
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--very-pale-blue);
+    margin-top: 30px;
+    border-radius: 1rem;
+  }
+
+  .annual-plan,
+  .plan-details {
+    justify-content: flex-start;
+  }
+
+  .plan-details {
+    align-items: flex-start;
+    padding-left: 10px;
+  }
+
+  button {
+    width: 100%;
+    background-color: var(--bright-blue);
+    color: white;
+    border-radius: 0.5rem;
+    padding: 10px;
+    border-style: none;
+  }
+
+  .button-container,
+  .cancel {
+    margin-top: 30px;
+  }
+
+  button:hover {
+    background-color: var(--desat-blue);
+    cursor: pointer;
+  }
+
+  .cancel,
+  .cancel-container {
+    margin: 20px 0 20px 0;
+  }
+
+  .cancel:hover,
+  .change:hover {
+    color: var(--dark-blue);
+  }
+
+  /* Footer */
+  .attribution {
+    padding: 10px;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .attribution a {
+    color: hsl(228, 45%, 44%);
+  }

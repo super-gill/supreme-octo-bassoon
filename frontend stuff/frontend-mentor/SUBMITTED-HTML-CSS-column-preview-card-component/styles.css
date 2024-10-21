@@ -1,0 +1,119 @@
+/* Main tags */
+html {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+.content-container {
+    padding: 40px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    color: hsl(0, 0%, 95%);
+}
+.card-container {
+    float: inherit;
+    width: 250px;
+}
+h1 {
+    font-family: 'big shoulders display';
+}
+p {
+    font-family: 'Lexend deca';
+    font-size: 0.8rem;
+    line-height: 2;
+}
+.sedan {
+    background-color: hsl(31, 77%, 52%);
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    ;
+}
+.suv {
+    background-color: hsl(184, 100%, 22%);
+}
+.luxuary {
+    background-color: hsl(179, 100%, 13%);
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5Srem;
+}
+.button-container {
+    padding-top: 50px;
+}
+
+/* Button inital state */
+.button-inital {
+    border-radius: 1.5rem;
+    border-style: solid;
+    border-color: hsl(0, 0%, 95%);
+    padding: 10px 20px;
+    background-color: hsl(0, 0%, 95%);
+    font-weight: bold;
+}
+.sedan-button {
+    color: hsl(31, 77%, 52%);
+}
+.suv-button {
+    color: hsl(184, 100%, 22%);
+}
+.luxuary-button {
+    color: hsl(179, 100%, 13%);
+}
+
+/* Button Hover State */
+/* global button hover state */
+.button-hover:hover {
+    border-color: hsl(0, 0%, 95%);
+    border-style: solid;
+    color: hsl(0, 0%, 95%);
+    ;
+}
+
+/* Individual button hover-colour states */
+.sedan-button:hover {
+    background-color: hsl(31, 77%, 52%);
+}
+.suv-button:hover {
+    background-color: hsl(184, 100%, 22%);
+}
+.luxuary-button:hover {
+    background-color: hsl(179, 100%, 13%);
+}
+
+/* Footer */
+.attribution {
+    font-size: 11px;
+    text-align: center;
+    font-family: sans-serif;
+    padding-top: 20px;
+}
+.attribution a {
+    color: hsl(228, 45%, 44%);
+}
+
+/* Breakpoint */
+@media only screen and (max-width: 750px) {
+    main {
+        flex-direction: column;
+    }
+    .sedan {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        border-bottom-left-radius: 0rem;
+    }
+    .luxuary {
+        border-top-right-radius: 0rem;
+        border-bottom-right-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+    }
+    .button-container {
+        padding-top: 10px;
+    }
+}

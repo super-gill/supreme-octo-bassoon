@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" class="flex">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        :root {
+            font-size: 16px;
+            min-height: 100vh;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .calc-outline {
+            width: 20rem;
+            height: 25rem;
+            border: solid 4px black;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .buttongrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            grid-template-areas:
+                "bracketOpen bracketClose percent cancel"
+                "seven eight nine divide"
+                "four five six multiply"
+                "one two three subtract"
+                "zero decimal equals add";
+        }
+
+        .button {
+            width: 1rem;
+            height: 1rem;
+            border: solid 1rem black;
+        }
+
+
+
+    </style>
+
+</head class="flex">
+
+<body class="flex">
+
+    <div class="calc-outline">
+        <div class="field"></div>
+        <div class="buttongrid"></div>
+
+
+
+        <div class="button bracketOpen"></div>
+        <div class="button bracketClose"></div>
+        <div class="button percent"></div>
+        <div class="button cancel"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+        <div class="button"></div>
+    </div>
+
+
+
+</body>
+
+</html>

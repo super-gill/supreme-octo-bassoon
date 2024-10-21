@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <style>
+        /* heirarchial right to left because it has a space and the second selector is a child */
+        .container .title-1 {
+            color: red;
+        }
+
+        /* no parent or child relationship because there is no space so it wont work because they need to be in the same component */
+        .container.title-2 {
+            color: blue;
+        }
+
+        /* this is correct without the space because both references are in the same component */
+        h1.title-2 {
+            color: green;
+        }
+
+        /* they can also be seperated by a comma which just includes all of them in one style: */
+
+        h1, h2, h3, h4, .title, .container /* etc */ {
+            font-size: 10rem;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="title-1">
+            Hello World!
+        </h1>
+    </div>
+
+    <div class="container-fluid">
+        <h1 class="title-2">
+            Bye World!
+        </h1>
+    </div>
+
+</body>
+
+</html>

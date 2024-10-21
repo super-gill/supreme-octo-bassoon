@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html class="flex-col" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Frontend Mentor | NFT preview card component</title>
+    
+</head>
+<body class="flex-col">
+    <main class="flex-col">
+        <section>
+            <div>
+                <div class="img-container">
+                    <a href="#">
+                        <img class="nft-img" src="images/image-equilibrium.jpg" alt="nft image">
+                    </a>
+                    <div class="overlay flex-col">
+                        <img class="view-icon" src="images/icon-view.svg" alt="view icon">
+                    </div>
+                </div>
+            </div>
+            <h1><a href="#">Equilibrium #3429</a></h1>
+            <p>Our Equilibrium collection promotes balance and calm.</p>
+            <div class="transaction-data flex-row">
+                <div>
+                    <p class="eth-price">
+                        <svg width="11" height="18" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11 10.216 5.5 18 0 10.216l5.5 3.263 5.5-3.262ZM5.5 0l5.496 9.169L5.5 12.43 0 9.17 5.5 0Z"
+                                fill="#00FFF8" />
+                        </svg>
+                        &nbsp;0.041 ETH
+                    </p>
+                </div>
+                <div>
+                    <p class="padding-adjust">
+                        <svg width="17" height="17" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M8.305 2.007a6.667 6.667 0 1 0 0 13.334 6.667 6.667 0 0 0 0-13.334Zm2.667 7.334H8.305a.667.667 0 0 1-.667-.667V6.007a.667.667 0 0 1 1.334 0v2h2a.667.667 0 0 1 0 1.334Z"
+                                fill="#8BACD9" />
+                        </svg>
+                        &nbsp;3 days left
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="card-foot flex-row">
+                <img class="avatar" src="images/image-avatar.png" alt="creator avatar">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Creation of <a href="#">Jules Wyvern</a></p>
+            </div>
+        </section>
+    </main>
+    <div class="attribution">
+        Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+        Coded by <a href="#">Jason Mcdill</a>.
+    </div>
+</body>
+
+</html>

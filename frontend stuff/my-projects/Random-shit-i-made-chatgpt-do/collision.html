@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Mouse Collision Demo</title>
+    <style>
+      body {
+        height: 100vh;
+        background-color: #2C2C36;
+        cursor: default;
+      }
+
+      .obstacle {
+        width: 100px;
+        height: 100px;
+        background-color: #67687D;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.1s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="obstacle"></div>
+
+    <script>
+      let obstacle = document.querySelector('.obstacle');
+      let mouseX = 0;
+      let mouseY = 0;
+      let collision = false;
+      let angle = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        detectCollision();
+      });
+
+      function detectCollision() {
+        let obstacleX = obstacle.getBoundingClientRect().left;
+        let obstacleY = obstacle.getBoundingClientRect().top;
+        let obstacleRadius = obstacle.getBoundingClientRect().width / 2;
+
+        let distanceX = obstacleX - mouseX;
+        let distanceY = obstacleY - mouseY;
+
+        let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        if (distance <= obstacleRadius) {
+          collision = true;
+          let angleRad = Math.atan2(distanceY, distanceX);
+          angle = angleRad * (180 / Math.PI) + 180;
+          obstacle.style.backgroundColor = 'red';
+        } else {
+          collision = false;
+          obstacle.style.backgroundColor = '#67687D';
+        }
+      }
+
+      function moveObstacle() {
+        if (collision) {
+          let newX = obstacle.getBoundingClientRect().left - Math.cos(angle * Math.PI / 180) * 10;
+          let newY = obstacle.getBoundingClientRect().top - Math.sin(angle * Math.PI / 180) * 10;
+          obstacle.style.left = newX + 'px';
+          obstacle.style.top = newY + 'px';
+        }
+      }
+
+      setInterval(moveObstacle, 16);
+    </script>
+  </body>
+</html>

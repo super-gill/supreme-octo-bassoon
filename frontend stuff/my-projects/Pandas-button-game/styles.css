@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+}
+
+body {
+  display: grid;
+  place-content: center center;
+  place-items: center;
+  margin: 150px 150px;
+  text-align: center;
+  /*   border: 1px solid grey; */
+}
+
+header {
+  margin: 10px 20px;
+}
+
+.container {
+  height: 300px;
+  width: 300px;
+  border: 1px solid grey;
+  display: grid;
+  place-content: center center;
+  border-radius: 0.5rem;
+}
+
+.btn {
+  display: grid;
+  place-content: center center;
+}
+
+.red {
+  background: red;
+  height: 100px;
+  width: 100px;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.blue {
+  background: dodgerblue;
+  color: white;
+  height: 100px;
+  width: 100px;
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.pressed {
+  background-color: gainsboro;
+  border: 2px solid white;
+}
