@@ -37,7 +37,7 @@
 param(
     [string]$adminURL, # The admin URL for the SharePoint site.
     [string]$userUPN, # The UPN of the user to be removed.
-    [switch]$whatIf = $true, # Flag WhatIf (default to true).
+    [bool]$whatIf = $true, # Flag WhatIf (default to true).
     [string]$adminUPN, # The admin UPN to be added as a site collection admin.
     [string]$dir, # The directory to the UPN CSV.
     [switch]$CSV # Tell the script you have a CSV.
