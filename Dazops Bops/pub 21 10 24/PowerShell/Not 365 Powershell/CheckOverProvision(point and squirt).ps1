@@ -1,9 +1,24 @@
-$volumes = Get-Volume | Where-Object { $_.DriveLetter -and $_.DriveType -eq 'Fixed' }
+param (
+    [string]$driveLetter
+)
+
+Write-Host ""
+
+if ($driveLetter) {
+    $volumes = get-volume | Where-Object { $_.DriveLetter -eq $driveLetter }
+    Write-Host "Searching for volumes assigned to $($driveLetter):`n"
+} else {
+    $volumes = Get-Volume | Where-Object { $_.DriveLetter -and $_.DriveType -eq 'Fixed' }
+    Write-Host "Will search the following drives:"
+    foreach($volume in $volumes) {Write-Host "$($volume.DriveLetter):"}
+    Write-Host ""
+}
 
 foreach ($volume in $volumes) {
     $volumeInfo = Get-Volume -DriveLetter $volume.DriveLetter
+    Write-Host -NoNewline "Scanning $($volume.DriveLetter): for VHD files..."
+    Write-Host  "`rDone searching.             `n"
 
-    $vhdFiles = Get-ChildItem "$($volume.DriveLetter):\" -Recurse -Depth 2 -Include *.vhd, *.vhdx -ErrorAction SilentlyContinue
     $currentSize = 0
     $maxSize = 0
 
@@ -24,19 +39,19 @@ foreach ($volume in $volumes) {
     $fullyProvisionedFreeSpace = $volumeInfo.SizeRemaining / 1GB - $maxSize + $currentSize
 
     Write-Host "Volume $($volume.DriveLetter):"
-    Write-Host "  Currently Provisioned VHD Space: $currentSize GB"
-    Write-Host "  Max Possible VHD Space: $maxSize GB"
-    Write-Host "  Fully Provisioned Free Space: $fullyProvisionedFreeSpace GB"
+    Write-Host "  Currently Provisioned VHD Space: $([math]::round($currentSize,2)) GB"
+    Write-Host "  Max Possible VHD Space: $([math]::round($maxSize,2)) GB"
+    Write-Host "  Fully Provisioned Free Space: $([math]::round($fullyProvisionedFreeSpace,2)) GB"
 
     if ($volumeInfo.Size -ne 0) {
         $provisionedUsagePercentage = ((($volumeInfo.Size / 1GB) - ($volumeInfo.SizeRemaining / 1GB) + $maxSize - $currentSize) * 100 / ($volumeInfo.Size / 1GB))
-        Write-Host "  Provisioned Usage Percentage: $provisionedUsagePercentage %"
+        Write-Host "  Provisioned Usage Percentage: $([math]::Round($provisionedUsagePercentage,2)) %"
     } else {
         Write-Host "  Provisioned Usage Percentage: Not Applicable (Size is 0)"
     }
 
     if ($fullyProvisionedFreeSpace -le 0) {
-        Write-Host "  Yo Dawg - You've over provisioned your virtual disks" -ForegroundColor Red
+        Write-Host "  Yo Dawg - You've over-provisioned your virtual disks" -ForegroundColor Red
     } else {
         Write-Host "  Status: All Good" -ForegroundColor Green
     }

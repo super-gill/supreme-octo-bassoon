@@ -71,9 +71,6 @@ else {
         )
         if (!(Test-Path -LiteralPath $dirPath)) {
             New-Item -Path $dirPath -ItemType Directory | Out-Null
-            Write-Host ""
-            Write-Host "Created: $($dirPath)" -ForegroundColor Green
-            Write-Host ""
         }
     }
 
