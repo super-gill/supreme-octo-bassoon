@@ -1,16 +1,21 @@
 param (
-    [string]$driveLetter
+    [string]$driveLetter,
+    [switch]$verbose
 )
 
-Write-Host ""
+$version = 1
+Write-Host "`nVersion: $($version)"
+Write-Host "Check Overprovsion 2: The Reiteratoration"
+Write-Host "------------------------------`n"
 
 if ($driveLetter) {
     $volumes = get-volume | Where-Object { $_.DriveLetter -eq $driveLetter }
     Write-Host "Searching for volumes assigned to $($driveLetter):`n"
-} else {
+}
+else {
     $volumes = Get-Volume | Where-Object { $_.DriveLetter -and $_.DriveType -eq 'Fixed' }
     Write-Host "Will search the following drives:"
-    foreach($volume in $volumes) {Write-Host "$($volume.DriveLetter):"}
+    foreach ($volume in $volumes) { Write-Host "$($volume.DriveLetter):" }
     Write-Host ""
 }
 
@@ -27,7 +32,8 @@ foreach ($volume in $volumes) {
         foreach ($file in $vhdFiles) {
             try {
                 $vhdInfo += Get-VHD -Path $file.FullName -ErrorAction Stop
-            } catch {
+            }
+            catch {
                 Write-Host "Error accessing VHD file: $($file.FullName)" -ForegroundColor Yellow
             }
         }
@@ -39,22 +45,26 @@ foreach ($volume in $volumes) {
     $fullyProvisionedFreeSpace = $volumeInfo.SizeRemaining / 1GB - $maxSize + $currentSize
 
     Write-Host "Volume $($volume.DriveLetter):"
-    Write-Host "  Currently Provisioned VHD Space: $([math]::round($currentSize,2)) GB"
-    Write-Host "  Max Possible VHD Space: $([math]::round($maxSize,2)) GB"
-    Write-Host "  Fully Provisioned Free Space: $([math]::round($fullyProvisionedFreeSpace,2)) GB"
+    if ($verbose) {
+        Write-Host "  Currently Provisioned VHD Space: $([math]::round($currentSize,2)) GB"
+        Write-Host "  Max Possible VHD Space: $([math]::round($maxSize,2)) GB"
+        Write-Host "  Fully Provisioned Free Space: $([math]::round($fullyProvisionedFreeSpace,2)) GB"
+    }
 
     if ($volumeInfo.Size -ne 0) {
         $provisionedUsagePercentage = ((($volumeInfo.Size / 1GB) - ($volumeInfo.SizeRemaining / 1GB) + $maxSize - $currentSize) * 100 / ($volumeInfo.Size / 1GB))
-        Write-Host "  Provisioned Usage Percentage: $([math]::Round($provisionedUsagePercentage,2)) %"
-    } else {
+        if($verbose){Write-Host "  Provisioned Usage Percentage: $([math]::Round($provisionedUsagePercentage,2)) %"}
+    }
+    else {
         Write-Host "  Provisioned Usage Percentage: Not Applicable (Size is 0)"
     }
 
     if ($fullyProvisionedFreeSpace -le 0) {
         Write-Host "  Yo Dawg - You've over-provisioned your virtual disks" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "  Status: All Good" -ForegroundColor Green
     }
 
-    Write-Host "------------------------------"
+    Write-Host "------------------------------`n"
 }
