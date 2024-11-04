@@ -8,11 +8,13 @@ param (
     [bool]$emailNotification = $FALSE,
     [string]$notificationEmailTo = "jason@mcdill.uk",
     [string]$notificationEmailFrom = "backups@mcdill.uk",
-    [string]$smtpServer = "mcdill-uk.mail.protection.outlook.com"
+    [string]$smtpServer = "mcdill-uk.mail.protection.outlook.com",
+    [switch]$differencing,
+    [switch]$image
 )
 
 # Internal variables
-[string]$backupNamePattern = "^Backup_\d{4}-\d{2}-\d{2}_\d{1,3}$"
+[string]$backupNamePattern = "^Backup_(FULL|DIFF)_\d{4}-\d{2}-\d{2}_\d{1,3}$"
 [string]$oneDrivePath = "C:\Program Files\Microsoft OneDrive\onedrive.exe"
 [array]$failedFiles = @()
 [string]$backupStatus
@@ -20,15 +22,17 @@ param (
 [array]$failedFiles = @()
 [int]$version = 1
 [datetime]$startDate = Get-Date
+[int]$fileCount = 0
 
 # Internal variables without definitions :/
 $endDate
 $report
 $duration
 
+Clear-Host
 
 if (-not $jobName -or -not $sourceFolder -or -not $destinationFolder) {
-   # Clear-Host
+    # Clear-Host
     Write-Host "We couldnt pass the job name, source folder or destination folder, the backup has been cancelled." -ForegroundColor Red
     Write-Host ""
     Write-Host "For reference, we tried to pass these as:"
@@ -52,6 +56,8 @@ if (-not $jobName -or -not $sourceFolder -or -not $destinationFolder) {
         Write-Host "Destination Folder: $($destinationFolder)" -ForegroundColor Green 
     }
     Write-Host ""
+    Write-Host "Example`n" -ForegroundColor Yellow 
+    Write-Host ".\simplebackup.ps1 -jobname ""Backup1"" -sourcefolder ""C:\temp"" -destinationfolder ""C:\backups""`n" -ForegroundColor Yellow
     exit
 }
 else {
@@ -77,7 +83,14 @@ else {
     # Create timestamp and random number for backup folder name
     [string]$date = Get-Date -Format "yyyy-MM-dd"
     [int]$randomNumber = Get-Random -Minimum 0 -Maximum 101
-    [string]$newFolderName = "Backup_$($date)_$randomNumber"
+    
+    if ($differencing) {
+        [string]$newFolderName = "Backup_DIFF_$($date)_$randomNumber"
+    }
+    else {
+        [string]$newFolderName = "Backup_FULL_$($date)_$randomNumber"
+    }
+    
     [string]$newFolderPath = checkLongFilePath (Join-Path -Path $destinationFolder -ChildPath $newFolderName)
 
     # Ensure the backup directory exists
@@ -161,10 +174,11 @@ else {
 
         # Calculate progress percentage
         $progressPercent = [math]::Round(($fileCount / $totalFiles) * 100, 2)
+        $progressStatus = ("{0,5}% complete - {1,1} files copied" -f $progressPercent, $filecount)
 
         # Display progress
         if ($Host.Name -eq 'ConsoleHost') {
-            Write-Progress -Activity "Copying files..." -Status "$progressPercent% complete" -PercentComplete $progressPercent
+            Write-Progress -Activity "Copying files..." -Status $progressStatus -PercentComplete $progressPercent
         }
         else {
             Write-Host -NoNewline -ForegroundColor Green "rProgress: $progressPercent% complete"
@@ -218,8 +232,8 @@ else {
     }
     else {
         Write-Host ""
-        Write-Host "All files copied successfully." -ForegroundColor Green
-        $report = "All files copied successfully."
+        Write-Host "$($fileCount) files copied successfully." -ForegroundColor Green
+        $report = "$($fileCount) All files copied successfully."
         $backupStatus = "Success"
         $notificationEmailSubject = "$jobName - Success"
     }
@@ -235,9 +249,10 @@ else {
     }
 
     # Report file path inside the specific backup folder (e.g., Backup_2024-10-26_100)
-    if(-not $reportDirectory) {
+    if (-not $reportDirectory) {
         [string]$reportFilePath = Join-Path -Path $newFolderPath -ChildPath "Backup_Report_$($date)_$randomNumber.txt"
-    } else {
+    }
+    else {
         $reportFilePath = $reportDirectory
     }
     
@@ -257,6 +272,7 @@ Destination Folder:$destinationFolder
 Backup Folder:     $newFolderName
 Version Retained:  $versions
 Backup Status:     $backupStatus
+Total Files:       $fileCount
 ---------------------------------------
 Successful Files:
 $([string]::Join("`n", $successfulFiles))
@@ -265,6 +281,8 @@ Failed Files:
 $($failedFiles | ForEach-Object { "$($_.FileName) - Error: $($_.ErrorMessage)" })
 =======================================
 "@
+
+Write-Host "`n$($reportContent)`n"
 
     # Write the report content to the file inside the backup folder
     Set-Content -Path $reportFilePath -Value $reportContent
