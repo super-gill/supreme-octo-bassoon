@@ -19,10 +19,13 @@ param (
 [array]$failedFiles = @()
 [string]$backupStatus
 [array]$successfulFiles = @()
-[array]$failedFiles = @()
 [int]$version = 1
 [datetime]$startDate = Get-Date
 [int]$fileCount = 0
+[string]$notificationState
+[string]$oneDriveRunningState
+[int]$longFileNameCount = 0
+[bool]$notificationSendStatus
 
 # Internal variables without definitions :/
 $endDate
@@ -66,11 +69,13 @@ else {
     function checkLongFilePath {
         param ([string]$path)
         if ($path.Length -gt 260 -and $path -notmatch "^\\\\\?\\") {
+            $longFileNameCount ++
             return "\\?\" + $path
         }
         return $path
     }
 
+    # Function to check a directory exists and create it if not
     function checkDirectory {
         param(
             $dirPath
@@ -78,6 +83,90 @@ else {
         if (!(Test-Path -LiteralPath $dirPath)) {
             New-Item -Path $dirPath -ItemType Directory | Out-Null
         }
+    }
+
+    # Function that returns the state of notifications as a string
+    function getNotificationState {
+        if ($emailNotification) {
+            return "On"
+        }
+        else {
+            return "Off"
+        }
+    }
+
+    # Function that returns the title
+    function title {
+        param (
+            [int]$style
+        )
+
+        Clear-Host
+
+        if ($style -eq 1) {
+            Write-Output "-----------------------"
+            Write-Output "Jankup Special Sauce Version $($version)`n`n`n`n`n"
+            Write-Output "Written By Jason Mcdill"
+            Write-Output "-----------------------`n"
+        }
+        if ($style -eq 2) {
+            Write-Output "-----------------------"
+            Write-Output "Jankup Special Sauce Version $($version)"
+            Write-Output "Written By Jason Mcdill"
+            Write-Output "-----------------------`n"
+        }
+    }
+
+    # Function that returns matching backup folders in the backup destination
+    function getExistingBackupFolders {
+        Get-ChildItem -LiteralPath $destinationFolder | Where-Object {
+            $_.PSIsContainer -and $_.Name -match $backupNamePattern
+        } | Sort-Object LastWriteTime -Descending
+    }
+
+    # Function that returns the running status of OneDrive as a string
+    function getOneDriveRunningStatus {
+        
+        if (Get-Process -Name "OneDrive" -ErrorAction SilentlyContinue) {
+            Write-Host "OneDrive is running"
+            return "Running"
+        }
+        else { 
+            Write-Host "OneDrive is Stopped"
+            return "Stopped" 
+        }
+    }
+
+    #function to toggle OneDrive on and off
+    function toggleOneDrive {
+
+        param(
+            [switch]$start,
+            [switch]$stop
+        )
+        
+        if ($stop) {
+            try {
+                if (getOneDriveRunningStatus -eq "Running") {
+                    Stop-Process -Name "OneDrive" -Force
+                }
+            }
+            catch {
+                Write-Host "Failed to stop OneDrive.`n" -ForegroundColor red
+            }
+        }
+        
+        if ($start) {
+            try {
+                if (getOneDriveRunningStatus -eq "Stopped") {
+                    Write-Output "Starting OneDrive...`n"
+                    Start-Process -FilePath $oneDrivePath -ArgumentList "/background"
+                }
+            }
+            catch {
+                Write-Host "OneDrive failed to start, please start it manually.`n" -ForegroundColor red
+            }
+        } $oneDriveRunningState = getOneDriveRunningStatus
     }
 
     # Create timestamp and random number for backup folder name
@@ -96,42 +185,16 @@ else {
     # Ensure the backup directory exists
     checkDirectory -dirPath $newFolderPath
 
-    # Clear-Host
-    Write-Output "Backup Started"
-    Write-Output "-----------------------"
-    Write-Output "Jankup"
-    Write-Output "Version $($version)"
-    Write-Output "Written By Jason Mcdill"
-    Write-Output "-----------------------"
-    Write-Host ""
+    title -style 1
 
     # Stop OneDrive if running
-    $oneDriveProc = Get-Process -Name "OneDrive" -ErrorAction SilentlyContinue
-    if ($oneDriveProc) {
-        Write-Output "Stopping OneDrive..."
-        Stop-Process -Name "OneDrive" -Force
-        # Wait until OneDrive process is completely stopped
-        do {
-            Start-Sleep -Seconds 1
-            $oneDriveProc = Get-Process -Name "OneDrive" -ErrorAction SilentlyContinue
-            Write-Host "Waiting OneDrive..." -ForegroundColor yellow
-        } while ($oneDriveProc)
-
-        Write-Output "OneDrive is no longer running."
-        Write-Output ""
-    }
-    else {
-        Write-Output "OneDrive was not running."
-        Write-Output ""
-    }
+    toggleOneDrive -stop
 
     Write-Output "Backup Job Name:      $jobName"
-    if ($emailNotification) {
-        Write-Output "Notifications to:    $notificationEmailTo"
-    }
-    else {
-        Write-Output "Notifications:        Off"
-    }
+
+    [void]($notificationState = getNotificationState)
+    
+    Write-Output "Notifications:        $notificationState"
     Write-Output "Source Folder:        $sourceFolder"
     Write-Output "Destination Folder:   $destinationFolder"
     Write-Output "New Backup Folder:    $newFolderName"
@@ -191,9 +254,8 @@ else {
 
     # Retrieve existing backups and sort by date
     Write-Output "Retrieving existing backups..."
-    $backupFolders = Get-ChildItem -LiteralPath $destinationFolder | Where-Object {
-        $_.PSIsContainer -and $_.Name -match $backupNamePattern
-    } | Sort-Object LastWriteTime -Descending
+
+    $backupFolders = getExistingBackupFolders
 
     Write-Output "Found $($backupFolders.Count) existing backup(s)."
     Write-Output ""
@@ -206,21 +268,14 @@ else {
             Write-Output " - Removing old backup: $($folder.FullName)"
             Remove-Item -LiteralPath (checkLongFilePath $folder.FullName) -Recurse -Force
         }
+        $backupFolders = getExistingBackupFolders
         Write-Output "Older backups removed successfully."
     }
     else {
         Write-Output "No older backups to remove. Currently storing $($backupFolders.count) of $($versions) version(s)."
     }
 
-    Write-Host ""
-    Write-Output "Starting OneDrive..."
-    Start-Process -FilePath $oneDrivePath -ArgumentList "/background"
-    if (-not (Get-Process -Name "OneDrive" -ErrorAction SilentlyContinue)) {
-        Write-host "OneDrive failed to start, please start it manually." -ForegroundColor red
-    }
-    else {
-        Write-host "OneDrive started successfully." -ForegroundColor green -NoNewline
-    }
+    toggleOneDrive -start
         
     if ($failedFiles.count -gt 0) {
         Write-Host ""
@@ -240,11 +295,16 @@ else {
 
     if ($emailNotification) {
         # Send backup status message
-        Send-MailMessage -From $notificationEmailFrom 
-        -to $notificationEmailTo 
-        -Subject $notificationEmailSubject 
-        -Body $report 
-        -SmtpServer $smtpServer 
+        try {
+            Send-MailMessage -From $notificationEmailFrom 
+            -to $notificationEmailTo 
+            -Subject $notificationEmailSubject 
+            -Body $report 
+            -SmtpServer $smtpServer 
+        }
+        catch {
+            $notificationSendStatus = $false
+        }
     
     }
 
@@ -259,21 +319,34 @@ else {
 
     [datetime]$endDate = Get-Date
     $duration = New-TimeSpan -start $startDate -End $endDate
+    [void]($oneDriveRunningState = getOneDriveRunningStatus)
 
     # Generate report content
     $reportContent = @"
 Backup Report for Job: $jobName
 =======================================
-Start Time:        $startDate
-End Time:          $endDate
-Duration:          $($duration.ToString("hh\:mm\:ss"))
-Source Folder:     $sourceFolder
-Destination Folder:$destinationFolder
-Backup Folder:     $newFolderName
-Version Retained:  $versions
-Backup Status:     $backupStatus
-Total Files:       $fileCount
----------------------------------------
+Time Stats
+----------
+Start Time:             $startDate
+End Time:               $endDate
+Duration:               $($duration.ToString("hh\:mm\:ss"))
+
+Directories
+-----------
+Source Folder:          $sourceFolder
+Destination Folder:     $destinationFolder
+Backup Folder:          $newFolderName
+Report Directory:       $reportFilePath
+Long Directories:       $($longFileNameCount)
+
+Other Stats
+-----------
+Version Retained:       $($backupFolders.Count) of $($versions)
+Backup Status:          $backupStatus
+Notification Status:     $($notificationState)
+OneDrive Running State: $($oneDriveRunningState)
+Total Files:            $fileCount
+=======================================
 Successful Files:
 $([string]::Join("`n", $successfulFiles))
 
@@ -282,22 +355,48 @@ $($failedFiles | ForEach-Object { "$($_.FileName) - Error: $($_.ErrorMessage)" }
 =======================================
 "@
 
-Write-Host "`n$($reportContent)`n"
+    title -style 2
+    Write-Host ""
+    # Generate report for the console
+    $consoleReport = @"
+Backup Report for Job: $jobName
+=======================================
+Time Stats
+----------
+Start Time:             $startDate
+End Time:               $endDate
+Duration:               $($duration.ToString("hh\:mm\:ss"))
 
-    # Write the report content to the file inside the backup folder
+Directories
+-----------
+Source Folder:          $sourceFolder
+Destination Folder:     $destinationFolder
+Backup Folder:          $newFolderName
+Report Directory:       $reportFilePath
+Long Directories:       $($longFileNameCount)
+
+Other Stats
+-----------
+Version Retained:       $($backupFolders.Count) of $($versions)
+Backup Status:          $backupStatus
+Notification Status:    $($notificationState)
+OneDrive Running State: $($oneDriveRunningState)
+Total Files:            $fileCount
+=======================================
+"@
+
+    # Close the progress bar
+    Write-Progress -Activity "Processing" -Status "Completed" -Complete
+
+    # Send the console report to the console
+    Write-Host "`n$($consoleReport)`n"
+
+    # Write the report content to file
     Set-Content -Path $reportFilePath -Value $reportContent
-
-    Write-Output ""
-    Write-Output "-------------------------------------------------------------"
-    Write-Output "Backup process completed in $($duration.ToString("hh\:mm\:ss"))"
-    Write-Output "Retained $versions most recent backup(s)."
-    Write-Output "Backup report created at: $reportFilePath"
-    Write-Output "-------------------------------------------------------------"
-    Write-Output ""
 
     # Send a windows notification
     Add-Type -AssemblyName System.Windows.Forms
-    If ($backupStatus = "success") {
+    If ($backupStatus -eq "success") {
         [string]$message = "Backup completed successfully"
         [System.Windows.Forms.MessageBox]::Show($message, $title, [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information) | Out-Null
 
