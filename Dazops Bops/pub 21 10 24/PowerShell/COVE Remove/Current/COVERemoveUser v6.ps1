@@ -125,7 +125,10 @@ function multipleUsers {
 }
 
 function doTeams {
-    param ([string]$UserUPN)
+    param (
+        [string]$UserUPN,
+        $teamsResult
+        )
 
     # Retrieve all Teams.
     $teams = Get-Team
@@ -153,7 +156,8 @@ function doSharePoint {
     param (
         [string]$adminUPN, 
         [string]$adminURL, 
-        $userUPNs
+        $userUPNs,
+        $spresult
     )
 
     # Retrieve all site URLs excluding OneDrive.
