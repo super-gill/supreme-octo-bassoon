@@ -172,11 +172,12 @@ function doSharePoint {
                 if (-not $whatIf) {
                     Remove-SPOUser -Site $site -LoginName $upn -ErrorAction Stop
                     Write-Host "[$upn] Removed from [$site]" -ForegroundColor Yellow
+                    $spResult += $site
                 }
                 else {
                     Write-Host ">> Would remove [$upn] from [$site]" -ForegroundColor Yellow
+                    $spResult += $site
                 }
-                $spResult += $site
                 Write-Host ">> debug wrote $($site) to spResult"
             }
             catch {
@@ -240,20 +241,23 @@ else {
 # Display the modified SharePoint sites and Teams
 Write-Host ""
 Write-Host "Summary of changes:"  -ForegroundColor Yellow
+Write-Host "$($spResult)"
 Write-Host ""
 Write-Host "SharePoint sites edited:" -ForegroundColor Yellow
-if ($spResult.Count -gt 0) {
-    Write-Host $spResult
-}
-else {
-    Write-Host "No SharePoint sites were edited"
-}
+Write-Host $teamsResult
 
-Write-Host ""
-Write-Host "Teams edited:"  -ForegroundColor Yellow
-if ($teamsResult.Count -gt 0) {
-    Write-Host $teamsResult
-}
-else {
-    Write-Host "No Teams teams were edited"
-}
+# if ($spResult.Count -gt 0) {
+#     Write-Host "$($spResult)"
+# }
+# else {
+#     Write-Host "No SharePoint sites were edited"
+# }
+
+# Write-Host ""
+# Write-Host "Teams edited:"  -ForegroundColor Yellow
+# if ($teamsResult.Count -gt 0) {
+#     Write-Host $teamsResult
+# }
+# else {
+#     Write-Host "No Teams teams were edited"
+# }
