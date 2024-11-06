@@ -246,18 +246,18 @@ Write-Host ""
 Write-Host "SharePoint sites edited:" -ForegroundColor Yellow
 Write-Host $teamsResult
 
-# if ($spResult.Count -gt 0) {
-#     Write-Host "$($spResult)"
-# }
-# else {
-#     Write-Host "No SharePoint sites were edited"
-# }
+if ($spResult.Count -gt 0) {
+    Write-Host "$($spResult)"
+}
+else {
+    Write-Host "No SharePoint sites were edited"
+}
 
-# Write-Host ""
-# Write-Host "Teams edited:"  -ForegroundColor Yellow
-# if ($teamsResult.Count -gt 0) {
-#     Write-Host $teamsResult
-# }
-# else {
-#     Write-Host "No Teams teams were edited"
-# }
+Write-Host ""
+Write-Host "Teams edited:"  -ForegroundColor Yellow
+if ($teamsResult.Count -gt 0) {
+    Write-Host $teamsResult
+}
+else {
+    Write-Host "No Teams teams were edited"
+}
