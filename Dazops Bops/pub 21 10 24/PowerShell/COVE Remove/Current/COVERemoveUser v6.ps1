@@ -53,34 +53,49 @@ param(
     [switch]$sharepoint
 )
 
-$spResult = @()
-$teamsResult = @()
-[string]$version = 5
+[string]$version = 6
 
-if ($dir -gt 0) {
-    Clear-Host
-    Write-Host "CoveRemoveUser Version: $($version)"
-    Write-Host ""
-    Write-Host "For this script to work the CSV must be formatted correctly:"
-    Write-Host ""
-    Write-Host "UserPrincipalName"
-    Write-Host "user1@email.com"
-    Write-Host "user2@email.com"
-    Write-Host "user3@email.com"
-    Write-Host "user4@email.com"
-    Write-Host ""
-    Write-Host "Make sure the first line contains the title ""UserPrincipalName"" and there are no commas at the end of each line."
-    Write-Host ""
-    Write-Host "This script will remove the 365 permissions that cant be changed in Cove, you must still delete backup data and disable backups for each user in Cove."
-    Write-Host ""
-    Write-Host "On completion you must wait for Cove to perform another backup to see changes."
-    Write-Host ""
-    Write-Host "Use ""Get-Help .\removeUser.ps1 -Full"" for more information."
-    Write-Host ""
-    Write-Host "Press any key to continue..."
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
-    Clear-Host
+try {
+    if (-not $UserUPN -and -not $dir) {
+        Clear-Host
+        Write-Host ""
+        Write-Host "No flags have been passed" -ForegroundColor Yellow
+        Write-Host "Use ""Get-Help '.\CoveRemoveUser V$version.ps1' -Full"" for help and examples of how to run this script" -ForegroundColor Yellow
+        Write-Host "The script will now end, no changes have been made" -ForegroundColor Yellow
+        Write-Host ""
+        exit
+    }
+
 }
+catch { Write-Host "Failed, exit 001" }
+
+try {
+    if ($dir -gt 0) {
+        Clear-Host
+        Write-Host "CoveRemoveUser Version: $($version)"
+        Write-Host ""
+        Write-Host "For this script to work the CSV must be formatted correctly:"
+        Write-Host ""
+        Write-Host "UserPrincipalName"
+        Write-Host "user1@email.com"
+        Write-Host "user2@email.com"
+        Write-Host "user3@email.com"
+        Write-Host "user4@email.com"
+        Write-Host ""
+        Write-Host "Make sure the first line contains the title ""UserPrincipalName"" and there are no commas at the end of each line."
+        Write-Host ""
+        Write-Host "This script will remove the 365 permissions that cant be changed in Cove, you must still delete backup data and disable backups for each user in Cove."
+        Write-Host ""
+        Write-Host "On completion you must wait for Cove to perform another backup to see changes."
+        Write-Host ""
+        Write-Host "Use ""Get-Help .\CoveRemoveUser V$($version).ps1 -Full"" for more information."
+        Write-Host ""
+        Write-Host "Press any key to continue..."
+        $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
+        Clear-Host
+    }
+}
+catch { Write-Host "Failed, exit 002" }
 
 Write-Host ""
 Write-Host "Version $($version)"
@@ -97,7 +112,11 @@ if ($whatIf) {
 
 function validateEmail {
     param ([string]$emailAddress)
+    try {
     return $emailAddress -match '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    } catch {
+        Write-Host "Failed to verify the email: "$_
+    }
 }
 
 function multipleUsers {
@@ -107,7 +126,6 @@ function multipleUsers {
         $userUPNs = @()
         $users = Import-Csv -Path $dir
         $userUPNs = $users | Select-Object -ExpandProperty UserPrincipalName -Unique
-
         $invalidUPNs = $userUPNs | Where-Object { -not (validateEmail $_) }
         
         if ($invalidUPNs.Count -gt 0) {
@@ -127,27 +145,30 @@ function multipleUsers {
 function doTeams {
     param (
         [string]$UserUPN,
-        $teamsResult
-        )
+        $userUPNs
+    )
+
+    Write-Host "`nChecking Teams Ownerships...`n"
 
     # Retrieve all Teams.
     $teams = Get-Team
     
-    foreach ($team in $teams) { 
-        try {
-            if (Get-TeamUser -GroupId $team.GroupId | Where-Object user -Like $UserUPN) {
-                if (-not $whatIf) {
-                    Remove-TeamUser -GroupId $team.GroupId -User $UserUPN
-                    Write-Host "[$UserUPN] removed from [$($team.DisplayName)]" -ForegroundColor Yellow
+    foreach ($team in $teams) {
+        foreach ($user in $userUPNs) {
+            try {
+                if (Get-TeamUser -GroupId $team.GroupId | Where-Object user -Like $UserUPN) {
+                    if (-not $whatIf) {
+                        Remove-TeamUser -GroupId $team.GroupId -User $UserUPN
+                        Write-Host "[$UserUPN] removed from [$($team.DisplayName)]" -ForegroundColor Yellow
+                    }
+                    else {
+                        Write-Host ">> Would remove [$UserUPN] from [$($team.DisplayName)]" -ForegroundColor Yellow
+                    }
                 }
-                else {
-                    Write-Host ">> Would remove [$UserUPN] from [$($team.DisplayName)]" -ForegroundColor Yellow
-                }
-                $teamsResult += $team.DisplayName
             }
-        }
-        catch {
-            Write-Host "[$UserUPN] - ERROR on [$($team.DisplayName)]: $_"
+            catch {
+                Write-Host "[$UserUPN] - ERROR on [$($team.DisplayName)]: $_"
+            }
         }
     }
 }
@@ -156,29 +177,27 @@ function doSharePoint {
     param (
         [string]$adminUPN, 
         [string]$adminURL, 
-        $userUPNs,
-        $spresult
+        $userUPNs
     )
 
+    Write-Host "`nChecking SharePoint Sites...`n"
     # Retrieve all site URLs excluding OneDrive.
     $siteUrls = (Get-SPOSite | Where-Object url -notlike "*-my.sharepoint.com*").url
 
     foreach ($site in $siteUrls) {
-        Set-SPOUser -Site $site -LoginName $adminUPN -IsSiteCollectionAdmin $True
+        Set-SPOUser -Site $site -LoginName $adminUPN -IsSiteCollectionAdmin $True | out-null
 
         foreach ($upn in $userUPNs) {
             try {
-                $user = Get-SPOUser -Site $site -LoginName $upn -ErrorAction Stop
+                $user = Get-SPOUser -Site $site -LoginName $upn -ErrorAction Stop | out-null
                 if (-not $whatIf) {
                     Remove-SPOUser -Site $site -LoginName $upn -ErrorAction Stop
-                    Write-Host "[$upn] Removed from [$site]" -ForegroundColor Yellow
-                    $spResult += $site
+                    Write-Host "[$upn] - Removed from [$site]" -ForegroundColor Yellow
+                    $localspresult += $site
                 }
                 else {
-                    Write-Host ">> Would remove [$upn] from [$site]" -ForegroundColor Yellow
-                    $spResult += $site
+                    Write-Host "[$upn] - Would be removed from [$site]" -ForegroundColor Yellow
                 }
-                Write-Host ">> debug wrote $($site) to spResult"
             }
             catch {
                 Write-Host "[$upn] - ERROR on [$site]: $_"
@@ -186,8 +205,9 @@ function doSharePoint {
         }
 
         # Remove the site collection admin status for the adminUPN after processing all users.
-        Set-SPOUser -Site $site -LoginName $adminUPN -IsSiteCollectionAdmin $False
+        Set-SPOUser -Site $site -LoginName $adminUPN -IsSiteCollectionAdmin $False | out-null
     }
+    return $localspresult
 }
  
 $foo = connect-microsoftteams
@@ -230,34 +250,10 @@ if ($dir -ne "") {
 else {
     if ($sharepoint) {
         $userUPNs = @($UserUPN)
-        doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs $userUPNs
+        doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs $userUPN
     }
 
     if ($teams) {
         doTeams -UserUPN $UserUPN
     }
-}
-
-# Display the modified SharePoint sites and Teams
-Write-Host ""
-Write-Host "Summary of changes:"  -ForegroundColor Yellow
-Write-Host "$($spResult)"
-Write-Host ""
-Write-Host "SharePoint sites edited:" -ForegroundColor Yellow
-Write-Host $teamsResult
-
-if ($spResult.Count -gt 0) {
-    Write-Host "$($spResult)"
-}
-else {
-    Write-Host "No SharePoint sites were edited"
-}
-
-Write-Host ""
-Write-Host "Teams edited:"  -ForegroundColor Yellow
-if ($teamsResult.Count -gt 0) {
-    Write-Host $teamsResult
-}
-else {
-    Write-Host "No Teams teams were edited"
 }
