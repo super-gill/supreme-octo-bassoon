@@ -1,20 +1,30 @@
 # Parameters
 param (
+    # Required
     [string]$jobName,
     [string]$sourceFolder,
     [string]$destinationFolder,
     [string]$reportDirectory,
+    
+    # Backup Type
+    [switch]$full,
+    [switch]$differencing,
+    [switch]$auto,
+    
+    # Backup Options
     [int]$versions = 40,
+
+    # Notifications
     [bool]$emailNotification = $FALSE,
     [string]$notificationEmailTo = "jason@mcdill.uk",
     [string]$notificationEmailFrom = "backups@mcdill.uk",
     [string]$smtpServer = "mcdill-uk.mail.protection.outlook.com",
-    [switch]$differencing,
     [switch]$image
 )
 
 # Internal variables
 [string]$backupNamePattern = "^Backup_(FULL|DIFF)_\d{4}-\d{2}-\d{2}_\d{1,3}$"
+[string]$fullBackupNamePattern = "^Backup_FULL_\d{4}-\d{2}-\d{2}_\d{1,3}$"
 [string]$oneDrivePath = "C:\Program Files\Microsoft OneDrive\onedrive.exe"
 [array]$failedFiles = @()
 [string]$backupStatus
@@ -28,11 +38,11 @@ param (
 [bool]$notificationSendStatus
 
 # Internal variables without definitions :/
-$endDate
-$report
+[datetime]$endDate
+[string]$report
 $duration
 
-Clear-Host
+# Clear-Host
 
 if (-not $jobName -or -not $sourceFolder -or -not $destinationFolder) {
     # Clear-Host
@@ -101,7 +111,7 @@ else {
             [int]$style
         )
 
-        Clear-Host
+        # Clear-Host
 
         if ($style -eq 1) {
             Write-Output "-----------------------"
@@ -166,7 +176,37 @@ else {
             catch {
                 Write-Host "OneDrive failed to start, please start it manually.`n" -ForegroundColor red
             }
-        } $oneDriveRunningState = getOneDriveRunningStatus
+        }
+    }
+
+    $latestBackupdate = $null
+    # Function to get the most recent backup by date
+    function getLastFullBackupDate {
+        param (
+            [string]$fullBackupPattern
+        )
+    
+        $latestFullBackup = Get-ChildItem -LiteralPath $destinationFolder | Where-Object {
+            $_.PSIsContainer -and $_.Name -match $fullBackupPattern
+        } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    
+        if ($latestFullBackup) {
+            Write-Host "Latest Full Backup Name: $($latestFullBackup.Name)"
+    
+            # Extract the date using a regex pattern to ensure the correct substring is found
+            if ($latestFullBackup.Name -match "Backup_FULL_(\d{4}-\d{2}-\d{2})") {
+                Write-Host "Extracted Date String: $($matches[1])"
+                return [datetime]::ParseExact($matches[1], "yyyy-MM-dd", $null)
+            }
+            else {
+                Write-Host "Failed to extract date from the full backup folder name." -ForegroundColor Yellow
+                return $null
+            }
+        }
+        else {
+            Write-Host "No full backup found." -ForegroundColor Yellow
+            return $null
+        }
     }
 
     # Create timestamp and random number for backup folder name
@@ -208,6 +248,51 @@ else {
     Write-Progress -Activity "Source files checked successfully." -Completed
 
 
+    if ($differencing) {
+        # Get the date of the last full backup
+        $lastBackupDate = getLastFullBackupDate -fullBackupPattern $fullBackupNamePattern
+    
+        if ($lastBackupDate) {
+            # Only copy files modified after the last full backup date
+            foreach ($file in $files) {
+                if ($file.LastWriteTime -gt $lastBackupDate) {
+                    $fileCount++
+                    $relativePath = $file.FullName.Substring($sourceFolder.Length).TrimStart('\')
+                    $destinationPath = checkLongFilePath (Join-Path -Path $newFolderPath -ChildPath $relativePath)
+                    $destinationDir = checkLongFilePath (Split-Path -Path $destinationPath)
+                    checkDirectory -dirPath $destinationDir
+    
+                    try {
+                        Copy-Item -LiteralPath (checkLongFilePath $file.FullName) -Destination $destinationPath -Force
+                        $successfulFiles += $file.FullName
+                    }
+                    catch {
+                        $failedFiles += @{
+                            FileName     = $file.FullName
+                            ErrorMessage = $_.Exception.Message
+                        }
+                        $backupStatus = "Failed"
+                    }
+    
+                    $progressPercent = [math]::Round(($fileCount / $totalFiles) * 100, 2)
+                    $progressStatus = ("{0,5}% complete - {1,1} files copied" -f $progressPercent, $fileCount)
+    
+                    if ($Host.Name -eq 'ConsoleHost') {
+                        Write-Progress -Activity "Copying files..." -Status $progressStatus -PercentComplete $progressPercent
+                    }
+                    else {
+                        Write-Host -NoNewline -ForegroundColor Green "Progress: $progressPercent% complete"
+                    }
+                }
+            }
+        }
+        else {
+            Write-Host "`nNo full backup found, or it failed, performing a full backup instead.`n" -ForegroundColor Yellow
+            # Fallback for full backup if no previous full backup is found
+        }
+    }
+    
+    
     # Copy each file individually with progress output for PS and EXE
     Write-Output "--------------------------------------"
     Write-Output "Copying folder contents..."
