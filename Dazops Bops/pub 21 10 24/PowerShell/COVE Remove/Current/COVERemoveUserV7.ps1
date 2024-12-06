@@ -53,7 +53,7 @@ param(
     [switch]$sharepoint
 )
 
-[string]$version = 6
+[string]$version = 7
 
 try {
     if (-not $UserUPN -and -not $dir) {
@@ -134,17 +134,23 @@ function multipleUsers {
 function doTeams {
     param (
         [string]$UserUPN,
-        $userUPNs
+        [string]$userUPNs
     )
 
     # Retrieve all Teams.
     $teams = Get-Team
+    # foreach ($team in $teams) {Write-Host $team.displayname}
     
     foreach ($team in $teams) {
         foreach ($user in $userUPNs) {
-            Write-Host "`n[$user] - Checked $team`n"
+            # Always output a message indicating the check is happening
+            Write-Host "Checking [$($team.DisplayName)] for [$user]"
+
             try {
-                if (Get-TeamUser -GroupId $team.GroupId | Where-Object user -Like $UserUPN) {
+                # Attempt to get the team user and filter based on $UserUPN
+                $teamUser = Get-TeamUser -GroupId $team.GroupId | Where-Object { $_.User -like $UserUPN }
+                
+                if ($teamUser) {
                     if (-not $whatIf) {
                         Remove-TeamUser -GroupId $team.GroupId -User $UserUPN
                         Write-Host "[$UserUPN] removed from [$($team.DisplayName)]" -ForegroundColor Yellow
@@ -152,14 +158,21 @@ function doTeams {
                     else {
                         Write-Host ">> Would remove [$UserUPN] from [$($team.DisplayName)]" -ForegroundColor Yellow
                     }
+                } 
+                else {
+                    # Output if the user was not found in the team
+                    Write-Host "[$UserUPN] not found in [$($team.DisplayName)]"
                 }
             }
             catch {
-                Write-Host "[$UserUPN] - ERROR on [$($team.DisplayName)]: $_"
+                Write-Host "[$UserUPN] - ERROR on [$($team.DisplayName)]: $_" -ForegroundColor Red
             }
         }
     }
 }
+
+
+
 
 function doSharePoint {
     param (
