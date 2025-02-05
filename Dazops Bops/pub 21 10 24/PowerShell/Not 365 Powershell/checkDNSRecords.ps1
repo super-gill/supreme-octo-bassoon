@@ -287,17 +287,60 @@ $regex = '(?<=- )\b[a-zA-Z0-9.-]+\.[a-z]{2,}\b'
 
 $domains = [regex]::matches($input, $regex) | ForEach-Object { $_.Value }
 
-$noSPF = @()
+$noMX = @()
+$trendMX = @()
+$dnsFailures = @()
+
 foreach ($domain in $domains) {
     try {
-        if (-not (resolve-dnsname -name $domain -type txt | Where-Object { $_.strings -match "spf" })) {
-            $noSPF += $domain
+        $mxRecords = resolve-dnsname -name $domain -type mx -ErrorAction Stop
+        
+        if ($mxRecords) {
+            $mxContent = $mxRecords | ForEach-Object { $_.Exchange }
+            $matchingTrend = $mxContent | Where-Object { $_ -match "trend" }
+
+            if ($matchingTrend) {
+                $trendMX += $domain
+                Write-Host "$($domain) has an MX record containing 'trend': $($matchingTrend -join ', ')" -foregroundcolor Green
+            } else {
+                Write-Host "$($domain) has MX records: $($mxContent -join ', ')" -foregroundcolor White
+            }
+        } else {
+            $noMX += $domain
+            Write-Host "$($domain) does not have an MX record" -foregroundcolor Yellow
         }
-        else {
-            Write-Host "$($domain) has an SPF"
-        }
+    } catch {
+        $dnsFailures += $domain
+        Write-Host "DNS lookup failed on $($domain): $($_.Exception.Message)" -foregroundcolor Red
     }
-    catch {
-        Write-Host "DNS lookup failed on $($domain)" -foregroundcolor Red
+}
+
+# Output DNS failures
+if ($dnsFailures.Count -gt 0) {
+    Write-Host "`nThe following domains failed the DNS check:" -foregroundcolor Green
+    foreach ($failed in $dnsFailures) {
+        Write-Host " - $failed"
     }
+} else {
+    Write-Host "`nNo domains failed the DNS check." -foregroundcolor Red
+}
+
+# Output domains without MX records
+if ($noMX.Count -gt 0) {
+    Write-Host "`nThe following domains do not have MX records:" -foregroundcolor Green
+    foreach ($noMXDomain in $noMX) {
+        Write-Host " - $noMXDomain"
+    }
+} else {
+    Write-Host "`nAll domains have MX records." -foregroundcolor Red
+}
+
+# Output MX records containing "trend"
+if ($trendMX.Count -gt 0) {
+    Write-Host "`nSummary: The following domains have MX records containing 'trend':" -foregroundcolor Green
+    foreach ($trendDomain in $trendMX) {
+        Write-Host " - $trendDomain"
+    }
+} else {
+    Write-Host "`nNo domains have MX records containing 'trend'.`n" -foregroundcolor Red
 }

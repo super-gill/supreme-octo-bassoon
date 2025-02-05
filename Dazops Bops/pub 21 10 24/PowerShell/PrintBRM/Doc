@@ -1,0 +1,629 @@
+# PrintBRM PowerShell Module (ChatGPT)
+
+This documentation provides instructions on how to use the `PrintBRM` PowerShell module for managing printer migration files.
+
+---
+
+## Class: `PrintBRM`
+
+### Constructor
+
+```powershell
+[PrintBRM]::new($WorkingDirectory, $FilePath)
+```
+
+#### Parameters:
+
+- **`$WorkingDirectory`**: Temporary directory for working files.
+- **`$FilePath`**: Path to the printer migration file (`.printerExport`).
+
+#### Example:
+
+```powershell
+$PrintBRM = [PrintBRM]::new("C:\temp\printbrm", "C:\temp\printbrm\printers.printerexport")
+```
+
+---
+
+## Methods
+
+### 1. `ExportPrinters()`
+
+Exports the printer configuration to the specified migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ExportPrinters()
+$PrintBRM.ExportPrinters([OptionExportPrinters]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionExportPrinters`** (Optional):
+  - `NOBIN`: Excludes binary files from the export.
+  - `TargetServer`: Specifies a target server to export printers from.
+
+#### Example:
+
+```powershell
+# Basic Export
+$PrintBRM.ExportPrinters()
+
+# Export with Options
+$options = [OptionExportPrinters]::new()# Documentation: Using the PrintBRM PowerShell Module
+
+This documentation provides instructions on how to use the `PrintBRM` PowerShell module for managing printer migration files. It covers the purpose and usage of each method, along with examples.
+
+---
+
+## Overview
+
+The `PrintBRM` module simplifies exporting, importing, and manipulating printer migration files (`.printerExport`). It uses the built-in `printbrm.exe` utility for operations and provides additional functionality for Intune integration and custom handling.
+
+### Key Features:
+
+1. Export and import printer configurations.
+2. Modify and manipulate printer migration files.
+3. Generate Intune printer deployment packages.
+4. List and manage printers in migration files.
+
+---
+
+## Class: `PrintBRM`
+
+### Constructor
+
+```powershell
+[PrintBRM]::new($WorkingDirectory, $FilePath)
+```
+
+#### Parameters:
+
+- **`$WorkingDirectory`**: Temporary directory for working files.
+- **`$FilePath`**: Path to the printer migration file (`.printerExport`).
+
+#### Example:
+
+```powershell
+$PrintBRM = [PrintBRM]::new("C:\temp\printbrm", "C:\temp\printbrm\printers.printerexport")
+```
+
+---
+
+## Methods
+
+### 1. `ExportPrinters()`
+
+Exports the printer configuration to the specified migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ExportPrinters()
+$PrintBRM.ExportPrinters([OptionExportPrinters]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionExportPrinters`** (Optional):
+  - `NOBIN`: Excludes binary files from the export.
+  - `TargetServer`: Specifies a target server to export printers from.
+
+#### Example:
+
+```powershell
+# Basic Export
+$PrintBRM.ExportPrinters()
+
+# Export with Options
+$options = [OptionExportPrinters]::new()
+$options.NOBIN = $true
+$options.TargetServer = "SERVER01"
+$PrintBRM.ExportPrinters($options)
+```
+
+---
+
+### 2. `ImportPrinters()`
+
+Imports printers from the specified migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ImportPrinters()
+$PrintBRM.ImportPrinters([OptionImportPrinters]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionImportPrinters`** (Optional):
+  - `Force`: Overwrites existing printers.
+  - `PublishScope`: Scope of printer publishing (`all` or `org`).
+  - `LPR2TCP`: Converts LPR ports to TCP/IP ports.
+  - `NOACL`: Ignores ACL settings.
+  - `TargetServer`: Specifies a target server for import.
+
+#### Example:
+
+```powershell
+# Basic Import
+$PrintBRM.ImportPrinters()
+
+# Import with Options
+$options = [OptionImportPrinters]::new()
+$options.Force = $true
+$options.PublishScope = [PublishScope]::all
+$PrintBRM.ImportPrinters($options)
+```
+
+---
+
+### 3. `OpenPrintMigration()`
+
+Extracts the contents of the migration file to a temporary working directory.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+```
+
+---
+
+### 4. `GetPrinterMigrationItem()`
+
+Retrieves a list of printers from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.GetPrinterMigrationItem()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$printers = $PrintBRM.GetPrinterMigrationItem()
+$printers | ForEach-Object { $_.PrinterName }
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 5. `RemovePrinterMigrationItem($PrinterName)`
+
+Removes a specific printer from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.RemovePrinterMigrationItem($PrinterName)
+```
+
+#### Parameters:
+
+- **`$PrinterName`**: The name of the printer to remove.
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$PrintBRM.RemovePrinterMigrationItem("Microsoft Print to PDF")
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 6. `RemoveDefaultPrinterMigrationItems()`
+
+Removes default printers (e.g., Microsoft Print to PDF, OneNote) from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.RemoveDefaultPrinterMigrationItems()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$PrintBRM.RemoveDefaultPrinterMigrationItems()
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 7. `NewIntunePrinterPackage()`
+
+Generates an Intune package for deploying printers.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.NewIntunePrinterPackage([OptionNewIntunePrinterPackage]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionNewIntunePrinterPackage`** (Optional):
+  - Inherits from `OptionImportPrinters` and includes options for Intune deployment.
+
+#### Example:
+
+```powershell
+$options = [OptionNewIntunePrinterPackage]::new()
+$options.Force = $true
+$PrintBRM.NewIntunePrinterPackage($options)
+```
+
+---
+
+### 8. `PublishIntunePrinterPackage()`
+
+Publishes the Intune package to Microsoft Endpoint Manager.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.PublishIntunePrinterPackage([OptionIntuneWin32Application]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionIntuneWin32Application`**:
+  - `DisplayName`: Name of the application.
+  - `Publisher`: Name of the publisher.
+  - `Description`: Description of the application.
+
+#### Example:
+
+```powershell
+$appOpts = [OptionIntuneWin32Application]::new()
+$appOpts.DisplayName = "Printer Deployment"
+$appOpts.Publisher = "Company Name"
+$appOpts.Description = "Deploy Printers via Intune"
+$PrintBRM.PublishIntunePrinterPackage($appOpts)
+```
+
+---
+
+### 9. `ClosePrintMigration()`
+
+Cleans up the temporary working directory and writes changes back to the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ClosePrintMigration()
+$PrintBRM.ClosePrintMigration([boolean]$Discard)
+```
+
+#### Parameters:
+
+- **`$Discard`**: If `true`, discards changes to the migration file.
+
+#### Example:
+
+```powershell
+# Save changes
+$PrintBRM.ClosePrintMigration()
+
+# Discard changes
+$PrintBRM.ClosePrintMigration($true)
+```
+
+---
+
+## Additional Notes
+
+- Ensure `printbrm.exe` exists in `C:\Windows\System32\spool\tools`.
+- Use the `OpenPrintMigration()` method before accessing or modifying the migration file.
+- Always call `ClosePrintMigration()` after operations to clean up resources.
+
+---
+
+## Example Workflow
+
+### Export Printers and Create Intune Package
+
+```powershell
+# Initialize
+$PrintBRM = [PrintBRM]::new("C:\temp\printbrm", "C:\temp\printbrm\printers.printerexport")
+
+# Export printers
+$PrintBRM.ExportPrinters()
+
+# Open migration file
+$PrintBRM.OpenPrintMigration()
+
+# List printers
+$printers = $PrintBRM.GetPrinterMigrationItem()
+$printers | ForEach-Object { Write-Host $_.PrinterName }
+
+# Create Intune package
+$options = [OptionNewIntunePrinterPackage]::new()
+$options.Force = $true
+$PrintBRM.NewIntunePrinterPackage($options)
+
+# Publish Intune package
+$appOpts = [OptionIntuneWin32Application]::new()
+$appOpts.DisplayName = "Printer Deployment"
+$appOpts.Publisher = "Company Name"
+$appOpts.Description = "Deploy Printers via Intune"
+$PrintBRM.PublishIntunePrinterPackage($appOpts)
+
+# Clean up
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+## Conclusion
+
+The `PrintBRM` module provides a powerful way to manage printer migrations, customize configurations, and integrate with Intune for streamlined deployment. Use the methods as outlined above to handle common printer management tasks efficiently.
+
+
+$options.NOBIN = $true
+$options.TargetServer = "SERVER01"
+$PrintBRM.ExportPrinters($options)
+```
+
+---
+
+### 2. `ImportPrinters()`
+
+Imports printers from the specified migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ImportPrinters()
+$PrintBRM.ImportPrinters([OptionImportPrinters]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionImportPrinters`** (Optional):
+  - `Force`: Overwrites existing printers.
+  - `PublishScope`: Scope of printer publishing (`all` or `org`).
+  - `LPR2TCP`: Converts LPR ports to TCP/IP ports.
+  - `NOACL`: Ignores ACL settings.
+  - `TargetServer`: Specifies a target server for import.
+
+#### Example:
+
+```powershell
+# Basic Import
+$PrintBRM.ImportPrinters()
+
+# Import with Options
+$options = [OptionImportPrinters]::new()
+$options.Force = $true
+$options.PublishScope = [PublishScope]::all
+$PrintBRM.ImportPrinters($options)
+```
+
+---
+
+### 3. `OpenPrintMigration()`
+
+Extracts the contents of the migration file to a temporary working directory.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+```
+
+---
+
+### 4. `GetPrinterMigrationItem()`
+
+Retrieves a list of printers from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.GetPrinterMigrationItem()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$printers = $PrintBRM.GetPrinterMigrationItem()
+$printers | ForEach-Object { $_.PrinterName }
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 5. `RemovePrinterMigrationItem($PrinterName)`
+
+Removes a specific printer from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.RemovePrinterMigrationItem($PrinterName)
+```
+
+#### Parameters:
+
+- **`$PrinterName`**: The name of the printer to remove.
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$PrintBRM.RemovePrinterMigrationItem("Microsoft Print to PDF")
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 6. `RemoveDefaultPrinterMigrationItems()`
+
+Removes default printers (e.g., Microsoft Print to PDF, OneNote) from the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.RemoveDefaultPrinterMigrationItems()
+```
+
+#### Example:
+
+```powershell
+$PrintBRM.OpenPrintMigration()
+$PrintBRM.RemoveDefaultPrinterMigrationItems()
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+### 7. `NewIntunePrinterPackage()`
+
+Generates an Intune package for deploying printers.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.NewIntunePrinterPackage([OptionNewIntunePrinterPackage]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionNewIntunePrinterPackage`** (Optional):
+  - Inherits from `OptionImportPrinters` and includes options for Intune deployment.
+
+#### Example:
+
+```powershell
+$options = [OptionNewIntunePrinterPackage]::new()
+$options.Force = $true
+$PrintBRM.NewIntunePrinterPackage($options)
+```
+
+---
+
+### 8. `PublishIntunePrinterPackage()`
+
+Publishes the Intune package to Microsoft Endpoint Manager.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.PublishIntunePrinterPackage([OptionIntuneWin32Application]$Properties)
+```
+
+#### Parameters:
+
+- **`OptionIntuneWin32Application`**:
+  - `DisplayName`: Name of the application.
+  - `Publisher`: Name of the publisher.
+  - `Description`: Description of the application.
+
+#### Example:
+
+```powershell
+$appOpts = [OptionIntuneWin32Application]::new()
+$appOpts.DisplayName = "Printer Deployment"
+$appOpts.Publisher = "Company Name"
+$appOpts.Description = "Deploy Printers via Intune"
+$PrintBRM.PublishIntunePrinterPackage($appOpts)
+```
+
+---
+
+### 9. `ClosePrintMigration()`
+
+Cleans up the temporary working directory and writes changes back to the migration file.
+
+#### Syntax:
+
+```powershell
+$PrintBRM.ClosePrintMigration()
+$PrintBRM.ClosePrintMigration([boolean]$Discard)
+```
+
+#### Parameters:
+
+- **`$Discard`**: If `true`, discards changes to the migration file.
+
+#### Example:
+
+```powershell
+# Save changes
+$PrintBRM.ClosePrintMigration()
+
+# Discard changes
+$PrintBRM.ClosePrintMigration($true)
+```
+
+---
+
+## Additional Notes
+
+- Ensure `printbrm.exe` exists in `C:\Windows\System32\spool\tools`.
+- Use the `OpenPrintMigration()` method before accessing or modifying the migration file.
+- Always call `ClosePrintMigration()` after operations to clean up resources.
+
+---
+
+## Example Workflow
+
+### Export Printers and Create Intune Package
+
+```powershell
+# Initialize
+$PrintBRM = [PrintBRM]::new("C:\temp\printbrm", "C:\temp\printbrm\printers.printerexport")
+
+# Export printers
+$PrintBRM.ExportPrinters()
+
+# Open migration file
+$PrintBRM.OpenPrintMigration()
+
+# List printers
+$printers = $PrintBRM.GetPrinterMigrationItem()
+$printers | ForEach-Object { Write-Host $_.PrinterName }
+
+# Create Intune package
+$options = [OptionNewIntunePrinterPackage]::new()
+$options.Force = $true
+$PrintBRM.NewIntunePrinterPackage($options)
+
+# Publish Intune package
+$appOpts = [OptionIntuneWin32Application]::new()
+$appOpts.DisplayName = "Printer Deployment"
+$appOpts.Publisher = "Company Name"
+$appOpts.Description = "Deploy Printers via Intune"
+$PrintBRM.PublishIntunePrinterPackage($appOpts)
+
+# Clean up
+$PrintBRM.ClosePrintMigration()
+```
+
+---
+
+## Conclusion
+
+The `PrintBRM` module provides a powerful way to manage printer migrations, customize configurations, and integrate with Intune for streamlined deployment. Use the methods as outlined above to handle common printer management tasks efficiently.
+

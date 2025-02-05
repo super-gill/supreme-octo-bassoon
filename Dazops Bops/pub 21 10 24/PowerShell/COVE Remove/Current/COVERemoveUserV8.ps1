@@ -150,6 +150,7 @@ function doTeams {
                 # Attempt to get the team user and filter based on $UserUPN
                 $teamUser = Get-TeamUser -GroupId $team.GroupId | Where-Object { $_.User -like $UserUPN }
                 
+                
                 if ($teamUser) {
                     if (-not $whatIf) {
                         Remove-TeamUser -GroupId $team.GroupId -User $UserUPN
