@@ -32,12 +32,12 @@
 .EXAMPLE
     Remove a single user from both Teams and SharePoint:
 
-    .\removeUser.ps1 -UserUPN user@contoso.com -teams -sharepoint -whatif $false
+    .\removeUser.ps1 -UserUPN user@contoso.com -teams -sharepoint
 
 .EXAMPLE
     Remove multiple users from both Teams and SharePoint from a CSV:
 
-    .\removeUser.ps1 -dir c:\temp\users.csv -teams -sharepoint -whatif $false
+    .\removeUser.ps1 -dir c:\temp\users.csv -teams -sharepoint
 
 .EXAMPLE
     Simulate the removal of multiple users from both Teams and SharePoint:
@@ -60,7 +60,7 @@ try {
         Clear-Host
         Write-Host ""
         Write-Host "No flags have been passed" -ForegroundColor Yellow
-        Write-Host "Use ""Get-Help '.\CoveRemoveUserV$version.ps1' -Full"" for help and examples of how to run this script" -ForegroundColor Yellow
+        Write-Host "Use ""Get-Help '.\CoveRemoveUser V$version.ps1' -Full"" for help and examples of how to run this script" -ForegroundColor Yellow
         Write-Host "The script will now end, no changes have been made" -ForegroundColor Yellow
         Write-Host ""
         exit
@@ -86,7 +86,7 @@ try {
         Clear-Host
     }
 }
-catch { Write-Host "Failed, exit 002" }
+catch { Write-Host "Failed, exit 002`n" }
 
 Write-Host "`nCove User Remover Version $($version)`n" -ForegroundColor green
 
@@ -100,8 +100,9 @@ if ($whatIf) {
 function validateEmail {
     param ([string]$emailAddress)
     try {
-    return $emailAddress -match '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    } catch {
+        return $emailAddress -match '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    }
+    catch {
         Write-Host "Failed to verify the email: "$_
     }
 }
@@ -150,7 +151,6 @@ function doTeams {
                 # Attempt to get the team user and filter based on $UserUPN
                 $teamUser = Get-TeamUser -GroupId $team.GroupId | Where-Object { $_.User -like $UserUPN }
                 
-                
                 if ($teamUser) {
                     if (-not $whatIf) {
                         Remove-TeamUser -GroupId $team.GroupId -User $UserUPN
@@ -171,9 +171,6 @@ function doTeams {
         }
     }
 }
-
-
-
 
 function doSharePoint {
     param (
@@ -211,51 +208,76 @@ function doSharePoint {
     }
     return $localspresult
 }
+
+function get-spourl {
+
+    param (
+        $adminupn,
+        $adminurl
+    )
  
-$foo = connect-microsoftteams
-[void]($foo.account.id)
+    $foo = connect-microsoftteams
+    [void]($foo.account.id)
 
-[string]$adminUPN = $foo.account.id
+    [string]$adminUPN = $foo.account.id
 
-connect-exchangeonline
-try {
-    #$adminURL = ((Get-UnifiedGroup -Filter { ResourceProvisioningOptions -eq "Team" }).sharepointsiteurl).split(".")[0] + "-admin.sharepoint.com/"
-    $sharepointSites = (Get-UnifiedGroup -Filter { ResourceProvisioningOptions -eq "Team" }).sharepointsiteurl
-    $adminURL = ($sharepointSites -ne $null).split(".")[0] + "-admin.sharepoint.com/"
-    write-host "Admin URL: $($adminURL)"
+    connect-exchangeonline
+    try {
+        #$adminURL = ((Get-UnifiedGroup -Filter { ResourceProvisioningOptions -eq "Team" }).sharepointsiteurl).split(".")[0] + "-admin.sharepoint.com/"
+        $sharepointSites = (Get-UnifiedGroup -Filter { ResourceProvisioningOptions -eq "Team" }).sharepointsiteurl
+        $adminURL = ($sharepointSites -ne $null).split(".")[0] + "-admin.sharepoint.com/"
+        write-host "Admin URL: $($adminURL)"
+        Connect-SPOService -Url $adminURL
+    }
+    catch {
+        Write-Host "Failed to get the Sharepoint admin portal URL, please provide it or check the user's UPN`n" -ForegroundColor red
+        Write-Host "Users UPN passed to the script:     $($UserUPN) *if blank then null value" -ForegroundColor Yellow
+        Write-Host "Admin Portal passed to the script:  $($adminURL) *if blank then null value`n" -ForegroundColor Yellow
+        $adminurl = Read-Host -prompt "SharePoint Admin URL"
+    }
+
     Connect-SPOService -Url $adminURL
-}
-catch {
-    Write-Host "Failed to get the Sharepoint admin portal URL, please provide it or check the user's UPN`n" -ForegroundColor red
-    Write-Host "Users UPN passed to the script:     [$($UserUPN)]   *if blank then null value" -ForegroundColor Yellow
-    Write-Host "Admin Portal passed to the script:  [$($adminURL)]  *if blank then null value`n" -ForegroundColor Yellow
-    $adminurl = Read-Host -prompt "SharePoint Admin URL"
+
 }
 
-Connect-SPOService -Url $adminURL
+function select-mode {
 
-if ($dir -ne "") {
-    $userUPNs = multipleUsers -dir $dir
+    param (
+        $userUPNs,
+        $UserUPN,
+        $adminUPN,
+        $adminurl,
+        $sharepoint,
+        $teams
+    )
 
-    Write-Host ""
-    Write-Host "Processing SharePoint users from CSV"
-    foreach ($upn in $userUPNs) {
-        doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs @($upn)
+    if ($dir -ne "") {
+        $userUPNs = multipleUsers -dir $dir
+
+        Write-Host ""
+        Write-Host "Processing SharePoint users from CSV"
+        foreach ($upn in $userUPNs) {
+            doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs @($upn)
+        }
+
+        Write-Host ""
+        Write-Host "Processing Teams users from CSV"
+        foreach ($upn in $userUPNs) {
+            doTeams -UserUPN $upn
+        }
+    }
+    else {
+        if ($sharepoint) {
+            $userUPNs = @($UserUPN)
+            doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs $userUPN
+        }
+
+        if ($teams) {
+            doTeams -UserUPN $UserUPN
+        }
     }
 
-    Write-Host ""
-    Write-Host "Processing Teams users from CSV"
-    foreach ($upn in $userUPNs) {
-        doTeams -UserUPN $upn
-    }
+    get-spourl -adminupn $adminUPN -adminurl $adminurl
 }
-else {
-    if ($sharepoint) {
-        $userUPNs = @($UserUPN)
-        doSharePoint -adminUPN $adminUPN -adminURL $adminURL -userUPNs $userUPN
-    }
 
-    if ($teams) {
-        doTeams -UserUPN $UserUPN
-    }
-}
+select-mode -userupns $userUPNs -userupns $UserUPN -adminUPN $adminUPN -adminURL $adminurl -sharepoint $sharepoint -teams $teams
