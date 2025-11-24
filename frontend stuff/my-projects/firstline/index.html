@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step Containers with Sidebar & Title Bar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            display: flex;
+        }
+
+        /* Title Bar */
+        .titlebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #1e293b;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            /*padding: 0 10px;*/
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+        }
+
+        .titlebarinner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 3000px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .titlebar h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .reset-btn {
+            background: #334155;
+            border: none;
+            padding: 8px 16px;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #475569;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 240px;
+            background: #1e293b;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            top: 60px;
+            /* leave space for titlebar */
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            margin: 5px 0;
+        }
+
+        /* Expandable details styling */
+        details {
+            padding: 5px 0;
+        }
+
+        details summary {
+            cursor: pointer;
+            padding: 10px 20px;
+            font-weight: 500;
+            /* border-radius: 8px; */
+            list-style: none;
+            color: #cbd5e1;
+            transition: background 0.3s ease;
+        }
+
+        details summary:hover {
+            background: #334155;
+            color: #fff;
+        }
+
+        details[open] summary {
+            background: #334155;
+            color: #fff;
+        }
+
+        details ul {
+            list-style: none;
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+
+        details ul li a {
+            display: block;
+            padding: 6px 20px;
+            text-decoration: none;
+            color: #cbd5e1;
+            border-radius: 6px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        details ul li a:hover {
+            background: #475569;
+            color: #fff;
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 260px;
+            /* leave space for sidebar */
+            margin-top: 80px;
+            /* leave space for titlebar */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-height: 120px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .container.done {
+            background: #e5e7eb;
+            /* greyed out */
+            opacity: 0.7;
+            height: 60px;
+            /* collapsed height */
+        }
+
+        .container.done .text p {
+            display: none;
+            /* hide description */
+        }
+
+        .container.done .image {
+            display: none;
+            /* hide the image */
+        }
+
+        .text {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .image {
+            flex: 1;
+            background: #e0e0e0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Expanded Image Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Title Bar -->
+    <div class="titlebar">
+        <div class="titlebarinner">
+            <h1>Procedure Library</h1>
+            <button class="reset-btn" onclick="resetSteps()">Reset Steps</button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul class="nav-links">
+            <li>
+                <details>
+                    <summary>Collection A</summary>
+                    <ul>
+                        <li><a href="#step1">Process 1</a></li>
+                        <li><a href="#step2">Process 2</a></li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                <details>
+                    <summary>Collection B</summary>
+                    <ul>
+                        <li><a href="#step3">Process 3</a></li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <!-- Example Container 1 -->
+        <div class="container" id="step1" onclick="toggleDone(this)">
+            <div class="text">
+                <h2>Step 1</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel massa ac orci commodo blandit.</p>
+            </div>
+            <div class="image" onclick="expandImage(this, event)">
+                <img src="Screenshot 2025-09-23 133525.png" alt="Example Image 1">
+            </div>
+        </div>
+
+        <!-- Example Container 2 -->
+        <div class="container" id="step2" onclick="toggleDone(this)">
+            <div class="text">
+                <h2>Step 2</h2>
+                <p>Aliquam erat volutpat. Suspendisse potenti. Phasellus nec mi et ligula commodo faucibus.</p>
+            </div>
+            <div class="image" onclick="expandImage(this, event)">
+                <img src="first.png" alt="Example Image 2">
+            </div>
+        </div>
+
+        <!-- Example Container 3 -->
+        <div class="container" id="step3" onclick="toggleDone(this)">
+            <div class="text">
+                <h2>Step 3</h2>
+                <p>Proin non mauris nec risus interdum accumsan. Integer a urna at leo lacinia convallis.</p>
+            </div>
+            <div class="image" onclick="expandImage(this, event)">
+                <img src="secon.png" alt="Example Image 3">
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Overlay for Expanded Image -->
+    <div class="overlay" id="overlay" onclick="closeOverlay()">
+        <img id="overlay-img" src="" alt="Expanded Image">
+    </div>
+
+    <script>
+        function toggleDone(container) {
+            container.classList.toggle("done");
+        }
+
+        function resetSteps() {
+            document.querySelectorAll(".container").forEach(c => {
+                c.classList.remove("done");
+            });
+        }
+
+        function expandImage(el, event) {
+            event.stopPropagation(); // Prevent marking step as done when image clicked
+            const imgSrc = el.querySelector("img").src;
+            document.getElementById("overlay-img").src = imgSrc;
+            document.getElementById("overlay").classList.add("active");
+        }
+
+        function closeOverlay() {
+            document.getElementById("overlay").classList.remove("active");
+        }
+    </script>
+
+</body>
+
+</html>
