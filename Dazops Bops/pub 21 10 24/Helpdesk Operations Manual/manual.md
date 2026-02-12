@@ -1,4 +1,4 @@
-[Helpdesk Operations Manual
+Helpdesk Operations Manual
 
 VE.4
 
@@ -145,6 +145,7 @@ Use headings to create structure:
     #### Detail heading (H4)
 
 Guidelines:
+
 - Use one space after the # symbols.
 - Keep headings short and consistent.
 - Leave a blank line after headings for readability.
@@ -154,7 +155,7 @@ Guidelines:
 Write normal text as paragraphs. Separate paragraphs with a blank line:
 
     This is paragraph one.
-
+    
     This is paragraph two.
 
 To force a line break inside a paragraph, end the line with two spaces:
@@ -170,6 +171,7 @@ Use bold and italics:
 - Italics: surround text with one asterisk on each side
 
 Examples:
+
 - Internal use only (bold)
 - Not in Force (italics)
 
@@ -263,10 +265,10 @@ alt="Ticket lifecycle image" />
 
 ## Triage Policy (NF)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Types of Triage
 
@@ -291,7 +293,8 @@ to confirm or update ticket details as required.
 
 ### Expectation
 
-#### All tickets processed by the CLS team or Helpdesk must, at a minimum,
+**All tickets processed by the CLS team or Helpdesk must, at a minimum**
+
 have been procedurally triaged to ensure:
 
 - Correct contact details are present
@@ -299,7 +302,7 @@ have been procedurally triaged to ensure:
 - Sufficient information exists to classify the ticket type and the
   request
 
-#### Helpdesk engineers correct any mistakes and add additional technicak information
+**Helpdesk engineers correct any mistakes and add additional technicak information** 
 
 - Correct any mistakes in the tickets details and infomration
 
@@ -321,10 +324,10 @@ entirely by the disciplinary process.
 
 ## Dispatch Policy
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 **This policy does not reflect changes to queue management and dispatch limitations (15 tickets per queue) for a brief overview of this practice see Appendix - Dispatch Limitations (Temporary)**
 
@@ -399,10 +402,10 @@ dispatch on a “best chance of success” basis.
 
 ## Dispatch Responsibility Policy (Abandoned)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -466,10 +469,10 @@ Leader(s) are available to resume their duties.</s>
 
 ## SLA Milestones (NF)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -487,12 +490,11 @@ service request (SR) and are determined by the priority level assigned
 during triage.
 
 | Priority | Description | Response Target (Incident) | Response Target (SR) | Resolution Target (Incident) | Resolution Target (SR) |
-|---:|---|---:|---:|---:|---:|
-| 1 | Critical | 00:30 | N/A | 02:00 | N/A |
-| 2 | High | 01:00 | 04:00 | 04:00 | 08:00 |
-| 3 | Moderate | 04:00 | 04:00 | 08:00 | 3 days |
-| 4 | Low | 08:00 | 08:00 | 3 days | 5 days |
-
+| -------: | ----------- | -------------------------: | -------------------: | ---------------------------: | ---------------------: |
+|        1 | Critical    |                      00:30 |                  N/A |                        02:00 |                    N/A |
+|        2 | High        |                      01:00 |                04:00 |                        04:00 |                  08:00 |
+|        3 | Moderate    |                      04:00 |                04:00 |                        08:00 |                 3 days |
+|        4 | Low         |                      08:00 |                08:00 |                       3 days |                 5 days |
 
 - Time expectations given are the maximum allowed, not the target.
   Tickets should be addressed as quickly as possible.
@@ -532,10 +534,10 @@ Shortfall is handled directly through the disciplinary process.
 
 ## Priority Classification Policy (NF)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -611,7 +613,7 @@ guidance, repeat failures are handled through the disciplinary process.
 
 ### Priority Classification Expectations
 
-##### Priority 1 (Critical)
+#### Priority 1 (Critical)
 
 Priority 1 (P1) incidents represent critical issues that have a severe
 and immediate impact on business operations, such as company-wide
@@ -620,7 +622,7 @@ users. When a P1 is raised, it takes absolute precedence over all other
 workloads. Agents must immediately stop work on any other tickets and
 prioritise resolution of the P1.
 
-##### Priority 2 (High)
+#### Priority 2 (High)
 
 Priority 2 (P2) incidents indicate a significant issue that causes
 serious disruption, but on a more limited scale than a P1. For example,
@@ -632,7 +634,7 @@ workloads.
 The primary distinction between P1 and P2 is the scope and scale of
 impact
 
-##### Priority 3 (Moderate)
+#### Priority 3 (Moderate)
 
 Priority 3 (P3) is the default level for most standard incidents. These
 include issues that are disruptive but not urgent, such as software
@@ -641,7 +643,7 @@ viable workarounds.
 P3 incidents are handled in the order they are received, unless
 escalated due to change in impact or urgency.
 
-##### Priority 4 (low)
+#### Priority 4 (low)
 
 Priority 4 (P4) incidents are low-impact or long-term issues that do not
 significantly affect user productivity or business operations. Examples
@@ -654,13 +656,13 @@ priority work has been completed.
 
 [TBD]
 
-### Record keeping and documentation
+#### Record keeping and documentation
 
 Priority classification is checked daily, through our daily ticket
 checks, through our weekly stats and through spot checks on high
 priority or high-risk tickets.
 
-### How we address shortfall
+#### How we address shortfall
 
 Shortfall is handled informally through corrective training and
 guidance, repeat failures are handled through the disciplinary process.
@@ -678,35 +680,38 @@ alt="HD Priority Matrix" />
 ## Documentation Standards [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 # Non-Critical Ticket Handling
 
 ## Incident Management [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Service Request Management [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Ticket Type Usage Policy
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -803,7 +808,7 @@ individuals. Use of child tickets to share workload requires leadership
 intervention and/or approval, except where automatic approval is defined
 within the Escalations Policy.
 
-##### Assigning a task with a child ticket
+#####> Assigning a task with a child ticket
 
 Any helpdesk ticket created specifically for task assignment—regardless
 of the receiving team or individual—must meet the expectations below.
@@ -815,7 +820,7 @@ approval only to:
 
 - Assign shipping instructions to CLS
 
-##### When creating a child ticket for account management:
+#####> When creating a child ticket for account management
 
 - The customer is always the agent that raised it and the company is
   Digital Origin
@@ -841,7 +846,7 @@ approval only to:
   - Apply a 3 strike rule to child tickets, but instead of closing it:
     escalate with a Team Leader
 
-##### When creating a child ticket for shipping instructions:
+#####> When creating a child ticket for shipping instructions
 
 - The customer is always the agent that raised it and the company is
   Digital Origin
@@ -861,7 +866,7 @@ approval only to:
   discovery requests they make. It is the agent creating the ticket who
   is responsible for providing the information, not CLS.
 
-##### When not to use a child ticket:
+#####> When not to use a child ticket
 
 - To avoid ownership or responsibility  
   If the intent is to “hand off” an issue and stop tracking it, a child
@@ -914,10 +919,10 @@ approval only to:
 
 ## Ticket Status Usage Policy (NF)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Expectation
 
@@ -937,19 +942,18 @@ The ticket must still be updated daily unless it is scheduled.
 SLA hold must not be used where progression of the ticket requires an
 internal team
 
-| Status | Usage | Expected SLA Status |
-|---|---|---|
-| New | A new ticket that has not been updated yet. | Running |
-| In Progress | The ticket is actively being worked on. | Running |
-| With User (HD) | Awaiting a response or action from the user; work is paused. | Held (for 24 hours) |
-| With Vendor | Awaiting a response or action from a vendor; work is paused. | Held |
-| With Testbench | Hardware has been delivered and is on the testbench | Running |
-| Escalate | The issue has been escalated for additional support or visibility. | Running |
-| Updated | The ticket has received an update from someone other than the agent. | Running |
-| Scheduled | The ticket has a future appointment or planned action (not missed). | Held |
-| Field Visit Scheduled | A field engineer has been scheduled, and a site visit is booked | Held |
-| With Internal Team | The ticket requires action from a team or authority with Digital Origin | Running |
-
+| Status                | Usage                                                                     | Expected SLA Status |
+| --------------------- | --------------------------------------------------------------------------| ------------------- |
+| New                   | A new ticket that has not been updated yet.                               | Running             |
+| In Progress           | The ticket is actively being worked on.                                   | Running             |
+| With User (HD)        | Awaiting a response or action from the user; work is paused.              | Held (for 24 hours) |
+| With Vendor           | Awaiting a response or action from a vendor; work is paused.              | Held                |
+| With Testbench        | Hardware has been delivered and is on the testbench                       | Running             |
+| Escalate              | The issue has been escalated for additional support or visibility.        | Running             |
+| Updated               | The ticket has received an update from someone other than the agent.      | Running             |
+| Scheduled             | The ticket has a future appointment or planned action (not missed).       | Held                |
+| Field Visit Scheduled | A field engineer has been scheduled, and a site visit is booked           | Held                |
+| With Internal Team    | The ticket requires action from a team or authority with Digital Origin   | Running             |
 
 **Valid Status Required**: Every ticket must always maintain a valid and
 appropriate status.
@@ -963,7 +967,7 @@ make sure.
 any situation where the ticket requires action or intervention from any
 team within Digital Origin.
 
-**Scheduled**
+**Scheduled**:
 
 - Have a valid appointment:
 
@@ -971,7 +975,7 @@ team within Digital Origin.
 
 - Set by the owner of the ticket
 
-**On Hold**
+**On Hold**:
 
 - Should only be used by / for:
 
@@ -979,7 +983,7 @@ team within Digital Origin.
 
 - TL – on demand
 
-**With User**
+**With User**:
 
 - The correct status has been used (“With User (HD)” as opposed to “With
   User”)
@@ -996,7 +1000,7 @@ team within Digital Origin.
 
   - Service Request & Telephony Service Request
 
-**With Vendor**
+**With Vendor**:
 
 - The ticket is actively waiting on a vendor
 
@@ -1005,7 +1009,7 @@ team within Digital Origin.
 - The user (if present) is being updated promptly of changes, or daily,
   whichever is soonest.
 
-**Awaiting Delivery**
+**Awaiting Delivery**:
 
 - Ensure the ticket is assigned to a helpdesk agent
 
@@ -1019,7 +1023,7 @@ team within Digital Origin.
 
 - DO not passing the machine to the agent on arrival
 
-**With Test bench**
+**With Test bench**:
 
 - Ensure the machine is on the test bench
 
@@ -1076,10 +1080,10 @@ sampling.
 
 ## Ticket Communication Policy (NF)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Expectation
 
@@ -1188,7 +1192,7 @@ policy primarily through daily lifecycle checks like “Bread”.
 
 This policy is being integrated into the disciplinary process but will
 not result in disciplinary action until the end of its grace period on
-3<sup>rd</sup> of October 2025
+3rd of October 2025
 
 #### Expectation
 
@@ -1228,17 +1232,18 @@ Intervention process:
 ## Queue Management [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Escalation Policy (NF)
 
-| Last Updated | 10/02/2026 |
-| --- | --- |
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -1428,10 +1433,10 @@ A post incident review is not required every time this policy is triggered, but 
 
 # Critical Incident Handling
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Overview
 
@@ -1441,21 +1446,21 @@ Critical incidents are high-priority issues that have a significant impact on se
 
 Critical incidents are categorized based on their type, whether coordination is required, and whether the incident involves a security concern. This ensures appropriate escalation paths and response procedures are followed.
 
-| Type | Coordination Required? | Security Required? | Example |
-|---|---:|---:|---|
-| Critical Incident | No | No | Internet outage |
-| Security Incident | No | Yes | Malware alert or unopened phishing spam |
-| Major Operational Incident | Yes | No | DC Failure, mail system failure |
-| Major Security Incident | Yes | Yes | Ransomware, successful phishing campaign |
+| Type                       | Coordination Required? | Security Required? | Example                                  |
+| -------------------------- | ---------------------: | -----------------: | ---------------------------------------- |
+| Critical Incident          |                     No |                 No | Internet outage                          |
+| Security Incident          |                     No |                Yes | Malware alert or unopened phishing spam  |
+| Major Operational Incident |                    Yes |                 No | DC Failure, mail system failure          |
+| Major Security Incident    |                    Yes |                Yes | Ransomware, successful phishing campaign |
 
 Each category follows a distinct escalation and communication path. Major incidents (operational or security) invoke the Major Incident Process, which includes cross-functional coordination, real-time updates, and post-incident review. It is crucial that we identify the appropriate course of action for critical priority cases, and selection of the response.
 
 ## Critical Incident Policy
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -1494,10 +1499,10 @@ Any Security Incident with a confirmed intrusion of any kind.
 
 ## Major Operational Incident Policy
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -1654,10 +1659,10 @@ RCA should be conducted every time a major operational incident is raised with f
 
 ## Major Security Incident Policy
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 > *This policies’ automatic trigger is not in force – see “When to use this policy (Not in force)”.*
 
@@ -1830,10 +1835,10 @@ This procedure should be reviewed each time it is triggered.
 
 ## Use of the Local Administrator group on customer machines
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Scope
 
@@ -1857,43 +1862,47 @@ Applies to customer computers running Windows and Mac OSX.
 ## Password & Credential Handling [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Tooling & Asset Management Handling [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Password & Credential Handling Policy [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Tooling & Asset Management Standards [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 # Customer Service
 
 ## Phone Etiquette Guide
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -1950,19 +1959,20 @@ After each call take a moment to reflect on your tone and interaction, consider 
 ## Handling Complaints and Difficult Customers [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 # Quality Assurance (NF)
 
 ## Ticket Hygiene Tooling
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -2167,35 +2177,41 @@ Where a ticket fails to meet our expectations, and it is recorded, the reasons a
 
 #### Status Checks
 
-**Scheduled**
+#####> Scheduled
+
 - No appointment (there is no appointment set)
 - Appointment invalid (the appointment is wrong, or in the past)
 
-**On Hold**
+#####> On Hold
+
 - Invalid use (use case breaches the status expectations)
 
-**With User**
+#####> With User
+
 - No update (the ticket has not received an update in 24 hours)
 - Incorrect version (“With User” vs “With User (HD)”)
 - Invalid use (the ticket is not waiting for a response from the user)
 
-**With Vendor**
+#####> With Vendor
+
 - No update (the ticket has not received an update in 24 hours)
 
-**Awaiting Delivery**
+#####> Awaiting Delivery
+
 - No update (the ticket has not received an update in 24 hours)
 - Invalid use (the ticket does not have an outstanding delivery associated with it)
 
-**With Test Bench**
+#####> With Test Bench
+
 - No update (the ticket has not received an update in 24 hours)
 - Invalid use (the ticket is not physically present in our office or on the test bench)
 
 ## Projects to Helpdesk Handover
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### When a handover interview is required
 
@@ -2257,17 +2273,18 @@ The helpdesk accepts a handover when:
 ## Scheduled Ticket Review [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Ticket Quality Sampling
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -2298,61 +2315,67 @@ The scoring matrix should be attached to the ticket it applies to; a copy of the
 ## New Starter & Onboarding [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Training [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Tooling and Systems [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Post Incident Review (PIR) [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 PIRs, where called upon, are handled by individual process with no global expecations yet.
 
 ## Knowledge Management [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Knowledge Base Management [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 # Resource
 
 ## Helpdesk Rota and Breaks
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 **THIS POLICY DOES NOT REFLECT THE 10-6 ROTA**
 
@@ -2364,10 +2387,10 @@ To ensure adequate helpdesk coverage at all times through effective management o
 
 Each shift has an assigned lunch window to maintain acceptable helpdesk coverage throughout the day.
 
-| Shift | Lunch |
-|---|---|
-| 0800 – 1600 / 1630 | 1200 - 1300 |
-| 0900 – 1700 / 1730 | 1300 - 1400 |
+| Shift                     | Lunch       |
+| ------------------------- | ----------- |
+| 0800 – 1600 / 1630        | 1200 - 1300 |
+| 0900 – 1700 / 1730        | 1300 - 1400 |
 | 1000 – 1800 & 0930 – 1730 | 1400 - 1500 |
 
 Lunch break windows are mandatory, whether working in the office or remotely. Agents are expected to plan their lunch breaks into their daily schedule.
@@ -2388,10 +2411,10 @@ Vaping and smoking breaks must be taken in accordance with the company handbook,
 
 ## Professional Advancement
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -2518,16 +2541,16 @@ If the interviewee fails to meet the required standard it can be re-taken after 
 
 ## Disciplinary Process
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Summary
 
 This process is defined by the advice given in the “Disciplinary procedures and action against you at work” document on gov.uk.
 
-https://www.gov.uk/disciplinary-procedures-and-action-at-work
+<https://www.gov.uk/disciplinary-procedures-and-action-at-work>
 
 The Helpdesk’s disciplinary process aims to address and correct shortcomings through training and mentorship, and only escalate to formal proceedings as a last resort or where less formal approaches would be insufficient or inappropriate.
 
@@ -2611,10 +2634,10 @@ All disciplinary action is recorded, including all warnings. Warnings are issued
 
 ## Grievance Process
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Submitting a grievance
 
@@ -2646,17 +2669,18 @@ You should submit a grievance, preferably in writing, to a manager who is not di
 ## Development Plan Policy [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Helpdesk Behaviour & Language Policy (Draft)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -2695,17 +2719,18 @@ To keep language and behaviour respectful, professional and customer-safe at all
 ## Appendix – DUO Use of Bypass [Placeholder]
 
 [Placeholder]
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Appendix – AI Usage Policy (Draft)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ### Purpose
 
@@ -2723,10 +2748,10 @@ Only AI platforms approved by management may be used for Helpdesk work, and publ
 
 ## Appendix – Helpdesk Ticket Screening for Live Projects (Draft)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 Draft
 
@@ -2740,37 +2765,43 @@ The process:
 
 ## Appendix – Policy Format / New Format (Draft)
 
-| Last Updated | 10/02/2026 |
-|---|---|
-| Updated By | Jason Mcdill |
-| Owner | Jason Mcdill |
+| Last Updated | 10/02/2026   |
+| ------------ | ------------ |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
 
 ## Policy New Format Title
 
-###  Purpose  
+### Purpose  
+
 High level overview of the whole policy
 
-###  Scope  
+### Scope  
+
 Who and what the policy applies to
 
-###  Expectation  
+### Expectation  
+
 Description of a sub-policy or expectation
 
-####  How we measure compliance  
+#### How we measure compliance  
+
 Methods used, linked process or policies
 
-####  How we address shortfall  
+#### How we address shortfall  
+
 How this policy integrates with discipline]
 
 ## Appendix - Dispatch Limitations (Temporary)
 
-**Purpose**  
+### Purpose
 
 This appendix outlines the temporary dispatch limitations currently in place for the Helpdesk team. These limitations are designed to manage workload and ensure a high level of service quality.
 
 The rationale of this policy is not temporary, only its current implementation. Limits will remain and continue to be enforced going forward but the expectations will evolve as we gather more data on their impact.
 
-**CLS Limitations**  
+### CLS Limitations
+
 - Maximum of 15 tickets per queue for initial dispatch
 - No assignment of tickets, unless P1 or P2, in the last 30 minutes of an agents shift, except when:
   - They have been directly communicated with
@@ -2779,7 +2810,8 @@ The rationale of this policy is not temporary, only its current implementation. 
 - If no valid queue is available for dispatch, the ticket will be held in unassigned
 - P1 and P2 tickets will continue to be prioritized for immediate dispatch regardles of queue size and state
 
-**Team Leader Expectations**
+### Team Leader Expectations
+
 - Monitor ticket queues and ensure:
   - Compliance with dispatch limitations
   - Agents are able to manage their workloads
@@ -2788,24 +2820,28 @@ The rationale of this policy is not temporary, only its current implementation. 
 - Support agents in managing their ticket assignments effectively
 
 Critical Operational Incident & Critical Security Incident "Incident Owner" workload management
+
 - The workload of this agent must be cleared, and as such the limitations do not apply when re-distributing their queue
 - Any conflict with any part of the helpdesk's "Critical Incident Handling Process" overrules this policy
 
-**Critical Care Tickets**
+### Critical Care Tickets
 
 Tickets that are classified as "Critical Care" will be handled in the same way as any normal ticket through dispatch, with the same limitations and expectations
 
-**Rationale** 
+### Rationale
+
 - Reduce the risk of overwhelming an agents queue with an amount of work they are unable to achieve inside each tickets SLA
 - Maintain enough agent bandwidth to allow P1 and P2 tickets through immediately
 - Allow workloads we are under-resourced to achieve to expire in a public forum (unassigned)
 
-**How we measure compliance**  
+### How we measure compliance
+
 - Ticket queues are constantly monitored already, breaches can be addressed informally and fedback immediately
 - Performance of this policy is tested by reporting on the average time a ticket spends without dispatch
 - "Slow dispatch" is excused or ignored in lieu of the expectations of this policy, where it applies
 
-**How we address shortfall**
+### How we address shortfall
+
 - If compliance shortfalls are identified, the Helpdesk management team will work with affected agents to reduce their workload
 - Feedback, training and additional resources can be provided where dispatch is unable to meet demand
 - This process is incompatible with the helpdesk disciplinary process as it requires cooperation from an external team and queue owners are not directly responsible for controlling their own workload volume
