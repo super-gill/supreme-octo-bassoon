@@ -343,15 +343,14 @@
       }
     }
   </style>
-  <link rel="icon" type="image/png" href="file.png">
 </head>
 
 <body>
   <div class="app">
     <aside>
       <div class="brand">
-        <strong id="docTitle">Helpdesk Operations Manual</strong>
-        <span id="docMeta">Internal Use Only</span>
+        <strong>Helpdesk Operations Manual</strong>
+        <span>VE.4 | Internal Use Only</span>
       </div>
 
       <div class="search">
@@ -397,19 +396,6 @@
     const resultsEl = document.getElementById('results');
 
     let CURRENT_QUERY = '';
-
-    function extractDocMeta(mdText) {
-      const lines = mdText.split(/\r?\n/);
-
-      // Title = first non-empty line
-      const title = (lines.find(l => l.trim()) || 'Helpdesk Operations Manual').trim();
-
-      // Version = first line like "VE.4"
-      const verLine = lines.find(l => /^\s*VE\.\d+\s*$/i.test(l));
-      const version = verLine ? verLine.trim().toUpperCase() : null;
-
-      return { title, version };
-    }
 
     function slugify(text) {
       return text
@@ -496,30 +482,20 @@
       }
     }
 
-    async function loadManualMd() {
-      const url = new URL('manual.md', document.baseURI);
-      console.log('Loading manual from:', url.href, 'page:', location.href);
+async function loadManualMd() {
+  const url = new URL('manual.md', document.baseURI);
+  console.log('Loading manual from:', url.href, 'page:', location.href);
 
-      const res = await fetch(url.href, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`Failed to load ${url.href} (${res.status} ${res.statusText})`);
+  const res = await fetch(url.href, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to load ${url.href} (${res.status} ${res.statusText})`);
 
-      return await res.text();
-    }
+  return await res.text();
+}
 
 
     async function init() {
       try {
         const mdText = await loadManualMd();
-        const { title, version } = extractDocMeta(mdText);
-
-        const titleEl = document.getElementById('docTitle');
-        const metaEl2 = document.getElementById('docMeta');
-
-        if (titleEl) titleEl.textContent = title;
-        if (metaEl2) metaEl2.textContent = `${version ? version + ' | ' : ''}Internal Use Only`;
-
-        document.title = title + (version ? ` — ${version}` : '');
-
         GROUPS = parseManual(mdText);
         buildIndexFromGroups();
 
@@ -532,6 +508,7 @@
         metaEl.textContent = 'Error loading manual.md';
         viewEl.innerHTML = `
       <h2>Couldn’t load manual.md</h2>
+      <p>Check the file exists next to this HTML and that you’re running the site via a web server (not file://).</p>
     `;
       }
     }

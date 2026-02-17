@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Helpdesk Operations Manual</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it-anchor@9.1.0/dist/markdownItAnchor.umd.js"></script>
+
+
+  <link rel="icon" type="image/png" href="file.png">
+</head>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <strong id="docTitle">Helpdesk Operations Manual</strong>
+        <span id="docMeta">Internal Use Only</span>
+      </div>
+
+      <div class="search">
+        <input id="search" type="search" placeholder="Search the manual…" autocomplete="off" />
+        <div id="results" class="results"></div>
+      </div>
+
+      <div id="nav"></div>
+    </aside>
+
+    <main>
+      <div class="wrap">
+        <div class="card">
+          <div class="meta" id="meta"></div>
+          <article class="doc" id="view"></article>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+<script src="index.js"></script>
+</html>
