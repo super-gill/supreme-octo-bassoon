@@ -1187,15 +1187,23 @@ policy primarily through daily lifecycle checks like “Bread”.
 
 [TBD]
 
-### Confirmation of resolution (NF, soft enforced)
+## Ticket Closer, Reopen and Recurrance (NF)
 
-This policy is being integrated into the disciplinary process but will
-not result in disciplinary action until the end of its grace period on
-3rd of October 2025
+### Purpose
+[TBD]
+
+### Scope
+[TBD]
+
+### When tickets can be closed
+
+#### Confirmation of resolution
+
+In most cases, the user is the only party that can confirm a solution is acceptable and allow the ticket to be closed. Tickets that can not be closed as a result of no confirmation, or where confirmation is impossible, should be raised with a Team Leader.
 
 #### Expectation
 
-All tickets processed by the helpdesk must have confirmation that the
+Tickets processed by the helpdesk must have confirmation that the
 resolution has worked before the ticket is closed.
 
 - Preferred method: Directly from the ticket user.
@@ -1215,18 +1223,17 @@ is already being monitored and can be fed back.
 
 #### How we address shortfalls
 
-Triggers for intervention:
+[TBD]
 
-- Any recurrence that results directly or indirectly from a lack of
-  resolution confirmation
+### Handling reopened tickets
+[TBD]
 
-Intervention process:
+### Classifying and actioning recurrance
+[TBD]
 
-- A meeting will be held with the agent to review the ticket and
-  identify the reason(s) confirmation was not obtained.
+### Confirmation of resolution
 
-- If necessary, corrective measures will be applied, which may include a
-  Development Plan and/or disciplinary action as appropriate.
+## Ticket Ownership and Handover Policy [Placeholder]
 
 ## Queue Management [Placeholder]
 
