@@ -2613,7 +2613,9 @@ Escalating to formal disciplinary steps only when:
 
 ### Typical Flow
 
-[TBD]
+1. **Concern identified**
+   - Triggered by QA checks, SLA failures, repeated ticket-handling shortfalls, customer complaints, colleague concerns or observed behaviours
+   - The Team Leader records a short “what happened” note and gathers initial evidence (examples, dates, tickets, messages)
 
 ### Formal Steps
 
