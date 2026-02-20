@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Web Markdown Editor (Mode A)</title>
+  <style>
+    :root { --bg:#0b1020; --panel:#111a33; --text:#e8eefc; --muted:#9fb1d1; --line:#22305a; --btn:#1c2a55; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--text); }
+    header { padding:16px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, #0b1020, #0b1020cc); position:sticky; top:0; z-index:10; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .title { font-weight:700; letter-spacing:.2px; margin-right:auto; }
+    button, input[type="text"] {
+      background:var(--btn); color:var(--text); border:1px solid var(--line);
+      padding:10px 12px; border-radius:10px; cursor:pointer;
+    }
+    button[disabled]{ opacity:.5; cursor:not-allowed; }
+    button:hover:not([disabled]) { filter:brightness(1.08); }
+    button:active:not([disabled]) { transform:translateY(1px); }
+    input[type="text"]{ cursor:text; }
+    .wrap { max-width:1100px; margin:0 auto; padding:16px; }
+    .hint { color:var(--muted); font-size:13px; margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .pill { font-size:12px; color:var(--muted); border:1px solid var(--line); padding:4px 10px; border-radius:999px; }
+
+    .layout { max-width:1100px; margin:0 auto; padding:16px; display:grid; grid-template-columns: 1fr 260px; gap:12px; align-items:start; }
+    @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden; min-width:0; }
+    textarea {
+      width:100%; height:70vh; resize:vertical; border:0; outline:0;
+      padding:16px; background:transparent; color:var(--text);
+      font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      box-sizing:border-box;
+    }
+    .preview { padding:18px; min-height:70vh; background:transparent; box-sizing:border-box; }
+
+    .outline {
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      position:sticky;
+      align-self:start;
+      top: var(--outline-top, 12px);
+      max-height: calc(100dvh - var(--outline-top, 12px) - 16px);
+      overflow:auto;
+      min-width:0;
+    }
+    .outline h3 { margin:0 0 10px 0; font-size:14px; color:var(--muted); letter-spacing:.2px; }
+    .outline a {
+      display:block; color:var(--text); text-decoration:none;
+      padding:6px 8px; border-radius:10px; border:1px solid transparent;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px;
+    }
+    .outline a:hover { border-color: var(--line); filter:brightness(1.06); }
+    .outline a[data-level="1"] { font-weight:700; }
+    .outline a[data-level="2"] { padding-left:16px; color:#dbe6ff; }
+    .outline a[data-level="3"] { padding-left:26px; color:#c9d8ff; }
+    .outline a[data-level="4"],
+    .outline a[data-level="5"],
+    .outline a[data-level="6"] { padding-left:36px; color:#b6c9ff; }
+    .empty-outline { color:var(--muted); font-size:13px; padding:6px 8px; }
+
+    .preview h1,.preview h2,.preview h3 { margin-top:1.1em; }
+    .preview pre { background:#0a0f20; border:1px solid var(--line); padding:12px; border-radius:12px; overflow:auto; }
+    .preview code { background:#0a0f20; padding:2px 6px; border-radius:8px; border:1px solid var(--line); }
+    .preview blockquote { border-left:4px solid #3b5bd6; margin:1em 0; padding:.2em 1em; color:var(--muted); }
+    .preview a { color:#8fb0ff; }
+    .preview table { border-collapse:collapse; width:100%; }
+    .preview th,.preview td { border:1px solid var(--line); padding:8px; }
+  </style>
+</head>
+<body>
+  <header id="appHeader">
+    <div class="wrap">
+      <div class="row">
+        <div class="title">Markdown Editor</div>
+
+        <button id="toggleBtn" type="button">Preview</button>
+        <input id="filename" type="text" value="notes.md" aria-label="Filename" />
+
+        <button id="openBtn" type="button">Open</button>
+        <button id="saveBtn" type="button" disabled>Save</button>
+        <button id="saveAsBtn" type="button">Save As</button>
+
+        <button id="exportBtn" type="button" title="Always works: downloads a copy">Export .md</button>
+        <button id="clearBtn" type="button">Clear</button>
+      </div>
+
+      <div class="hint">
+        <span class="pill" id="statusPill">Checking environment…</span>
+        <span class="pill" id="envPill">—</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="panel">
+      <textarea id="editor" spellcheck="false" aria-label="Markdown editor"></textarea>
+      <div id="preview" class="preview" style="display:none;"></div>
+    </div>
+
+    <aside class="outline" aria-label="Document outline">
+      <h3>Outline</h3>
+      <div id="outlineList" class="empty-outline">No headings yet.</div>
+    </aside>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+  <script>
+    // ---------- logging ----------
+    const LOG_PREFIX = "[MD-Editor]";
+    const log = (...a) => console.log(LOG_PREFIX, ...a);
+    const warn = (...a) => console.warn(LOG_PREFIX, ...a);
+    const fail = (where, e) => {
+      const msg = e?.name ? `${e.name}: ${e.message}` : String(e);
+      console.error(LOG_PREFIX, where, e);
+      setStatus(`${where} failed (${msg})`);
+    };
+
+    // ---------- DOM ----------
+    const md = window.markdownit({ html:false, linkify:true, typographer:true });
+
+    const editor = document.getElementById("editor");
+    const preview = document.getElementById("preview");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    const filenameInput = document.getElementById("filename");
+    const openBtn = document.getElementById("openBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const saveAsBtn = document.getElementById("saveAsBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const statusPill = document.getElementById("statusPill");
+    const envPill = document.getElementById("envPill");
+
+    const outlineList = document.getElementById("outlineList");
+    const headerEl = document.getElementById("appHeader");
+    const rootEl = document.documentElement;
+
+    // ---------- Mode A requirements ----------
+    const FS_SUPPORTED = typeof window.showOpenFilePicker === "function";
+    const SECURE = window.isSecureContext === true;
+    const MODE_A_OK = FS_SUPPORTED && SECURE;
+
+    // ---------- state ----------
+    let fileHandle = null;
+    let lastSaved = "";
+    let autosaveTimer = null;
+    let autosaveInFlight = false;
+
+    // ---------- helpers ----------
+    function setStatus(t){ statusPill.textContent = t; }
+
+    function sanitizeFilename(name) {
+      let safe = (name || "notes.md").trim();
+      safe = safe.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-");
+      if (!safe.toLowerCase().endsWith(".md")) safe += ".md";
+      if (safe.length > 120) safe = safe.slice(0, 120);
+      return safe || "notes.md";
+    }
+
+    // ensure outline stays within viewport
+    function updateOutlineViewportFit() {
+      const h = Math.ceil(headerEl.getBoundingClientRect().height);
+      rootEl.style.setProperty("--outline-top", (h + 12) + "px");
+    }
+    window.addEventListener("resize", updateOutlineViewportFit);
+    if (window.ResizeObserver) new ResizeObserver(updateOutlineViewportFit).observe(headerEl);
+
+    function updateButtons() {
+      openBtn.disabled = !MODE_A_OK;
+      saveBtn.disabled = !fileHandle;
+      // Save As is allowed if Mode A is available (even if no file opened)
+      saveAsBtn.disabled = !MODE_A_OK;
+
+      openBtn.title = MODE_A_OK ? "Open a file (autosave to same file)" : "Needs Chrome/Edge + https:// or http://localhost";
+      saveAsBtn.title = MODE_A_OK ? "Pick a location and start autosaving to it" : openBtn.title;
+    }
+
+    // ---------- markdown headings + outline ----------
+    function slugify(text) {
+      return (text || "")
+        .toLowerCase().trim()
+        .replace(/[`~!@#$%^&*()+=\[\]{};:'",.<>/?\\|]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+    }
+
+    function extractHeadings(markdownText) {
+      const lines = (markdownText || "").split(/\r?\n/);
+      const headings = [];
+      for (const line of lines) {
+        const m = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+        if (!m) continue;
+        headings.push({ level: m[1].length, title: m[2].trim() });
+      }
+      return headings;
+    }
+
+    function assignUniqueIds(headings) {
+      const used = new Map();
+      return headings.map(h => {
+        const base = slugify(h.title) || "section";
+        const count = (used.get(base) || 0) + 1;
+        used.set(base, count);
+        return { ...h, id: count === 1 ? base : `${base}-${count}` };
+      });
+    }
+
+    const originalHeadingOpen = md.renderer.rules.heading_open;
+    md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
+      const token = tokens[idx];
+      if (env && env.headingIds && env.headingIds.length) {
+        const next = env.headingIds.shift();
+        if (next?.id) token.attrSet("id", next.id);
+      }
+      return originalHeadingOpen
+        ? originalHeadingOpen(tokens, idx, options, env, self)
+        : self.renderToken(tokens, idx, options);
+    };
+
+    function renderOutline(headings) {
+      if (!headings.length) {
+        outlineList.className = "empty-outline";
+        outlineList.textContent = "No headings yet.";
+        return;
+      }
+      outlineList.className = "";
+      outlineList.innerHTML = headings.map(h => {
+        const safeText = h.title.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        return `<a href="#${h.id}" data-id="${h.id}" data-level="${h.level}" title="${safeText}">${safeText}</a>`;
+      }).join("");
+    }
+
+    function renderPreviewAndOutline() {
+      const raw = editor.value || "";
+      const headings = assignUniqueIds(extractHeadings(raw));
+      preview.innerHTML = md.render(raw, { headingIds: headings.map(h => ({ id: h.id })) });
+      renderOutline(headings);
+    }
+
+    function renderOutlineOnly() {
+      renderOutline(assignUniqueIds(extractHeadings(editor.value || "")));
+    }
+
+    let uiTimer = null;
+    function scheduleUiUpdate() {
+      if (uiTimer) clearTimeout(uiTimer);
+      uiTimer = setTimeout(() => {
+        if (preview.style.display !== "none") renderPreviewAndOutline();
+        else renderOutlineOnly();
+      }, 80);
+    }
+
+    function setMode(mode) {
+      const isPreview = mode === "preview";
+      editor.style.display = isPreview ? "none" : "block";
+      preview.style.display = isPreview ? "block" : "none";
+      toggleBtn.textContent = isPreview ? "Raw" : "Preview";
+      if (isPreview) renderPreviewAndOutline();
+    }
+
+    // ---------- Mode A: Open/Save/SaveAs + autosave ----------
+    async function ensureRWPermission(handle) {
+      // Newer Chromium supports queryPermission/requestPermission
+      if (!handle?.queryPermission) return true;
+      const opts = { mode: "readwrite" };
+      const q = await handle.queryPermission(opts);
+      if (q === "granted") return true;
+      const r = await handle.requestPermission(opts);
+      return r === "granted";
+    }
+
+    async function openFile() {
+      log("Open clicked", { FS_SUPPORTED, SECURE, MODE_A_OK });
+      if (!MODE_A_OK) { setStatus("Open blocked: use Chrome/Edge + http://localhost or https://"); return; }
+
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{
+            description: "Markdown",
+            accept: { "text/markdown": [".md",".markdown"], "text/plain": [".txt"] }
+          }]
+        });
+        if (!handle) return;
+
+        // read
+        const file = await handle.getFile();
+        const text = await file.text();
+
+        fileHandle = handle;
+        editor.value = text;
+        lastSaved = text;
+
+        filenameInput.value = sanitizeFilename(file.name || "notes.md");
+
+        // request RW permission up front (optional but nicer)
+        const ok = await ensureRWPermission(handle);
+        setStatus(ok ? `Opened: ${file.name} (autosave on)` : `Opened: ${file.name} (read-only permission)`);
+        updateButtons();
+        scheduleUiUpdate();
+      } catch (e) {
+        if (e?.name === "AbortError") { setStatus("Open cancelled"); return; }
+        fail("Open", e);
+      }
+    }
+
+    async function writeToHandle(handle, text) {
+      const writable = await handle.createWritable();
+      await writable.write(text);
+      await writable.close();
+    }
+
+    async function saveNow() {
+      log("Save clicked", { hasHandle: !!fileHandle });
+      if (!fileHandle) { setStatus("No file opened. Use Open or Save As."); return; }
+
+      if (autosaveInFlight) return;
+      autosaveInFlight = true;
+
+      try {
+        const ok = await ensureRWPermission(fileHandle);
+        if (!ok) { setStatus("Save blocked: permission denied"); return; }
+
+        const text = editor.value || "";
+        if (text === lastSaved) { setStatus("Saved (no changes)"); return; }
+
+        setStatus("Saving…");
+        await writeToHandle(fileHandle, text);
+        lastSaved = text;
+        setStatus("Saved ✓");
+      } catch (e) {
+        fail("Save", e);
+      } finally {
+        autosaveInFlight = false;
+      }
+    }
+
+    async function saveAs() {
+      log("Save As clicked", { FS_SUPPORTED, SECURE, MODE_A_OK });
+      if (!MODE_A_OK) { setStatus("Save As blocked: use Chrome/Edge + http://localhost or https://"); return; }
+
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: sanitizeFilename(filenameInput.value),
+          types: [{
+            description: "Markdown",
+            accept: { "text/markdown": [".md",".markdown"], "text/plain": [".txt"] }
+          }]
+        });
+        if (!handle) return;
+
+        fileHandle = handle;
+        lastSaved = ""; // force save
+        updateButtons();
+        await saveNow();
+      } catch (e) {
+        if (e?.name === "AbortError") { setStatus("Save As cancelled"); return; }
+        fail("Save As", e);
+      }
+    }
+
+    function scheduleAutoSave() {
+      if (!fileHandle) return;
+      if (autosaveTimer) clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(saveNow, 700);
+    }
+
+    // ---------- Export (download) as universal fallback ----------
+    function exportMarkdown() {
+      const content = editor.value || "";
+      const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = sanitizeFilename(filenameInput.value);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---------- events ----------
+    toggleBtn.addEventListener("click", () => {
+      const isPreview = preview.style.display !== "none";
+      setMode(isPreview ? "raw" : "preview");
+    });
+
+    openBtn.addEventListener("click", openFile);
+    saveBtn.addEventListener("click", saveNow);
+    saveAsBtn.addEventListener("click", saveAs);
+
+    exportBtn.addEventListener("click", exportMarkdown);
+
+    clearBtn.addEventListener("click", () => {
+      editor.value = "";
+      fileHandle = null;
+      lastSaved = "";
+      updateButtons();
+      setStatus("Cleared");
+      scheduleUiUpdate();
+    });
+
+    editor.addEventListener("input", () => {
+      scheduleUiUpdate();
+      scheduleAutoSave();
+    });
+
+    outlineList.addEventListener("click", (e) => {
+      const a = e.target.closest("a[data-id]");
+      if (!a) return;
+      e.preventDefault();
+      const id = a.getAttribute("data-id");
+      if (!id) return;
+
+      if (preview.style.display === "none") setMode("preview");
+      requestAnimationFrame(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", "#" + id);
+      });
+    });
+
+    window.addEventListener("beforeunload", (e) => {
+      if (fileHandle && (editor.value || "") !== (lastSaved || "")) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    });
+
+    // ---------- init ----------
+    updateOutlineViewportFit();
+    scheduleUiUpdate();
+    setMode("raw");
+
+    envPill.textContent = `Secure=${SECURE ? "YES" : "NO"} | FS API=${FS_SUPPORTED ? "YES" : "NO"}`;
+    if (!MODE_A_OK) {
+      setStatus("Mode A unavailable: open via http://localhost and use Chrome/Edge");
+    } else {
+      setStatus("Mode A ready: Open a file to enable autosave");
+    }
+    updateButtons();
+    log("Init", { isSecureContext: SECURE, FS_SUPPORTED, MODE_A_OK });
+  </script>
+</body>
+</html>

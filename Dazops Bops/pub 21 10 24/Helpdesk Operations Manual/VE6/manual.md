@@ -251,6 +251,13 @@ If a line begins with # but you do not want it to become a heading, prefix it wi
 - Prefer Markdown tables over HTML tables
 - Keep blank lines between blocks (headings, lists, tables) for readability
 
+## Changes
+
+- Removed Incident Management placeholder (entirely covered by the Non-Critical Ticket Handling Process)
+- Removed Service Request Management placeholder (entirely covered by the Non-Critical Ticket Handling Process)
+- Updated Ticket Communication Policy (NF)
+  - Added Record keeping and documentation
+
 # Ticket Lifecycle & Classification
 
 ## Lifecycle Flowchart 
@@ -1112,7 +1119,7 @@ the agent’s recorded stats agree.
 
 #### Record keeping and documentation
 
-[TBD]
+Callout and email communication statistics are recorded with weekly performance stats and kept indefinitely, communication quality is recorded by spot check and recorded where notable.
 
 #### How we address shortfalls
 
@@ -1162,9 +1169,7 @@ focussing on Incidents.
 
 #### How we measure compliance
 
-Lifecycle management is an ongoing process with several automated
-methods of reporting and alerting. We measure compliance with this
-policy primarily through daily lifecycle checks like “Bread”.
+Lifecycle management is an ongoing process with several automated methods of reporting and alerting. We measure compliance with this policy primarily through daily lifecycle checks like “Bread”.
 
 #### Record keeping and documentation
 
@@ -1174,10 +1179,10 @@ policy primarily through daily lifecycle checks like “Bread”.
 
 [TBD]
 
-## Ticket Closer, Reopen and Recurrance (NF)
+## Ticket Closure, Reopen and Recurrence (NF)
 
 ### Purpose
-[TBD]
+The purpose of this policy is to ensure tickets are closed consistently and safely, without prematurely ending ownership, and to ensure that re-opened or repeating issues are handled in a controlled way that protects customer confidence, SLA performance, and operational risk.
 
 ### Scope
 [TBD]
