@@ -251,10 +251,6 @@ If a line begins with # but you do not want it to become a heading, prefix it wi
 - Prefer Markdown tables over HTML tables
 - Keep blank lines between blocks (headings, lists, tables) for readability
 
-## Changes
-
-Not defined
-
 # Ticket Lifecycle & Classification
 
 ## Lifecycle Flowchart 
@@ -545,7 +541,7 @@ updated appropriately throughout their lifecycle. This maintains SLA
 integrity and ensures that high-impact issues receive the appropriate
 urgency and response.
 
-### Initital Classification
+### Initial Classification
 
 - Priority should be set:
 
@@ -686,24 +682,6 @@ alt="HD Priority Matrix" />
 | Owner        | Jason Mcdill |
 
 # Non-Critical Ticket Handling
-
-## Incident Management [Placeholder]
-
-[Placeholder]
-
-| Last Updated | 10/02/2026   |
-| ------------ | ------------ |
-| Updated By   | Jason Mcdill |
-| Owner        | Jason Mcdill |
-
-## Service Request Management [Placeholder]
-
-[Placeholder]
-
-| Last Updated | 10/02/2026   |
-| ------------ | ------------ |
-| Updated By   | Jason Mcdill |
-| Owner        | Jason Mcdill |
 
 ## Ticket Type Usage Policy
 
