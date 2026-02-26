@@ -1,450 +1,743 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Web Markdown Editor (Mode A)</title>
-  <style>
-    :root { --bg:#0b1020; --panel:#111a33; --text:#e8eefc; --muted:#9fb1d1; --line:#22305a; --btn:#1c2a55; }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--text); }
-    header { padding:16px; border-bottom:1px solid var(--line); background:linear-gradient(180deg, #0b1020, #0b1020cc); position:sticky; top:0; z-index:10; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .title { font-weight:700; letter-spacing:.2px; margin-right:auto; }
-    button, input[type="text"] {
-      background:var(--btn); color:var(--text); border:1px solid var(--line);
-      padding:10px 12px; border-radius:10px; cursor:pointer;
-    }
-    button[disabled]{ opacity:.5; cursor:not-allowed; }
-    button:hover:not([disabled]) { filter:brightness(1.08); }
-    button:active:not([disabled]) { transform:translateY(1px); }
-    input[type="text"]{ cursor:text; }
-    .wrap { max-width:1100px; margin:0 auto; padding:16px; }
-    .hint { color:var(--muted); font-size:13px; margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .pill { font-size:12px; color:var(--muted); border:1px solid var(--line); padding:4px 10px; border-radius:999px; }
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Web Markdown Editor</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --panel: #111a33;
+            --text: #e8eefc;
+            --muted: #9fb1d1;
+            --line: #22305a;
+            --btn: #1c2a55;
+        }
 
-    .layout { max-width:1100px; margin:0 auto; padding:16px; display:grid; grid-template-columns: 1fr 260px; gap:12px; align-items:start; }
-    @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
 
-    .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden; min-width:0; }
-    textarea {
-      width:100%; height:70vh; resize:vertical; border:0; outline:0;
-      padding:16px; background:transparent; color:var(--text);
-      font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      box-sizing:border-box;
-    }
-    .preview { padding:18px; min-height:70vh; background:transparent; box-sizing:border-box; }
+        header {
+            padding: 16px;
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(180deg, #0b1020, #0b1020cc);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-    .outline {
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-      position:sticky;
-      align-self:start;
-      top: var(--outline-top, 12px);
-      max-height: calc(100dvh - var(--outline-top, 12px) - 16px);
-      overflow:auto;
-      min-width:0;
-    }
-    .outline h3 { margin:0 0 10px 0; font-size:14px; color:var(--muted); letter-spacing:.2px; }
-    .outline a {
-      display:block; color:var(--text); text-decoration:none;
-      padding:6px 8px; border-radius:10px; border:1px solid transparent;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px;
-    }
-    .outline a:hover { border-color: var(--line); filter:brightness(1.06); }
-    .outline a[data-level="1"] { font-weight:700; }
-    .outline a[data-level="2"] { padding-left:16px; color:#dbe6ff; }
-    .outline a[data-level="3"] { padding-left:26px; color:#c9d8ff; }
-    .outline a[data-level="4"],
-    .outline a[data-level="5"],
-    .outline a[data-level="6"] { padding-left:36px; color:#b6c9ff; }
-    .empty-outline { color:var(--muted); font-size:13px; padding:6px 8px; }
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
-    .preview h1,.preview h2,.preview h3 { margin-top:1.1em; }
-    .preview pre { background:#0a0f20; border:1px solid var(--line); padding:12px; border-radius:12px; overflow:auto; }
-    .preview code { background:#0a0f20; padding:2px 6px; border-radius:8px; border:1px solid var(--line); }
-    .preview blockquote { border-left:4px solid #3b5bd6; margin:1em 0; padding:.2em 1em; color:var(--muted); }
-    .preview a { color:#8fb0ff; }
-    .preview table { border-collapse:collapse; width:100%; }
-    .preview th,.preview td { border:1px solid var(--line); padding:8px; }
-  </style>
+        .title {
+            font-weight: 700;
+            letter-spacing: .2px;
+            margin-right: auto;
+        }
+
+        button,
+        input[type="text"] {
+            background: var(--btn);
+            color: var(--text);
+            border: 1px solid var(--line);
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        button:hover:not([disabled]) {
+            filter: brightness(1.08);
+        }
+
+        button:active:not([disabled]) {
+            transform: translateY(1px);
+        }
+
+        input[type="text"] {
+            cursor: text;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .pill {
+            font-size: 12px;
+            color: var(--muted);
+            border: 1px solid var(--line);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr 260px;
+            gap: 12px;
+            align-items: start;
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Always keep the main panel at a stable "window" height */
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            overflow: hidden;
+            min-width: 0;
+            min-height: 70vh;
+            /* <-- ensures the container isn't small on load */
+        }
+
+        /* Raw should behave like Preview: page scroll, not inner scroll */
+        textarea {
+            width: 100%;
+            min-height: 70vh;
+            height: auto;
+            /* controlled by JS autosize */
+            resize: none;
+            overflow: hidden;
+            /* <-- prevents internal textarea scroll */
+            border: 0;
+            outline: 0;
+            padding: 16px;
+            background: transparent;
+            color: var(--text);
+            font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        .preview {
+            padding: 18px;
+            min-height: 70vh;
+            /* stable window height */
+            background: transparent;
+            box-sizing: border-box;
+        }
+
+        .outline {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 12px;
+            position: sticky;
+            align-self: start;
+            top: var(--outline-top, 12px);
+            max-height: calc(100dvh - var(--outline-top, 12px) - 16px);
+            overflow: auto;
+            min-width: 0;
+        }
+
+        .outline h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: var(--muted);
+            letter-spacing: .2px;
+        }
+
+        .outline a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 6px 8px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 13px;
+        }
+
+        .outline a:hover {
+            border-color: var(--line);
+            filter: brightness(1.06);
+        }
+
+        .outline a[data-level="1"] {
+            font-weight: 700;
+        }
+
+        .outline a[data-level="2"] {
+            padding-left: 16px;
+            color: #dbe6ff;
+        }
+
+        .outline a[data-level="3"] {
+            padding-left: 26px;
+            color: #c9d8ff;
+        }
+
+        .outline a[data-level="4"],
+        .outline a[data-level="5"],
+        .outline a[data-level="6"] {
+            padding-left: 36px;
+            color: #b6c9ff;
+        }
+
+        .empty-outline {
+            color: var(--muted);
+            font-size: 13px;
+            padding: 6px 8px;
+        }
+
+        .preview h1,
+        .preview h2,
+        .preview h3 {
+            margin-top: 1.1em;
+        }
+
+        .preview pre {
+            background: #0a0f20;
+            border: 1px solid var(--line);
+            padding: 12px;
+            border-radius: 12px;
+            overflow: auto;
+        }
+
+        .preview code {
+            background: #0a0f20;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+        }
+
+        .preview blockquote {
+            border-left: 4px solid #3b5bd6;
+            margin: 1em 0;
+            padding: .2em 1em;
+            color: var(--muted);
+        }
+
+        .preview a {
+            color: #8fb0ff;
+        }
+
+        .preview table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .preview th,
+        .preview td {
+            border: 1px solid var(--line);
+            padding: 8px;
+        }
+    </style>
 </head>
+
 <body>
-  <header id="appHeader">
-    <div class="wrap">
-      <div class="row">
-        <div class="title">Markdown Editor</div>
+    <header id="appHeader">
+        <div class="wrap">
+            <div class="row">
+                <div class="title">Markdown Editor</div>
 
-        <button id="toggleBtn" type="button">Preview</button>
-        <input id="filename" type="text" value="notes.md" aria-label="Filename" />
+                <button id="toggleBtn" type="button">Preview</button>
+                <input id="filename" type="text" value="notes.md" aria-label="Filename" />
 
-        <button id="openBtn" type="button">Open</button>
-        <button id="saveBtn" type="button" disabled>Save</button>
-        <button id="saveAsBtn" type="button">Save As</button>
+                <button id="exportBtn" type="button">Export .md</button>
 
-        <button id="exportBtn" type="button" title="Always works: downloads a copy">Export .md</button>
-        <button id="clearBtn" type="button">Clear</button>
-      </div>
+                <button id="openFsBtn" type="button">Open file</button>
+                <button id="saveFsBtn" type="button" disabled>Save</button>
+                <button id="saveAsFsBtn" type="button" disabled>Save As</button>
 
-      <div class="hint">
-        <span class="pill" id="statusPill">Checking environment…</span>
-        <span class="pill" id="envPill">—</span>
-      </div>
-    </div>
-  </header>
+                <input id="fileInput" type="file" accept=".md,.markdown,.txt" style="display:none" />
+                <button id="loadBtn" type="button" title="Fallback loader (no autosave-to-disk)">Load
+                    (fallback)</button>
 
-  <main class="layout">
-    <div class="panel">
-      <textarea id="editor" spellcheck="false" aria-label="Markdown editor"></textarea>
-      <div id="preview" class="preview" style="display:none;"></div>
-    </div>
+                <button id="clearBtn" type="button">Clear</button>
+            </div>
 
-    <aside class="outline" aria-label="Document outline">
-      <h3>Outline</h3>
-      <div id="outlineList" class="empty-outline">No headings yet.</div>
-    </aside>
-  </main>
+            <div class="hint">
+                <span id="contextHint"></span>
+                <span class="pill" id="saveStatus">No file opened</span>
+            </div>
+        </div>
+    </header>
 
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-  <script>
-    // ---------- logging ----------
-    const LOG_PREFIX = "[MD-Editor]";
-    const log = (...a) => console.log(LOG_PREFIX, ...a);
-    const warn = (...a) => console.warn(LOG_PREFIX, ...a);
-    const fail = (where, e) => {
-      const msg = e?.name ? `${e.name}: ${e.message}` : String(e);
-      console.error(LOG_PREFIX, where, e);
-      setStatus(`${where} failed (${msg})`);
-    };
+    <main class="layout">
+        <div class="panel">
+            <textarea id="editor" spellcheck="false" aria-label="Markdown editor"></textarea>
+            <div id="preview" class="preview" style="display:none;"></div>
+        </div>
 
-    // ---------- DOM ----------
-    const md = window.markdownit({ html:false, linkify:true, typographer:true });
+        <aside class="outline" aria-label="Document outline">
+            <h3>Outline</h3>
+            <div id="outlineList" class="empty-outline">No headings yet.</div>
+        </aside>
+    </main>
 
-    const editor = document.getElementById("editor");
-    const preview = document.getElementById("preview");
-    const toggleBtn = document.getElementById("toggleBtn");
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+    <script>
+        // ---------- small logger ----------
+        function log(...args) { console.log("[MD-Editor]", ...args); }
+        function errlog(e, where) {
+            console.error("[MD-Editor]", where, e);
+            const msg = e && (e.name ? `${e.name}: ${e.message}` : String(e));
+            setStatus(`${where} failed (${msg})`);
+        }
 
-    const filenameInput = document.getElementById("filename");
-    const openBtn = document.getElementById("openBtn");
-    const saveBtn = document.getElementById("saveBtn");
-    const saveAsBtn = document.getElementById("saveAsBtn");
-    const exportBtn = document.getElementById("exportBtn");
-    const clearBtn = document.getElementById("clearBtn");
+        const md = window.markdownit({ html: false, linkify: true, typographer: true });
 
-    const statusPill = document.getElementById("statusPill");
-    const envPill = document.getElementById("envPill");
+        const editor = document.getElementById("editor");
+        const preview = document.getElementById("preview");
+        const toggleBtn = document.getElementById("toggleBtn");
+        const exportBtn = document.getElementById("exportBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const filenameInput = document.getElementById("filename");
+        const outlineList = document.getElementById("outlineList");
+        const headerEl = document.getElementById("appHeader");
+        const rootEl = document.documentElement;
 
-    const outlineList = document.getElementById("outlineList");
-    const headerEl = document.getElementById("appHeader");
-    const rootEl = document.documentElement;
+        const loadBtn = document.getElementById("loadBtn");
+        const fileInput = document.getElementById("fileInput");
 
-    // ---------- Mode A requirements ----------
-    const FS_SUPPORTED = typeof window.showOpenFilePicker === "function";
-    const SECURE = window.isSecureContext === true;
-    const MODE_A_OK = FS_SUPPORTED && SECURE;
+        const openFsBtn = document.getElementById("openFsBtn");
+        const saveFsBtn = document.getElementById("saveFsBtn");
+        const saveAsFsBtn = document.getElementById("saveAsFsBtn");
+        const saveStatus = document.getElementById("saveStatus");
+        const contextHint = document.getElementById("contextHint");
 
-    // ---------- state ----------
-    let fileHandle = null;
-    let lastSaved = "";
-    let autosaveTimer = null;
-    let autosaveInFlight = false;
+        const STORAGE_KEY = "my_markdown_editor_draft_v5";
 
-    // ---------- helpers ----------
-    function setStatus(t){ statusPill.textContent = t; }
+        const FS_SUPPORTED = typeof window.showOpenFilePicker === "function";
+        const SECURE = window.isSecureContext === true;
 
-    function sanitizeFilename(name) {
-      let safe = (name || "notes.md").trim();
-      safe = safe.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-");
-      if (!safe.toLowerCase().endsWith(".md")) safe += ".md";
-      if (safe.length > 120) safe = safe.slice(0, 120);
-      return safe || "notes.md";
-    }
+        let openedFileHandle = null;
+        let lastSavedText = "";
+        let saveTimer = null;
+        let saveInFlight = false;
 
-    // ensure outline stays within viewport
-    function updateOutlineViewportFit() {
-      const h = Math.ceil(headerEl.getBoundingClientRect().height);
-      rootEl.style.setProperty("--outline-top", (h + 12) + "px");
-    }
-    window.addEventListener("resize", updateOutlineViewportFit);
-    if (window.ResizeObserver) new ResizeObserver(updateOutlineViewportFit).observe(headerEl);
+        function setStatus(text) { saveStatus.textContent = text; }
 
-    function updateButtons() {
-      openBtn.disabled = !MODE_A_OK;
-      saveBtn.disabled = !fileHandle;
-      // Save As is allowed if Mode A is available (even if no file opened)
-      saveAsBtn.disabled = !MODE_A_OK;
+        function updateFsButtons() {
+            const canUseFS = FS_SUPPORTED && SECURE;
+            openFsBtn.disabled = !canUseFS;
+            if (!canUseFS) {
+                openFsBtn.title = !FS_SUPPORTED ? "Not supported in this browser" : "Requires https:// or http://localhost";
+            } else {
+                openFsBtn.title = "Open a file (autosave supported)";
+            }
 
-      openBtn.title = MODE_A_OK ? "Open a file (autosave to same file)" : "Needs Chrome/Edge + https:// or http://localhost";
-      saveAsBtn.title = MODE_A_OK ? "Pick a location and start autosaving to it" : openBtn.title;
-    }
+            const hasHandle = !!openedFileHandle;
+            saveFsBtn.disabled = !hasHandle;
+            saveAsFsBtn.disabled = !canUseFS;
+        }
 
-    // ---------- markdown headings + outline ----------
-    function slugify(text) {
-      return (text || "")
-        .toLowerCase().trim()
-        .replace(/[`~!@#$%^&*()+=\[\]{};:'",.<>/?\\|]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .replace(/^-|-$/g, "");
-    }
+        // ---------- Draft save/load ----------
+        function saveDraft() { try { localStorage.setItem(STORAGE_KEY, editor.value || ""); } catch { } }
+        function loadDraft() { try { const v = localStorage.getItem(STORAGE_KEY); if (v !== null) editor.value = v; } catch { } }
 
-    function extractHeadings(markdownText) {
-      const lines = (markdownText || "").split(/\r?\n/);
-      const headings = [];
-      for (const line of lines) {
-        const m = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
-        if (!m) continue;
-        headings.push({ level: m[1].length, title: m[2].trim() });
-      }
-      return headings;
-    }
+        // ---------- Outline sizing ----------
+        function updateOutlineViewportFit() {
+            const h = Math.ceil(headerEl.getBoundingClientRect().height);
+            rootEl.style.setProperty("--outline-top", (h + 12) + "px");
+        }
+        window.addEventListener("resize", updateOutlineViewportFit);
+        if (window.ResizeObserver) new ResizeObserver(updateOutlineViewportFit).observe(headerEl);
 
-    function assignUniqueIds(headings) {
-      const used = new Map();
-      return headings.map(h => {
-        const base = slugify(h.title) || "section";
-        const count = (used.get(base) || 0) + 1;
-        used.set(base, count);
-        return { ...h, id: count === 1 ? base : `${base}-${count}` };
-      });
-    }
+        // ---------- RAW autosize (keeps Raw behaving like Preview: page scroll) ----------
+        function autosizeEditor() {
+            const pageY = window.scrollY;
+            editor.style.height = "auto";
+            editor.style.height = Math.max(editor.scrollHeight, Math.floor(window.innerHeight * 0.7)) + "px";
+            window.scrollTo(0, pageY);
+        }
 
-    const originalHeadingOpen = md.renderer.rules.heading_open;
-    md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
-      const token = tokens[idx];
-      if (env && env.headingIds && env.headingIds.length) {
-        const next = env.headingIds.shift();
-        if (next?.id) token.attrSet("id", next.id);
-      }
-      return originalHeadingOpen
-        ? originalHeadingOpen(tokens, idx, options, env, self)
-        : self.renderToken(tokens, idx, options);
-    };
+        // ---------- Headings / outline (store line numbers for Raw navigation) ----------
+        let currentHeadings = []; // [{level,title,id,lineNo}]
+        function slugify(text) {
+            return (text || "")
+                .toLowerCase().trim()
+                .replace(/[`~!@#$%^&*()+=\[\]{};:'",.<>/?\\|]/g, "")
+                .replace(/\s+/g, "-")
+                .replace(/-+/g, "-")
+                .replace(/^-|-$/g, "");
+        }
+        function extractHeadings(markdownText) {
+            const lines = (markdownText || "").split(/\r?\n/);
+            const headings = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const m = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+                if (!m) continue;
+                headings.push({ level: m[1].length, title: m[2].trim(), lineNo: i });
+            }
+            return headings;
+        }
+        function assignUniqueIds(headings) {
+            const used = new Map();
+            return headings.map(h => {
+                const base = slugify(h.title) || "section";
+                const count = (used.get(base) || 0) + 1;
+                used.set(base, count);
+                return { ...h, id: count === 1 ? base : `${base}-${count}` };
+            });
+        }
 
-    function renderOutline(headings) {
-      if (!headings.length) {
-        outlineList.className = "empty-outline";
-        outlineList.textContent = "No headings yet.";
-        return;
-      }
-      outlineList.className = "";
-      outlineList.innerHTML = headings.map(h => {
-        const safeText = h.title.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-        return `<a href="#${h.id}" data-id="${h.id}" data-level="${h.level}" title="${safeText}">${safeText}</a>`;
-      }).join("");
-    }
+        const originalHeadingOpen = md.renderer.rules.heading_open;
+        md.renderer.rules.heading_open = function (tokens, idx, options, env, self) {
+            const token = tokens[idx];
+            if (env && env.headingIds && env.headingIds.length) {
+                const next = env.headingIds.shift();
+                if (next && next.id) token.attrSet("id", next.id);
+            }
+            return originalHeadingOpen
+                ? originalHeadingOpen(tokens, idx, options, env, self)
+                : self.renderToken(tokens, idx, options);
+        };
 
-    function renderPreviewAndOutline() {
-      const raw = editor.value || "";
-      const headings = assignUniqueIds(extractHeadings(raw));
-      preview.innerHTML = md.render(raw, { headingIds: headings.map(h => ({ id: h.id })) });
-      renderOutline(headings);
-    }
+        function renderOutline(headings) {
+            if (!headings.length) {
+                outlineList.className = "empty-outline";
+                outlineList.textContent = "No headings yet.";
+                return;
+            }
+            outlineList.className = "";
+            outlineList.innerHTML = headings.map(h => {
+                const safeText = h.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                return `<a href="#${h.id}" data-id="${h.id}" data-level="${h.level}" title="${safeText}">${safeText}</a>`;
+            }).join("");
+        }
 
-    function renderOutlineOnly() {
-      renderOutline(assignUniqueIds(extractHeadings(editor.value || "")));
-    }
+        function renderPreviewAndOutline() {
+            const raw = editor.value || "";
+            const headings = assignUniqueIds(extractHeadings(raw));
+            currentHeadings = headings;
 
-    let uiTimer = null;
-    function scheduleUiUpdate() {
-      if (uiTimer) clearTimeout(uiTimer);
-      uiTimer = setTimeout(() => {
-        if (preview.style.display !== "none") renderPreviewAndOutline();
-        else renderOutlineOnly();
-      }, 80);
-    }
+            preview.innerHTML = md.render(raw, { headingIds: headings.map(h => ({ id: h.id })) });
+            renderOutline(headings);
+        }
 
-    function setMode(mode) {
-      const isPreview = mode === "preview";
-      editor.style.display = isPreview ? "none" : "block";
-      preview.style.display = isPreview ? "block" : "none";
-      toggleBtn.textContent = isPreview ? "Raw" : "Preview";
-      if (isPreview) renderPreviewAndOutline();
-    }
+        function renderOutlineOnly() {
+            const headings = assignUniqueIds(extractHeadings(editor.value || ""));
+            currentHeadings = headings;
+            renderOutline(headings);
+        }
 
-    // ---------- Mode A: Open/Save/SaveAs + autosave ----------
-    async function ensureRWPermission(handle) {
-      // Newer Chromium supports queryPermission/requestPermission
-      if (!handle?.queryPermission) return true;
-      const opts = { mode: "readwrite" };
-      const q = await handle.queryPermission(opts);
-      if (q === "granted") return true;
-      const r = await handle.requestPermission(opts);
-      return r === "granted";
-    }
+        let uiTimer = null;
+        function scheduleUiUpdate() {
+            if (uiTimer) clearTimeout(uiTimer);
+            uiTimer = setTimeout(() => {
+                autosizeEditor(); // keep Raw "window" consistently tall
+                if (preview.style.display !== "none") renderPreviewAndOutline();
+                else renderOutlineOnly();
+            }, 60);
+        }
 
-    async function openFile() {
-      log("Open clicked", { FS_SUPPORTED, SECURE, MODE_A_OK });
-      if (!MODE_A_OK) { setStatus("Open blocked: use Chrome/Edge + http://localhost or https://"); return; }
+        // ---------- Scroll preservation between Raw/Preview (both are page scroll now) ----------
+        function getPageRatioFor(el) {
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            const max = Math.max(0, el.scrollHeight - window.innerHeight);
+            if (max <= 0) return 0;
+            const yInto = window.scrollY - top;
+            return Math.max(0, Math.min(1, yInto / max));
+        }
+        function setPageRatioFor(el, ratio) {
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            const max = Math.max(0, el.scrollHeight - window.innerHeight);
+            const y = top + (Math.max(0, Math.min(1, ratio)) * max);
+            window.scrollTo(0, y);
+        }
 
-      try {
-        const [handle] = await window.showOpenFilePicker({
-          multiple: false,
-          types: [{
-            description: "Markdown",
-            accept: { "text/markdown": [".md",".markdown"], "text/plain": [".txt"] }
-          }]
+        function setMode(mode) {
+            const isPreview = mode === "preview";
+            editor.style.display = isPreview ? "none" : "block";
+            preview.style.display = isPreview ? "block" : "none";
+            toggleBtn.textContent = isPreview ? "Raw" : "Preview";
+
+            if (!isPreview) autosizeEditor();
+            if (isPreview) renderPreviewAndOutline();
+        }
+
+        function toggleModePreserveScroll(targetMode) {
+            const goingToPreview = targetMode === "preview";
+            const activeEl = goingToPreview ? editor : preview;
+
+            const ratio = getPageRatioFor(activeEl);
+            setMode(targetMode);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const newEl = goingToPreview ? preview : editor;
+                    setPageRatioFor(newEl, ratio);
+                });
+            });
+        }
+
+        // ---------- Nav click: works in BOTH modes, never forces Preview ----------
+        function getLineHeightPx() {
+            const cs = getComputedStyle(editor);
+            const lh = cs.lineHeight;
+            if (lh && lh.endsWith("px")) return parseFloat(lh);
+            const fs = parseFloat(cs.fontSize || "14");
+            return fs * 1.5; // fallback for "normal"
+        }
+
+        function scrollToHeadingRaw(heading) {
+            // scroll page to the line inside the textarea
+            const lineHeight = getLineHeightPx();
+            const headerOffset = Math.ceil(headerEl.getBoundingClientRect().height) + 12;
+
+            const editorTop = editor.getBoundingClientRect().top + window.scrollY;
+            const targetY = editorTop + (heading.lineNo * lineHeight) - headerOffset;
+
+            window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+        }
+
+        function scrollToHeadingPreview(id) {
+            const headerOffset = Math.ceil(headerEl.getBoundingClientRect().height) + 12;
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            const y = (el.getBoundingClientRect().top + window.scrollY) - headerOffset;
+            window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+        }
+
+        // ---------- Export (download) ----------
+        function sanitizeFilename(name) {
+            let safe = (name || "notes.md").trim();
+            safe = safe.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-");
+            if (!safe.toLowerCase().endsWith(".md")) safe += ".md";
+            return safe || "notes.md";
+        }
+        function exportMarkdown() {
+            const content = editor.value || "";
+            const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = sanitizeFilename(filenameInput.value);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        // ---------- File System Access: open/save/save as ----------
+        async function openFileFs() {
+            log("Open clicked. supported=", FS_SUPPORTED, "secure=", SECURE);
+            if (!FS_SUPPORTED || !SECURE) {
+                setStatus("Open blocked: needs https:// or http://localhost");
+                return;
+            }
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{
+                        description: "Markdown",
+                        accept: { "text/markdown": [".md", ".markdown"], "text/plain": [".txt"] }
+                    }]
+                });
+
+                if (!handle) return;
+
+                const file = await handle.getFile();
+                const text = await file.text();
+
+                openedFileHandle = handle;
+                editor.value = text;
+                lastSavedText = text;
+
+                filenameInput.value = sanitizeFilename(file.name || "notes.md");
+                saveDraft();
+                scheduleUiUpdate();
+
+                setStatus(`Opened: ${file.name} (autosave on)`);
+                updateFsButtons();
+            } catch (e) {
+                if (e?.name === "AbortError") { log("Open cancelled"); return; }
+                errlog(e, "Open");
+            }
+        }
+
+        async function writeToHandle(handle, text) {
+            const writable = await handle.createWritable();
+            await writable.write(text);
+            await writable.close();
+        }
+
+        async function saveToOpenedFile() {
+            if (!openedFileHandle) { setStatus("No file handle: use Open file / Save As"); return; }
+            if (saveInFlight) return;
+            saveInFlight = true;
+
+            try {
+                const text = editor.value || "";
+                if (text === lastSavedText) { setStatus("Saved (no changes)"); return; }
+                setStatus("Saving...");
+                await writeToHandle(openedFileHandle, text);
+                lastSavedText = text;
+                setStatus("Saved ✓");
+            } catch (e) {
+                errlog(e, "Save");
+            } finally {
+                saveInFlight = false;
+            }
+        }
+
+        async function saveAsFs() {
+            if (!FS_SUPPORTED || !SECURE) {
+                setStatus("Save As blocked: needs https:// or http://localhost");
+                return;
+            }
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: sanitizeFilename(filenameInput.value),
+                    types: [{
+                        description: "Markdown",
+                        accept: { "text/markdown": [".md", ".markdown"], "text/plain": [".txt"] }
+                    }]
+                });
+                if (!handle) return;
+
+                openedFileHandle = handle;
+                lastSavedText = "";
+                updateFsButtons();
+                await saveToOpenedFile();
+            } catch (e) {
+                if (e?.name === "AbortError") return;
+                errlog(e, "Save As");
+            }
+        }
+
+        function scheduleAutoSaveToFile() {
+            if (!openedFileHandle) return;
+            if (saveTimer) clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => { saveToOpenedFile(); }, 700);
+        }
+
+        // ---------- Fallback loader ----------
+        async function loadFromFileInput(file) {
+            if (!file) return;
+            const text = await file.text();
+            editor.value = text;
+            if (file.name) filenameInput.value = sanitizeFilename(file.name);
+            openedFileHandle = null;
+            lastSavedText = "";
+            updateFsButtons();
+            setStatus("Loaded (fallback): no autosave-to-disk");
+            saveDraft();
+            scheduleUiUpdate();
+        }
+
+        // ---------- Events ----------
+        toggleBtn.addEventListener("click", () => {
+            const isPreview = preview.style.display !== "none";
+            toggleModePreserveScroll(isPreview ? "raw" : "preview");
         });
-        if (!handle) return;
 
-        // read
-        const file = await handle.getFile();
-        const text = await file.text();
+        exportBtn.addEventListener("click", exportMarkdown);
 
-        fileHandle = handle;
-        editor.value = text;
-        lastSaved = text;
+        clearBtn.addEventListener("click", () => {
+            editor.value = "";
+            openedFileHandle = null;
+            lastSavedText = "";
+            updateFsButtons();
+            setStatus("Cleared (no file opened)");
+            saveDraft();
+            scheduleUiUpdate();
+        });
 
-        filenameInput.value = sanitizeFilename(file.name || "notes.md");
+        editor.addEventListener("input", () => {
+            saveDraft();
+            scheduleUiUpdate();
+            scheduleAutoSaveToFile();
+        });
 
-        // request RW permission up front (optional but nicer)
-        const ok = await ensureRWPermission(handle);
-        setStatus(ok ? `Opened: ${file.name} (autosave on)` : `Opened: ${file.name} (read-only permission)`);
-        updateButtons();
+        // Nav works in BOTH modes:
+        outlineList.addEventListener("click", (e) => {
+            const a = e.target.closest("a[data-id]");
+            if (!a) return;
+            e.preventDefault();
+
+            const id = a.getAttribute("data-id");
+            if (!id) return;
+
+            const isPreview = preview.style.display !== "none";
+
+            if (isPreview) {
+                // normal: scroll to rendered heading
+                scrollToHeadingPreview(id);
+            } else {
+                // raw: scroll page to the matching line inside textarea
+                const h = currentHeadings.find(x => x.id === id);
+                if (h) scrollToHeadingRaw(h);
+            }
+        });
+
+        openFsBtn.addEventListener("click", openFileFs);
+        saveFsBtn.addEventListener("click", saveToOpenedFile);
+        saveAsFsBtn.addEventListener("click", saveAsFs);
+
+        loadBtn.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", async () => {
+            const file = fileInput.files && fileInput.files[0];
+            await loadFromFileInput(file);
+            fileInput.value = "";
+        });
+
+        window.addEventListener("beforeunload", (e) => {
+            if (openedFileHandle && (editor.value || "") !== (lastSavedText || "")) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        });
+
+        // ---------- Init ----------
+        updateOutlineViewportFit();
+        loadDraft();
+        autosizeEditor();
         scheduleUiUpdate();
-      } catch (e) {
-        if (e?.name === "AbortError") { setStatus("Open cancelled"); return; }
-        fail("Open", e);
-      }
-    }
+        setMode("raw");
 
-    async function writeToHandle(handle, text) {
-      const writable = await handle.createWritable();
-      await writable.write(text);
-      await writable.close();
-    }
+        contextHint.textContent =
+            `Secure context: ${SECURE ? "YES" : "NO"} | FS API: ${FS_SUPPORTED ? "YES" : "NO"} (Open/Save needs https:// or http://localhost)`;
 
-    async function saveNow() {
-      log("Save clicked", { hasHandle: !!fileHandle });
-      if (!fileHandle) { setStatus("No file opened. Use Open or Save As."); return; }
+        updateFsButtons();
+        if (!SECURE) setStatus("Open/Save disabled: run on http://localhost or https://");
+        else setStatus("No file opened");
+        log("Init. isSecureContext=", SECURE, "FS_SUPPORTED=", FS_SUPPORTED);
 
-      if (autosaveInFlight) return;
-      autosaveInFlight = true;
-
-      try {
-        const ok = await ensureRWPermission(fileHandle);
-        if (!ok) { setStatus("Save blocked: permission denied"); return; }
-
-        const text = editor.value || "";
-        if (text === lastSaved) { setStatus("Saved (no changes)"); return; }
-
-        setStatus("Saving…");
-        await writeToHandle(fileHandle, text);
-        lastSaved = text;
-        setStatus("Saved ✓");
-      } catch (e) {
-        fail("Save", e);
-      } finally {
-        autosaveInFlight = false;
-      }
-    }
-
-    async function saveAs() {
-      log("Save As clicked", { FS_SUPPORTED, SECURE, MODE_A_OK });
-      if (!MODE_A_OK) { setStatus("Save As blocked: use Chrome/Edge + http://localhost or https://"); return; }
-
-      try {
-        const handle = await window.showSaveFilePicker({
-          suggestedName: sanitizeFilename(filenameInput.value),
-          types: [{
-            description: "Markdown",
-            accept: { "text/markdown": [".md",".markdown"], "text/plain": [".txt"] }
-          }]
+        // Just in case fonts/layout settle after first paint:
+        window.addEventListener("load", () => {
+            autosizeEditor();
+            scheduleUiUpdate();
         });
-        if (!handle) return;
-
-        fileHandle = handle;
-        lastSaved = ""; // force save
-        updateButtons();
-        await saveNow();
-      } catch (e) {
-        if (e?.name === "AbortError") { setStatus("Save As cancelled"); return; }
-        fail("Save As", e);
-      }
-    }
-
-    function scheduleAutoSave() {
-      if (!fileHandle) return;
-      if (autosaveTimer) clearTimeout(autosaveTimer);
-      autosaveTimer = setTimeout(saveNow, 700);
-    }
-
-    // ---------- Export (download) as universal fallback ----------
-    function exportMarkdown() {
-      const content = editor.value || "";
-      const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = sanitizeFilename(filenameInput.value);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    // ---------- events ----------
-    toggleBtn.addEventListener("click", () => {
-      const isPreview = preview.style.display !== "none";
-      setMode(isPreview ? "raw" : "preview");
-    });
-
-    openBtn.addEventListener("click", openFile);
-    saveBtn.addEventListener("click", saveNow);
-    saveAsBtn.addEventListener("click", saveAs);
-
-    exportBtn.addEventListener("click", exportMarkdown);
-
-    clearBtn.addEventListener("click", () => {
-      editor.value = "";
-      fileHandle = null;
-      lastSaved = "";
-      updateButtons();
-      setStatus("Cleared");
-      scheduleUiUpdate();
-    });
-
-    editor.addEventListener("input", () => {
-      scheduleUiUpdate();
-      scheduleAutoSave();
-    });
-
-    outlineList.addEventListener("click", (e) => {
-      const a = e.target.closest("a[data-id]");
-      if (!a) return;
-      e.preventDefault();
-      const id = a.getAttribute("data-id");
-      if (!id) return;
-
-      if (preview.style.display === "none") setMode("preview");
-      requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        history.replaceState(null, "", "#" + id);
-      });
-    });
-
-    window.addEventListener("beforeunload", (e) => {
-      if (fileHandle && (editor.value || "") !== (lastSaved || "")) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    });
-
-    // ---------- init ----------
-    updateOutlineViewportFit();
-    scheduleUiUpdate();
-    setMode("raw");
-
-    envPill.textContent = `Secure=${SECURE ? "YES" : "NO"} | FS API=${FS_SUPPORTED ? "YES" : "NO"}`;
-    if (!MODE_A_OK) {
-      setStatus("Mode A unavailable: open via http://localhost and use Chrome/Edge");
-    } else {
-      setStatus("Mode A ready: Open a file to enable autosave");
-    }
-    updateButtons();
-    log("Init", { isSecureContext: SECURE, FS_SUPPORTED, MODE_A_OK });
-  </script>
+    </script>
 </body>
+
 </html>
