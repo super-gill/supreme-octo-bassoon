@@ -1,6 +1,6 @@
 Helpdesk Operations Manual
 
-VE.6
+VE.7
 
 2026
 
@@ -757,7 +757,7 @@ Used to link and track multipe related tickets
 
 - Not used for direct actions or updates
 
-- Srves two main purposes:
+- Serves two main purposes:
 
   - To doucment a widespread issue across clients or systems
 
@@ -780,10 +780,10 @@ Used to link and track multipe related tickets
 
 ### Child Tickets
 
-Child tickets are used to either **assign tasks** or **share workload**.
+Child tickets are used to either assign tasks or share workload.
 Each use case has specific requirements and expectations. In all
-situations, a child ticket must be handled with the **same standards and
-urgency** as any other helpdesk ticket, and all policies that would
+situations, a child ticket must be handled with the same standards and
+urgency as any other helpdesk ticket, and all policies that would
 apply to any other ticket, also apply to children except during
 escalation (see the escalation policy).
 
