@@ -88,8 +88,9 @@ Unless a policy explicitly states otherwise, the default position is:
 
 - If multiple policies could apply, follow the most safety-critical or
   customer-impacting requirement first (e.g., security and critical
-  incident controls take precedence). Continuous improvement and
-  document governance
+  incident controls take precedence). 
+  
+### Continuous improvement and document governance
 
 This manual will evolve. Where a policy is unclear, unworkable, or
 conflicts with real operational constraints, that is a signal that the
@@ -304,7 +305,7 @@ have been procedurally triaged to ensure:
 - Sufficient information exists to classify the ticket type and the
   request
 
-**Helpdesk engineers correct any mistakes and add additional technicak information** 
+**Helpdesk engineers correct any mistakes and add additional technical information** 
 
 - Correct any mistakes in the tickets details and infomration
 
@@ -2590,7 +2591,7 @@ Escalating to formal disciplinary steps only when:
 - Informal correction has been attempted and has not resulted in sustained improvement, or
 - The nature of the issue means informal handling would be inappropriate (e.g. gross misconduct, major negligence, or serious breach of trust)
 
-### Typical Flow
+### Typical Flow [TBD]
 
 1. **Concern identified**
    - Triggered by QA checks, SLA failures, repeated ticket-handling shortfalls, customer complaints, colleague concerns or observed behaviours
@@ -2828,7 +2829,7 @@ Methods used, linked process or policies
 
 #### (H4) How we address shortfall  
 
-How this policy integrates with discipline]
+How this policy integrates with discipline
 
 ## Appendix - Dispatch Limitations (Temporary)
 
