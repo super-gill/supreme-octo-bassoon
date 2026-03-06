@@ -793,11 +793,8 @@ Child tickets must be treated as customer-impacting tickets raised on
 behalf of a customer. The agent who raises the child ticket retains
 ownership and accountability for it for its entire lifecycle.
 
-The primary use of child tickets is to assign tasks to Account Managers,
-however they may also be used to assign tasks to other teams or
-individuals. Use of child tickets to share workload requires leadership
-intervention and/or approval, except where automatic approval is defined
-within the Escalations Policy.
+The primary use of child tickets is to assign quotation tasks to Service Delivery, however they may also be used to assign tasks to other teams or individuals. Use of child tickets to share workload requires leadership intervention and/or approval, excep where automatic approval is defined within this policy, and the Escalation policy.
+
 
 ##### Assigning a task with a child ticket
 
@@ -811,8 +808,10 @@ approval only to:
 
 - Assign shipping instructions to CLS
 
-##### When creating a child ticket for account management
+##### When creating a child ticket for Service Delivery (Quoting)
 
+- The agent is automatically approved to raise child tickets for quoting
+  
 - The customer is always the agent that raised it and the company is
   Digital Origin
 
@@ -831,14 +830,15 @@ approval only to:
 
 - The agent that creates the child ticket is responsible for ensuring it
   is conducted but:
-
-  - Chase the account manager for updates daily
-
+  - Chase Service Delivery for updates daily
+  
   - Apply a 3 strike rule to child tickets, but instead of closing it:
     escalate with a Team Leader
 
-##### When creating a child ticket for shipping instructions
+##### When creating a child ticket for CLS (shipping instructions)
 
+- The agent is automatically approved to raise child tickets for shipping instructions
+  
 - The customer is always the agent that raised it and the company is
   Digital Origin
 
@@ -902,7 +902,7 @@ approval only to:
 
 ### Record keeping and documentation
 
-[TBD]
+Open child tickets are recorded and reported to Team Leaders daily to be checked individually, failures are reported through stats.
 
 ### How we address shortfall
 
@@ -1141,13 +1141,11 @@ Intervention process:
   ticket actions.
 
   - If necessary, corrective measures will be applied, which may include
-    a Development Plan
-
-    - If the customer confirms email as the preferred contact method
+    a Development Plans
 
   - For Vetoquinol tickets where primary contact is in person or over
     teams
-
+  
 - Each use is scrutinized for compliance with this policy
 
 Each agent should be able to reach a ratio of 1:1 for use of the call
@@ -1426,10 +1424,6 @@ A post incident review is not required every time this policy is triggered, but 
 #### How we address shortfalls
 
 [TBD]
-
-## Remote Access & Remote Support Policy (NF)
-
-[Content not present in the provided extraction. If you paste the Remote Access section text (or re-export), I’ll convert it cleanly into markdown and keep the same metadata/table style as the other policies.]
 
 # Critical Incident Handling
 
