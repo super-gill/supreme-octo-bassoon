@@ -339,9 +339,6 @@ async function exportCurrentPolicyPdf() {
     body.innerHTML = md.render(CURRENT_POLICY.mdText);
     applyIndent(body);
 
-    const firstH2 = body.querySelector("h2");
-    if (firstH2) firstH2.remove();
-
     const host = document.createElement("div");
     host.className = "pdf-export";
 
