@@ -181,7 +181,7 @@ async function init() {
   } catch (err) {
     console.error(err);
     if (metaEl) metaEl.textContent = "Error loading manual.md";
-    if (viewEl) viewEl.innerHTML = `<h2>Couldn’t load manual.md</h2>`;
+    if (viewEl) viewEl.innerHTML = `<h2>Couldn't load manual.md</h2>`;
   }
 }
 
@@ -319,7 +319,6 @@ async function exportCurrentPolicyPdf() {
     return;
   }
 
-  // ---- helper: load image as dataURL (so jsPDF can embed it) ----
   async function loadAsDataUrl(url) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
@@ -339,19 +338,18 @@ async function exportCurrentPolicyPdf() {
     body.innerHTML = md.render(CURRENT_POLICY.mdText);
     applyIndent(body);
 
+    // Keep the H2 title so it appears at the top of the exported PDF
+
     const host = document.createElement("div");
     host.className = "pdf-export";
-
-    // IMPORTANT: do NOT include an in-content header, because it only affects page 1.
-    // Rely entirely on stamped letterhead header/footer so every page is consistent.
     host.appendChild(body);
 
     staging = document.createElement("div");
     staging.style.position = "fixed";
-    staging.style.left = "-10000px";   // off-screen
+    staging.style.left = "-10000px";
     staging.style.top = "0";
-    staging.style.width = "980px";     // give it a real width (matches your app max)
-    staging.style.opacity = "1";       // IMPORTANT: do not make it fully transparent
+    staging.style.width = "980px";
+    staging.style.opacity = "1";
     staging.style.pointerEvents = "none";
     staging.style.background = "#fff";
     staging.style.zIndex = "-1";
@@ -369,17 +367,12 @@ async function exportCurrentPolicyPdf() {
       .trim()
       .slice(0, 120) || "policy";
 
-    // ---- Letterhead assets (from your DOTX) ----
     const letterheadLogoDataUrl = await loadAsDataUrl("letterhead_logo.png");
 
-    // Footer text
     const footerLine1 = "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787";
     const footerLine2 = "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L";
     const footerLine3 = "Registered in England 04121501";
 
-    // ---- Give the PDF content room for the repeating header/footer ----
-    // [top, left, bottom, right] in mm
-    // Top margin must cover the stamped logo area; bottom margin must cover footer area.
     const opt = {
       margin: [20, 10, 15, 10],
       filename: `${safeName}.pdf`,
@@ -398,7 +391,6 @@ async function exportCurrentPolicyPdf() {
       }
     };
 
-    // Build PDF, then stamp every page using jsPDF
     const worker = window.html2pdf().set(opt).from(host).toPdf();
 
     await worker.get("pdf").then((pdf) => {
@@ -409,14 +401,12 @@ async function exportCurrentPolicyPdf() {
       for (let i = 1; i <= pageCount; i++) {
         pdf.setPage(i);
 
-        // --- Header (logo) ---
-        const logoW = 40;           // mm
-        const logoH = logoW / 4.04; // keep aspect ratio
+        const logoW = 40;
+        const logoH = logoW / 4.04;
         const headerX = 15;
         const headerY = 8;
         pdf.addImage(letterheadLogoDataUrl, "PNG", headerX, headerY, logoW, logoH);
 
-        // --- Footer ---
         pdf.setFontSize(9);
         pdf.setTextColor(80);
 
@@ -425,7 +415,6 @@ async function exportCurrentPolicyPdf() {
         pdf.text(footerLine2, centerX, pageHeight - 9, { align: "center" });
         pdf.text(footerLine3, centerX, pageHeight - 5, { align: "center" });
 
-        // optional: page numbers (right aligned)
         const pageLabel = `Page ${i} of ${pageCount}`;
         const textWidth = pdf.getTextWidth(pageLabel);
         pdf.text(pageLabel, pageWidth - 10 - textWidth, pageHeight - 5);
@@ -436,7 +425,7 @@ async function exportCurrentPolicyPdf() {
 
   } catch (e) {
     console.error(e);
-    alert("PDF export failed. Check DevTools Console for details.");
+    alert(String(e));
   } finally {
     staging?.remove();
   }
@@ -452,7 +441,7 @@ async function exportFullManualPdf() {
     return;
   }
   if (!window.html2canvas) {
-    alert("html2canvas not available (required for full export).");
+    alert("html2canvas not available.");
     return;
   }
 
@@ -468,188 +457,148 @@ async function exportFullManualPdf() {
     });
   }
 
-  // Your margins: [top, left, bottom, right] in mm
-  const margin = [20, 10, 15, 10];
-  const [mTop, mLeft, mBottom, mRight] = margin;
+  // A4 dimensions and margins (mm)
+  const pageW = 210, pageH = 297;
+  const mTop = 20, mLeft = 10, mBottom = 15, mRight = 10;
+  const usableW = pageW - mLeft - mRight; // 190mm
+  const usableH = pageH - mTop - mBottom; // 262mm
+  const renderWidthPx = 980; // matches staging div width
 
-  // Letterhead assets
-  const letterheadLogoDataUrl = await loadAsDataUrl("letterhead_logo.png");
-  const footerLine1 = "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787";
-  const footerLine2 = "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L";
-  const footerLine3 = "Registered in England 04121501";
-
-  // Create a jsPDF instance directly
-  const pdf = new window.jspdf.jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-
-  const usableW = pageWidth - mLeft - mRight;
-  const usableH = pageHeight - mTop - mBottom;
-
-  // Offscreen staging (VISIBLE, but offscreen)
-  const staging = document.createElement("div");
-  staging.style.position = "fixed";
-  staging.style.left = "-10000px";
-  staging.style.top = "0";
-  staging.style.width = "980px";
-  staging.style.opacity = "1";
-  staging.style.pointerEvents = "none";
-  staging.style.background = "#fff";
-  staging.style.zIndex = "-1";
-  document.body.appendChild(staging);
-
-  // Helper: add a canvas to the PDF, slicing across pages if it's taller than usableH
-  function addCanvasWithPaging(canvas) {
-    // Scale to fit width
-    const imgWmm = usableW;
-    const imgHmm = (canvas.height * imgWmm) / canvas.width;
-
-    if (imgHmm <= usableH) {
-      const imgData = canvas.toDataURL("image/jpeg", 0.95);
-      pdf.addImage(imgData, "JPEG", mLeft, mTop, imgWmm, imgHmm);
-      return;
-    }
-
-    // Need to slice canvas into page-sized chunks
-    const pxPerMm = canvas.width / imgWmm;           // pixels per mm at this scale
-    const sliceHPx = Math.floor(usableH * pxPerMm);  // pixels that fit one page height
-
-    let y = 0;
-    while (y < canvas.height) {
-      const slice = document.createElement("canvas");
-      slice.width = canvas.width;
-      slice.height = Math.min(sliceHPx, canvas.height - y);
-
-      const ctx = slice.getContext("2d");
-      ctx.drawImage(
-        canvas,
-        0, y, canvas.width, slice.height,  // src
-        0, 0, slice.width, slice.height    // dst
-      );
-
-      const sliceData = slice.toDataURL("image/jpeg", 0.95);
-      const sliceHmm = (slice.height * imgWmm) / slice.width;
-
-      pdf.addImage(sliceData, "JPEG", mLeft, mTop, imgWmm, sliceHmm);
-      y += slice.height;
-
-      if (y < canvas.height) pdf.addPage();
-    }
-  }
-
-  // Build the PDF content policy-by-policy
-  let firstContent = true;
+  let staging;
 
   try {
-    // Make a simple title page block (optional; remove if you don't want it)
+    const letterheadLogoDataUrl = await loadAsDataUrl("letterhead_logo.png");
+    const footerLine1 = "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787";
+    const footerLine2 = "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L";
+    const footerLine3 = "Registered in England 04121501";
+
     const docTitle = (document.getElementById("docTitle")?.textContent || "Helpdesk Operations Manual").trim();
     const versionMeta = (document.getElementById("docMeta")?.textContent || "").trim();
 
-    const cover = document.createElement("div");
-    cover.className = "pdf-export";
-    cover.innerHTML = `
-      <h1 style="margin:0 0 8px 0;">${docTitle}</h1>
-      <p style="margin:0 0 16px 0;">${versionMeta}</p>
-      <p style="margin:0;">Full manual export</p>
-    `;
-    staging.appendChild(cover);
+    // Bootstrap pdf instance from html2pdf (which bundles jsPDF internally)
+    // so we don't need a separate window.jspdf script tag
+    let pdf = null;
+    let firstPage = true;
 
-    const coverCanvas = await window.html2canvas(cover, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: "#ffffff"
-    });
+    staging = document.createElement("div");
+    staging.style.cssText = "position:fixed;left:-10000px;top:0;width:980px;opacity:1;pointer-events:none;background:#fff;z-index:-1;";
+    document.body.appendChild(staging);
 
-    addCanvasWithPaging(coverCanvas);
-    staging.removeChild(cover);
-    pdf.addPage();
-    firstContent = false;
+    if (document.fonts?.ready) {
+      try { await document.fonts.ready; } catch {}
+    }
 
-    for (const g of GROUPS) {
-      // Group heading page block (optional but helps readability)
-      const groupBlock = document.createElement("div");
-      groupBlock.className = "pdf-export";
-      groupBlock.innerHTML = `<h1>${g.title}</h1>`;
-      staging.appendChild(groupBlock);
+    // Dummy render to extract the bundled jsPDF instance from html2pdf
+    const _bootstrapEl = document.createElement("div");
+    _bootstrapEl.style.cssText = "width:1px;height:1px;overflow:hidden;";
+    staging.appendChild(_bootstrapEl);
+    await window.html2pdf()
+      .set({ margin: [20,10,15,10], jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, html2canvas: { scale:1, backgroundColor:"#ffffff" } })
+      .from(_bootstrapEl).toPdf()
+      .get("pdf").then(p => { pdf = p; });
+    staging.removeChild(_bootstrapEl);
 
-      const groupCanvas = await window.html2canvas(groupBlock, {
+    // Renders an element to canvas, slices it into A4-height pages, adds to master PDF
+    async function addElementToPdf(el) {
+      staging.appendChild(el);
+      await waitForImages(el);
+
+      const canvas = await window.html2canvas(el, {
         scale: 2,
         useCORS: true,
         allowTaint: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        logging: false
       });
 
-      addCanvasWithPaging(groupCanvas);
-      staging.removeChild(groupBlock);
-      pdf.addPage();
+      staging.removeChild(el);
+
+      if (canvas.width === 0 || canvas.height === 0) return;
+
+      // How many canvas px fit in one usable page height, given the canvas width
+      const pxPerMm = canvas.width / usableW;
+      const sliceHeightPx = Math.floor(usableH * pxPerMm);
+
+      let y = 0;
+      while (y < canvas.height) {
+        const sliceH = Math.min(sliceHeightPx, canvas.height - y);
+
+        const slice = document.createElement("canvas");
+        slice.width = canvas.width;
+        slice.height = sliceH;
+        slice.getContext("2d").drawImage(
+          canvas,
+          0, y, canvas.width, sliceH,
+          0, 0, canvas.width, sliceH
+        );
+
+        const imgData = slice.toDataURL("image/jpeg", 0.95);
+        const sliceHmm = (sliceH / canvas.width) * usableW;
+
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(imgData, "JPEG", mLeft, mTop, usableW, sliceHmm);
+        firstPage = false;
+
+        y += sliceH;
+      }
+    }
+
+    // Cover page
+    const cover = document.createElement("div");
+    cover.className = "pdf-export";
+    cover.innerHTML = `<h1 style="margin:0 0 8px 0;">${docTitle}</h1><p style="margin:0;">${versionMeta}</p>`;
+    await addElementToPdf(cover);
+
+    // Groups and policies
+    for (const g of GROUPS) {
+      const groupBlock = document.createElement("div");
+      groupBlock.className = "pdf-export";
+      groupBlock.innerHTML = `<h1>${g.title}</h1>`;
+      await addElementToPdf(groupBlock);
 
       for (const p of g.policies) {
         const block = document.createElement("div");
         block.className = "pdf-export";
-
-        // Render the policy markdown
         block.innerHTML = md.render(p.mdText);
         applyIndent(block);
-
-        staging.appendChild(block);
-        await waitForImages(block);
-
-        const canvas = await window.html2canvas(block, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          backgroundColor: "#ffffff"
-        });
-
-        addCanvasWithPaging(canvas);
-        staging.removeChild(block);
-
-        // Add a page break between policies (but not after the last one)
-        pdf.addPage();
+        await addElementToPdf(block);
       }
     }
 
-    // If we added an extra blank page at the end, remove it
-    const totalPagesBeforeStamp = pdf.internal.getNumberOfPages();
-    // If last page is empty, it's hard to detect perfectly; simplest: keep it if you don't mind.
-    // If you DO mind, comment out the pdf.addPage() after each policy and add it conditionally.
-
-    // Stamp header/footer on every page
+    // Stamp header + footer on every page
     const pageCount = pdf.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       pdf.setPage(i);
 
-      // Header logo
       const logoW = 40;
       const logoH = logoW / 4.04;
       pdf.addImage(letterheadLogoDataUrl, "PNG", 15, 8, logoW, logoH);
 
-      // Footer (centered)
       pdf.setFontSize(9);
       pdf.setTextColor(80);
-      const centerX = pageWidth / 2;
-      pdf.text(footerLine1, centerX, pageHeight - 13, { align: "center" });
-      pdf.text(footerLine2, centerX, pageHeight - 9,  { align: "center" });
-      pdf.text(footerLine3, centerX, pageHeight - 5,  { align: "center" });
+      const cx = pageW / 2;
+      pdf.text(footerLine1, cx, pageH - 13, { align: "center" });
+      pdf.text(footerLine2, cx, pageH - 9,  { align: "center" });
+      pdf.text(footerLine3, cx, pageH - 5,  { align: "center" });
+
+      const label = `Page ${i} of ${pageCount}`;
+      pdf.text(label, pageW - mRight - pdf.getTextWidth(label), pageH - 5);
     }
 
-    // Filename
     const safeName = `${docTitle}${versionMeta ? " - " + versionMeta : ""}`
-      .replace(/[\\/:*?"<>|]+/g, "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .slice(0, 140) || "manual";
+      .replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim().slice(0, 140) || "manual";
 
     pdf.save(`${safeName}.pdf`);
 
   } catch (e) {
     console.error(e);
-    alert("Full manual export failed. Check DevTools Console for details.");
+    alert(String(e));
   } finally {
-    staging.remove();
+    staging?.remove();
   }
 }
+
+
 function onHash() {
   const id = (location.hash || "").slice(1);
   renderPolicy(id);
@@ -745,7 +694,6 @@ if (exportBtn) {
   exportBtn.addEventListener("click", exportCurrentPolicyPdf);
 }
 
-// Null-guard (suggestion #5)
 if (searchInput) {
   searchInput.addEventListener("input", debounce((e) => runSearch(e.target.value), 140));
   searchInput.addEventListener("keydown", (e) => {
