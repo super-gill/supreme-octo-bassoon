@@ -1,0 +1,934 @@
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   Dark theme by default; light theme overrides via prefers-color-scheme.
+   ========================================================================== */
+
+:root {
+    --bg: #0b0f14;              /* Page background */
+    --panel: #0f1621;           /* Card / panel background */
+    --text: #e6edf3;            /* Primary text colour */
+    --muted: #9fb0c0;           /* Secondary / meta text */
+    --border: #223043;          /* Borders and dividers */
+    --link: #7dd3fc;            /* Hyperlink colour */
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.35);  /* Card drop-shadow */
+    --radius: 14px;             /* Default border-radius for cards */
+    --sidebar: 340px;           /* Sidebar width */
+    --maxw: 980px;              /* Max width of the main content area */
+    --h1bg: rgba(125, 211, 252, 0.08);   /* H1 nav item background tint */
+    --mark: rgba(255, 217, 102, 0.35);   /* Search highlight colour */
+    --heading: #7dd3fc;         /* Heading text colour */
+}
+
+/* Light theme overrides — applied via system preference OR explicit toggle */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --text: #0b1220;
+        --muted: #475569;
+        --border: #e2e8f0;
+        --link: #0369a1;
+        --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
+        --h1bg: rgba(2, 132, 199, 0.07);
+        --mark: rgba(255, 217, 102, 0.55);
+    }
+}
+
+/* Explicit light theme override (when user selects light via toggle) */
+:root[data-theme="light"] {
+    --bg: #f5f7fb;
+    --panel: #ffffff;
+    --text: #0b1220;
+    --muted: #475569;
+    --border: #e2e8f0;
+    --link: #0369a1;
+    --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
+    --h1bg: rgba(2, 132, 199, 0.07);
+    --mark: rgba(255, 217, 102, 0.55);
+}
+
+/* ==========================================================================
+   BASE / RESET
+   ========================================================================== */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14.5px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+}
+
+/* ==========================================================================
+   APP LAYOUT
+   Two-column grid: fixed-width sidebar | fluid main content.
+   On small screens collapses to single column (see responsive section).
+   ========================================================================== */
+
+.app {
+    height: 100%;
+    display: grid;
+    grid-template-columns: var(--sidebar) 1fr;
+}
+
+/* Sidebar: scrollable, subtle background tint */
+aside {
+    border-right: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    overflow: auto;
+    padding: 14px 10px;
+}
+
+/* Main content pane: independently scrollable */
+main {
+    overflow: auto;
+}
+
+/* Centres content within main, with max-width constraint */
+.wrap {
+    max-width: var(--maxw);
+    margin: 18px auto;
+    padding: 0 18px 40px;
+}
+
+/* ==========================================================================
+   CARD
+   The main content panel that holds the rendered policy.
+   ========================================================================== */
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 18px 30px;
+}
+
+/* ==========================================================================
+   META BAR
+   Top bar inside the card: breadcrumb on the left, export buttons on the right.
+   ========================================================================== */
+
+.meta {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 0 0 8px;
+}
+
+.meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 8px;
+}
+
+/* ==========================================================================
+   BUTTONS
+   Generic small button style used for PDF export actions.
+   ========================================================================== */
+
+.btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    padding: 7px 10px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.08);
+}
+
+/* Subtle press feedback */
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   PDF EXPORT STYLES
+   Applied to the off-screen staging container when generating PDFs.
+   Forces a white background with print-friendly typography and pagination.
+   ========================================================================== */
+
+.pdf-export {
+    background: #fff;
+    color: #000;
+    padding: 22px 24px;
+    font: 12px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+}
+
+.pdf-export a {
+    color: #0645ad;
+    text-decoration: underline;
+    word-break: break-word;
+}
+
+.pdf-export h1, .pdf-export h2, .pdf-export h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.pdf-export p { margin: 0 0 10px; }
+.pdf-export ul, .pdf-export ol { margin: 0 0 10px 20px; }
+.pdf-export li { margin: 0 0 4px; }
+
+/* PDF header block (title + subtitle at top of export) */
+.pdf-export .pdf-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.pdf-export .pdf-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 4px;
+}
+
+.pdf-export .pdf-subtitle {
+    font-size: 12px;
+    margin: 0;
+    color: #444;
+}
+
+/* Prevent headings from being stranded at the bottom of a page */
+.pdf-export h1,
+.pdf-export h2,
+.pdf-export h3,
+.pdf-export h4,
+.pdf-export h5 {
+    color: #000;
+    break-after: avoid-page;
+    page-break-after: avoid;
+}
+
+/* Keep the first paragraph/list after a heading on the same page */
+.pdf-export h2 + p,
+.pdf-export h3 + p,
+.pdf-export h4 + p,
+.pdf-export h2 + ul,
+.pdf-export h3 + ul,
+.pdf-export h4 + ul,
+.pdf-export h2 + ol,
+.pdf-export h3 + ol,
+.pdf-export h4 + ol {
+    break-before: avoid-page;
+    page-break-before: avoid;
+}
+
+/* Prevent content blocks from being split across pages */
+.pdf-export p,
+.pdf-export li,
+.pdf-export blockquote,
+.pdf-export pre,
+.pdf-export code,
+.pdf-export table,
+.pdf-export img,
+.pdf-export figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.pdf-export img {
+    max-width: 100%;
+    height: auto;
+}
+
+.pdf-export table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Repeat table headers on each page */
+.pdf-export thead { display: table-header-group; }
+.pdf-export tfoot { display: table-footer-group; }
+
+.pdf-export th,
+.pdf-export td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    vertical-align: top;
+}
+
+.pdf-export pre,
+.pdf-export code {
+    background: #f6f8fa;
+    border: 1px solid #e5e7eb;
+}
+
+/* ==========================================================================
+   SIDEBAR: BRAND
+   Document title and classification label at the top of the sidebar.
+   ========================================================================== */
+
+.brand {
+    padding: 6px 10px 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.brand strong {
+    display: block;
+    font-size: 14px;
+}
+
+.brand span {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   SIDEBAR: BOOK SELECTOR
+   Dropdown to switch between different .md manuals (e.g. manual.md, qms.md).
+   ========================================================================== */
+
+.book-select {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 0;
+}
+
+.book-select select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    outline: none;
+    font-size: 13px;
+    cursor: pointer;
+    /* Remove native dropdown arrow and replace with custom SVG chevron */
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239fb0c0' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+
+/* Light-mode override: darker chevron arrow for visibility */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .book-select select {
+        background-color: rgba(2, 6, 23, 0.02);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+}
+
+:root[data-theme="light"] .book-select select {
+    background-color: rgba(2, 6, 23, 0.02);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+/* Dropdown option styling to match theme */
+.book-select select option {
+    background: var(--panel);
+    color: var(--text);
+}
+
+/* ==========================================================================
+   SIDEBAR: SEARCH
+   Full-text search input and results list.
+   ========================================================================== */
+
+.search {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 10px;
+}
+
+.search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    outline: none;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .search input {
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-theme="light"] .search input {
+    background: rgba(2, 6, 23, 0.02);
+}
+
+.search input::placeholder {
+    color: rgba(159, 176, 192, 0.8);
+}
+
+/* Results container: hidden by default, shown when search has input */
+.results {
+    margin-top: 10px;
+    display: none;
+}
+
+.results.on {
+    display: block;
+}
+
+/* Match count label */
+.results .count {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 8px;
+}
+
+/* Individual search result item */
+.result {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    margin: 6px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.result:hover {
+    border-color: rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* Result title */
+.result strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+/* Result snippet / breadcrumb */
+.result small {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+/* ==========================================================================
+   SIDEBAR: NAVIGATION
+   H1 groups (section headers) and H2 links (individual policies).
+   ========================================================================== */
+
+/* H1 section header in the nav */
+.nav-h1 {
+    margin: 10px 6px 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--h1bg);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* H2 policy link in the nav */
+.nav-h2 {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    margin: 2px 6px;
+    font-size: 13.5px;
+}
+
+.nav-h2:hover {
+    border-color: rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* Currently selected policy */
+.nav-h2.active {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.10);
+}
+
+/* ==========================================================================
+   SIDEBAR: PLATFORM VERSION FOOTER
+   Subtle version label pinned to the bottom of the sidebar content.
+   ========================================================================== */
+
+.sidebar-footer {
+    margin-top: 14px;
+    padding: 10px 10px 4px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+/* ==========================================================================
+   DOCUMENT CONTENT (.doc)
+   Styles for the rendered markdown inside the main content area.
+   ========================================================================== */
+
+/* --- Heading sizes --- */
+
+.doc h1 {
+    font-size: 36px;
+    margin: 0 0 10px;
+}
+
+.doc h2 {
+    font-size: 36px;
+    margin: 18px 0 8px;
+}
+
+.doc h3 {
+    font-size: 22px;
+    margin: 16px 0 6px;
+}
+
+.doc h4 {
+    font-size: 20px;
+    margin: 16px 0 6px;
+}
+
+.doc h5 {
+    font-size: 18px;
+    margin: 16px 0 6px;
+}
+
+/* Heading colour and subtle glow effect */
+.doc h1,
+.doc h2,
+.doc h3,
+.doc h4,
+.doc h5,
+.doc h6 {
+    color: var(--heading);
+    text-shadow: 0 0 0.6px rgba(125, 211, 252, 0.65);
+}
+
+/* --- Indentation levels ---
+   Applied by JS (applyIndent) based on heading hierarchy.
+   H3 content gets indent 1, H4 gets indent 2, H5/H6 gets indent 3. */
+
+.doc [data-indent="1"] {
+    padding-left: 20px;
+}
+
+.doc [data-indent="2"] {
+    padding-left: 35px;
+}
+
+.doc [data-indent="3"] {
+    padding-left: 50px;
+}
+
+/* --- Block elements --- */
+
+.doc p {
+    margin: 10px 0;
+}
+
+.doc ul {
+    margin: 8px 0 8px 18px;
+}
+
+.doc li {
+    margin: 4px 0;
+}
+
+.doc a {
+    color: var(--link);
+}
+
+/* Code blocks (fenced / pre) */
+.doc pre {
+    background: #0b1220;
+    color: #e5e7eb;
+    padding: 12px;
+    border-radius: 12px;
+    overflow: auto;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Inline code */
+.doc code {
+    background: rgba(125, 211, 252, 0.08);
+    border: 1px solid rgba(125, 211, 252, 0.15);
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+}
+
+/* --- Tables --- */
+
+.doc table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 12px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .doc table {
+        border: 1px solid rgba(2, 6, 23, 0.14);
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-theme="light"] .doc table {
+    border: 1px solid rgba(2, 6, 23, 0.14);
+    background: rgba(2, 6, 23, 0.02);
+}
+
+.doc th,
+.doc td {
+    padding: 8px 10px;
+    vertical-align: top;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+
+    :root:not([data-theme="dark"]) .doc th,
+    :root:not([data-theme="dark"]) .doc td {
+        border-right: 1px solid rgba(2, 6, 23, 0.12);
+        border-bottom: 1px solid rgba(2, 6, 23, 0.12);
+    }
+}
+
+:root[data-theme="light"] .doc th,
+:root[data-theme="light"] .doc td {
+    border-right: 1px solid rgba(2, 6, 23, 0.12);
+    border-bottom: 1px solid rgba(2, 6, 23, 0.12);
+}
+
+/* Remove bottom border on last row, right border on last column */
+.doc tr:last-child td {
+    border-bottom: none;
+}
+
+.doc th:last-child,
+.doc td:last-child {
+    border-right: none;
+}
+
+/* Table header row */
+.doc th {
+    background: rgba(125, 211, 252, 0.14);
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Zebra-striped rows */
+.doc tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .doc tbody tr:nth-child(even) td {
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-theme="light"] .doc tbody tr:nth-child(even) td {
+    background: rgba(2, 6, 23, 0.02);
+}
+
+/* --- Images --- */
+
+.doc img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.10);
+}
+
+/* --- Search highlight (mark) --- */
+
+.doc mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   COLLAPSIBLE NAV SECTIONS
+   H1 headers toggle visibility of their child H2 links.
+   ========================================================================== */
+
+/* Chevron indicator on H1 headers */
+.nav-h1 {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-h1::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+/* Collapsed state: chevron rotated to point right */
+.nav-h1.collapsed::after {
+    transform: rotate(-90deg);
+}
+
+/* Container for H2 links within a group */
+.nav-group {
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+.nav-group.collapsed {
+    max-height: 0 !important;
+}
+
+/* ==========================================================================
+   BACK TO TOP BUTTON
+   Fixed button that scrolls main content to the top.
+   ========================================================================== */
+
+.back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.08);
+}
+
+.back-to-top:active {
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   THEME TOGGLE
+   Small button in the sidebar footer to cycle light/dark/system.
+   ========================================================================== */
+
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.theme-toggle {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    color: var(--text);
+}
+
+/* ==========================================================================
+   IN-POLICY TABLE OF CONTENTS
+   Auto-generated ToC from H3/H4/H5 headings within the rendered policy.
+   ========================================================================== */
+
+.policy-toc {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(125, 211, 252, 0.04);
+    padding: 12px 16px;
+    margin: 12px 0 20px;
+    font-size: 13px;
+}
+
+.policy-toc-title {
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px;
+}
+
+.policy-toc a {
+    display: block;
+    color: var(--link);
+    text-decoration: none;
+    padding: 2px 0;
+    line-height: 1.4;
+}
+
+.policy-toc a:hover {
+    text-decoration: underline;
+}
+
+/* Indent levels for sub-headings in the ToC */
+.policy-toc a[data-level="4"] {
+    padding-left: 16px;
+}
+
+.policy-toc a[data-level="5"] {
+    padding-left: 32px;
+}
+
+/* ==========================================================================
+   COPY / SHARE LINK ICON
+   Small link icon next to the H2 heading for copying the deep link.
+   ========================================================================== */
+
+.heading-link {
+    display: inline-block;
+    margin-left: 8px;
+    color: var(--muted);
+    opacity: 0;
+    cursor: pointer;
+    font-size: 0.6em;
+    vertical-align: middle;
+    text-decoration: none;
+    transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.doc h2:hover .heading-link,
+.heading-link:focus {
+    opacity: 0.7;
+}
+
+.heading-link:hover {
+    opacity: 1 !important;
+    color: var(--link);
+}
+
+/* Brief "Copied!" tooltip feedback */
+.heading-link.copied::after {
+    content: "Copied!";
+    position: absolute;
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   BROKEN HASH FALLBACK
+   Notice shown when a URL hash doesn't match any known policy.
+   ========================================================================== */
+
+.hash-fallback {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+}
+
+.hash-fallback-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 8px;
+}
+
+.hash-fallback-detail {
+    font-size: 14px;
+    margin: 0 0 16px;
+}
+
+.hash-fallback-action {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--link);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+}
+
+.hash-fallback-action:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   On screens narrower than 980px, collapse to single-column layout.
+   ========================================================================== */
+
+@media (max-width: 980px) {
+    .app {
+        grid-template-columns: 1fr;
+    }
+
+    aside {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 45vh;
+    }
+}
