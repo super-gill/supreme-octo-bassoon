@@ -1,40 +1,47 @@
 /* ==========================================================================
    CSS CUSTOM PROPERTIES (DESIGN TOKENS)
-   Dark theme by default; light theme overrides via prefers-color-scheme.
+   Default dark theme; additional themes applied via data-theme attribute.
+   System preference (light/dark) honoured when no explicit theme is set.
    ========================================================================== */
 
+/* --- Layout tokens (shared across all themes) --- */
 :root {
-    --bg: #0b0f14;              /* Page background */
-    --panel: #0f1621;           /* Card / panel background */
-    --text: #e6edf3;            /* Primary text colour */
-    --muted: #9fb0c0;           /* Secondary / meta text */
-    --border: #223043;          /* Borders and dividers */
-    --link: #7dd3fc;            /* Hyperlink colour */
-    --shadow: 0 10px 25px rgba(0, 0, 0, 0.35);  /* Card drop-shadow */
-    --radius: 14px;             /* Default border-radius for cards */
-    --sidebar: 340px;           /* Sidebar width */
-    --maxw: 980px;              /* Max width of the main content area */
-    --h1bg: rgba(125, 211, 252, 0.08);   /* H1 nav item background tint */
-    --mark: rgba(255, 217, 102, 0.35);   /* Search highlight colour */
-    --heading: #7dd3fc;         /* Heading text colour */
+    --radius: 14px;
+    --sidebar: 340px;
+    --maxw: 980px;
 }
 
-/* Light theme overrides — applied via system preference OR explicit toggle */
+/* --- Dark (default) --- */
+:root {
+    --bg: #0b0f14;
+    --panel: #0f1621;
+    --text: #e6edf3;
+    --muted: #9fb0c0;
+    --border: #223043;
+    --link: #7dd3fc;
+    --heading: #7dd3fc;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    --h1bg: rgba(125, 211, 252, 0.08);
+    --mark: rgba(255, 217, 102, 0.35);
+}
+
+/* --- Light — via system preference (when no explicit theme is set) --- */
 @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
+    :root:not([data-tone]) {
         --bg: #f5f7fb;
         --panel: #ffffff;
         --text: #0b1220;
         --muted: #475569;
         --border: #e2e8f0;
         --link: #0369a1;
+        --heading: #0369a1;
         --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
         --h1bg: rgba(2, 132, 199, 0.07);
         --mark: rgba(255, 217, 102, 0.55);
     }
 }
 
-/* Explicit light theme override (when user selects light via toggle) */
+/* --- Light — explicit selection via theme picker --- */
 :root[data-theme="light"] {
     --bg: #f5f7fb;
     --panel: #ffffff;
@@ -42,9 +49,66 @@
     --muted: #475569;
     --border: #e2e8f0;
     --link: #0369a1;
+    --heading: #0369a1;
     --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
     --h1bg: rgba(2, 132, 199, 0.07);
     --mark: rgba(255, 217, 102, 0.55);
+}
+
+/* --- Midnight — deep navy with teal accents --- */
+:root[data-theme="midnight"] {
+    --bg: #0a0e1a;
+    --panel: #111827;
+    --text: #e0e7ef;
+    --muted: #8b9ec2;
+    --border: #1e2d4a;
+    --link: #67e8f9;
+    --heading: #67e8f9;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    --h1bg: rgba(103, 232, 249, 0.08);
+    --mark: rgba(103, 232, 249, 0.25);
+}
+
+/* --- Ember — warm dark with amber accents --- */
+:root[data-theme="ember"] {
+    --bg: #141010;
+    --panel: #1c1614;
+    --text: #f0e6df;
+    --muted: #b8a08a;
+    --border: #3a2a20;
+    --link: #f59e0b;
+    --heading: #f59e0b;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.40);
+    --h1bg: rgba(245, 158, 11, 0.08);
+    --mark: rgba(245, 158, 11, 0.25);
+}
+
+/* --- Forest — dark green with green accents --- */
+:root[data-theme="forest"] {
+    --bg: #0b120e;
+    --panel: #111c15;
+    --text: #dce8e0;
+    --muted: #88a894;
+    --border: #1e3327;
+    --link: #4ade80;
+    --heading: #4ade80;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.40);
+    --h1bg: rgba(74, 222, 128, 0.08);
+    --mark: rgba(74, 222, 128, 0.25);
+}
+
+/* --- Sand — warm light with earthy tones --- */
+:root[data-theme="sand"] {
+    --bg: #f7f3ee;
+    --panel: #fffdf9;
+    --text: #2c2418;
+    --muted: #7a6e5d;
+    --border: #e0d5c5;
+    --link: #a16207;
+    --heading: #a16207;
+    --shadow: 0 10px 25px rgba(44, 36, 24, 0.10);
+    --h1bg: rgba(161, 98, 7, 0.07);
+    --mark: rgba(255, 217, 102, 0.45);
 }
 
 /* ==========================================================================
@@ -125,34 +189,6 @@ main {
     justify-content: space-between;
     gap: 10px;
     margin: 0 0 8px;
-}
-
-/* ==========================================================================
-   BUTTONS
-   Generic small button style used for PDF export actions.
-   ========================================================================== */
-
-.btn {
-    appearance: none;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text);
-    padding: 7px 10px;
-    border-radius: 12px;
-    font-size: 12.5px;
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-}
-
-.btn:hover {
-    border-color: rgba(125, 211, 252, 0.55);
-    background: rgba(125, 211, 252, 0.08);
-}
-
-/* Subtle press feedback */
-.btn:active {
-    transform: translateY(1px);
 }
 
 /* ==========================================================================
@@ -432,6 +468,29 @@ main {
    H1 groups (section headers) and H2 links (individual policies).
    ========================================================================== */
 
+.nav-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+}
+
+.nav-toggle-all {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 0;
+    opacity: 0.7;
+    font-family: inherit;
+}
+
+.nav-toggle-all:hover {
+    color: var(--link);
+    opacity: 1;
+}
+
 /* H1 section header in the nav */
 .nav-h1 {
     margin: 10px 6px 6px;
@@ -479,6 +538,9 @@ main {
     font-size: 11px;
     color: var(--muted);
     opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* ==========================================================================
@@ -592,13 +654,13 @@ main {
 }
 
 @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) .doc table {
+    :root:not([data-tone]) .doc table {
         border: 1px solid rgba(2, 6, 23, 0.14);
         background: rgba(2, 6, 23, 0.02);
     }
 }
 
-:root[data-theme="light"] .doc table {
+:root[data-tone="light"] .doc table {
     border: 1px solid rgba(2, 6, 23, 0.14);
     background: rgba(2, 6, 23, 0.02);
 }
@@ -613,15 +675,15 @@ main {
 
 @media (prefers-color-scheme: light) {
 
-    :root:not([data-theme="dark"]) .doc th,
-    :root:not([data-theme="dark"]) .doc td {
+    :root:not([data-tone]) .doc th,
+    :root:not([data-tone]) .doc td {
         border-right: 1px solid rgba(2, 6, 23, 0.12);
         border-bottom: 1px solid rgba(2, 6, 23, 0.12);
     }
 }
 
-:root[data-theme="light"] .doc th,
-:root[data-theme="light"] .doc td {
+:root[data-tone="light"] .doc th,
+:root[data-tone="light"] .doc td {
     border-right: 1px solid rgba(2, 6, 23, 0.12);
     border-bottom: 1px solid rgba(2, 6, 23, 0.12);
 }
@@ -649,12 +711,12 @@ main {
 }
 
 @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) .doc tbody tr:nth-child(even) td {
+    :root:not([data-tone]) .doc tbody tr:nth-child(even) td {
         background: rgba(2, 6, 23, 0.02);
     }
 }
 
-:root[data-theme="light"] .doc tbody tr:nth-child(even) td {
+:root[data-tone="light"] .doc tbody tr:nth-child(even) td {
     background: rgba(2, 6, 23, 0.02);
 }
 
@@ -762,36 +824,31 @@ main {
 }
 
 /* ==========================================================================
-   THEME TOGGLE
-   Small button in the sidebar footer to cycle light/dark/system.
+   THEME PICKER
+   Dropdown selector in the sidebar footer for colour themes.
    ========================================================================== */
 
-.sidebar-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.theme-toggle {
+.theme-picker {
     appearance: none;
+    -webkit-appearance: none;
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.04);
     color: var(--muted);
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
     flex-shrink: 0;
+    font-family: inherit;
 }
 
-.theme-toggle:hover {
+.theme-picker:hover {
     border-color: rgba(125, 211, 252, 0.55);
+    color: var(--text);
+}
+
+.theme-picker option {
+    background: var(--panel);
     color: var(--text);
 }
 
@@ -877,6 +934,118 @@ main {
 }
 
 /* ==========================================================================
+   TOME BRANDING
+   Shared wordmark used on the loading splash and fallback pages.
+   ========================================================================== */
+
+.tome-wordmark {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.55;
+    margin: 0 0 4px;
+    user-select: none;
+    text-align: center;
+}
+
+.tome-nav {
+    font-size: 18px;
+    padding: 12px 0 4px;
+    margin: 0;
+}
+
+/* --- Full-screen splash overlay: covers the entire viewport on load --- */
+
+.tome-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    animation: tomeFadeIn 0.4s ease-out;
+    transition: opacity 0.4s ease;
+}
+
+.tome-overlay.dismissed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- Splash animation --- */
+
+.splash-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px 28px;
+    margin: 0 0 16px;
+    transition: gap 0.5s ease, padding 0.5s ease, border-radius 0.5s ease;
+}
+
+.splash-letter {
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text);
+    opacity: 0.7;
+    display: inline-block;
+    min-width: 0.7em;
+    text-align: center;
+    transition: opacity 0.2s;
+}
+
+.splash-letter.resolved {
+    opacity: 1;
+}
+
+.splash-letter.cycling {
+    opacity: 0.4;
+}
+
+/* --- Merge: letters tighten into the final wordmark --- */
+
+.splash-box.merged {
+    gap: 2px;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+
+.splash-box.merged .splash-letter {
+    animation: splashPulse 1.6s ease-in-out 0.5s infinite;
+}
+
+@keyframes splashPulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+}
+
+.tome-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    opacity: 0;
+    letter-spacing: 0.1em;
+    animation: taglineFadeIn 0.4s ease 0.8s forwards;
+}
+
+@keyframes tomeFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes taglineFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 0.5; transform: translateY(0); }
+}
+
+/* ==========================================================================
    BROKEN HASH FALLBACK
    Notice shown when a URL hash doesn't match any known policy.
    ========================================================================== */
@@ -885,6 +1054,10 @@ main {
     text-align: center;
     padding: 40px 20px;
     color: var(--muted);
+}
+
+.hash-fallback .tome-wordmark {
+    margin-bottom: 12px;
 }
 
 .hash-fallback-title {
@@ -917,8 +1090,45 @@ main {
 }
 
 /* ==========================================================================
+   HAMBURGER BUTTON
+   Hidden on desktop, shown on mobile in the meta bar.
+   ========================================================================== */
+
+.nav-hamburger {
+    display: none;
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.6;
+}
+
+.nav-hamburger:hover {
+    color: var(--text);
+    opacity: 1;
+}
+
+/* Mobile nav backdrop */
+.nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.nav-backdrop[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
    RESPONSIVE
-   On screens narrower than 980px, collapse to single-column layout.
+   On screens narrower than 980px, sidebar becomes a slide-out drawer.
    ========================================================================== */
 
 @media (max-width: 980px) {
@@ -926,9 +1136,537 @@ main {
         grid-template-columns: 1fr;
     }
 
+    /* Sidebar becomes a fixed left drawer */
     aside {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        max-height: 45vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 300px;
+        max-width: 85vw;
+        max-height: none;
+        z-index: 8001;
+        background: var(--panel);
+        border-right: 1px solid var(--border);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        overflow-y: auto;
+    }
+
+    aside.drawer-open {
+        transform: translateX(0);
+    }
+
+    /* Show hamburger on mobile */
+    .nav-hamburger {
+        display: block;
+    }
+}
+
+/* ==========================================================================
+   PRINT
+   Hides chrome and renders only the document content for Ctrl+P.
+   ========================================================================== */
+
+/* ==========================================================================
+   SETTINGS PANEL
+   Slide-out panel from the right with tabs for Settings, Guide, About.
+   ========================================================================== */
+
+.settings-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.15s, color 0.15s;
+}
+
+.settings-btn:hover {
+    color: var(--text);
+    opacity: 1;
+}
+
+.settings-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.settings-backdrop[hidden] {
+    display: none;
+}
+
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    max-width: 90vw;
+    z-index: 9001;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    overflow: hidden;
+}
+
+.settings-panel[hidden] {
+    display: flex;
+    transform: translateX(100%);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.settings-panel.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.settings-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.settings-close {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.settings-close:hover {
+    color: var(--text);
+}
+
+/* --- Tabs --- */
+
+.settings-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.settings-tab {
+    flex: 1;
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-family: inherit;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.settings-tab:hover {
+    color: var(--text);
+}
+
+.settings-tab.active {
+    color: var(--link);
+    border-bottom-color: var(--link);
+}
+
+/* --- Tab content --- */
+
+.settings-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.settings-content[hidden] {
+    display: none;
+}
+
+.settings-group {
+    margin: 0 0 20px;
+}
+
+.settings-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 8px;
+}
+
+.settings-group .theme-picker {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+/* --- Export buttons in settings --- */
+
+.settings-export-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.settings-action {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.settings-action:hover {
+    border-color: var(--link);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* --- Guide tab --- */
+
+.settings-guide h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 10px;
+}
+
+.settings-guide h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 18px 0 6px;
+}
+
+.settings-guide p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0 0 8px;
+}
+
+.settings-guide ul {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    padding-left: 20px;
+    margin: 0 0 8px;
+}
+
+.settings-guide li {
+    margin: 0 0 4px;
+}
+
+.settings-guide code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.settings-guide pre {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    overflow-x: auto;
+    margin: 0 0 8px;
+}
+
+.settings-guide table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 0 0 8px;
+}
+
+.settings-guide th,
+.settings-guide td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-guide th {
+    font-weight: 700;
+    color: var(--heading);
+}
+
+/* --- Guide accordion --- */
+
+.guide-accordion {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0 0 6px;
+    overflow: hidden;
+}
+
+.guide-toggle {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+    width: 100%;
+    padding: 12px 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.guide-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.guide-toggle.open {
+    border-bottom: 1px solid var(--border);
+}
+
+.guide-toggle-title {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 2px;
+}
+
+.guide-toggle-desc {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+}
+
+.guide-body {
+    padding: 14px;
+}
+
+.guide-body[hidden] {
+    display: none;
+}
+
+/* --- About tab --- */
+
+.settings-about {
+    text-align: center;
+    padding: 20px 0 0;
+}
+
+.settings-about-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 0 0 24px;
+    text-align: left;
+}
+
+.settings-about-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-about-table td:first-child {
+    color: var(--muted);
+    font-weight: 600;
+    width: 45%;
+}
+
+.settings-copyright {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 4px;
+}
+
+.settings-proprietary {
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+/* --- Changelog button and sub-view --- */
+
+.changelog-btn {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 16px 0;
+    display: inline-block;
+}
+
+.changelog-btn:hover {
+    border-color: var(--link);
+    color: var(--text);
+}
+
+.changelog-view {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.changelog-view[hidden] {
+    display: none;
+}
+
+.changelog-back {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--link);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 0 16px;
+}
+
+.changelog-back:hover {
+    text-decoration: underline;
+}
+
+.changelog-content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 12px;
+}
+
+.changelog-content h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 16px 0 6px;
+}
+
+.changelog-content ul {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text);
+    padding-left: 18px;
+    margin: 0 0 8px;
+}
+
+.changelog-content li {
+    margin: 0 0 3px;
+}
+
+.changelog-content code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11.5px;
+}
+
+/* ==========================================================================
+   EXPORT PROGRESS OVERLAY
+   Full-screen overlay shown during PDF generation.
+   ========================================================================== */
+
+.export-progress {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.export-progress[hidden] {
+    display: none;
+}
+
+.export-progress-inner {
+    text-align: center;
+}
+
+.export-progress-text {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+}
+
+@media print {
+    aside,
+    .meta-bar,
+    .back-to-top,
+    .tome-overlay,
+    .policy-toc,
+    .heading-link,
+    .settings-panel,
+    .settings-backdrop,
+    .nav-backdrop,
+    .nav-hamburger {
+        display: none !important;
+    }
+
+    .app {
+        display: block;
+    }
+
+    main {
+        padding: 0;
+    }
+
+    .wrap {
+        max-width: 100%;
+    }
+
+    .card {
+        box-shadow: none;
+        border: none;
+        background: none;
+        padding: 0;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    .doc a {
+        color: #000;
+        text-decoration: underline;
     }
 }

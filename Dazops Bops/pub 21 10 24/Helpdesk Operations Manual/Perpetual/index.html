@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tome</title>
+
+  <!-- Markdown parser: converts .md content into HTML -->
+  <script src="libs/markdown-it.min.js"></script>
+
+  <!-- Anchor plugin for markdown-it: auto-generates heading IDs for deep linking -->
+  <script src="libs/markdownItAnchor.umd.js"></script>
+
+  <!-- PDF generation libraries: html2pdf wraps html2canvas + jsPDF -->
+  <script src="libs/html2pdf.bundle.min.js"></script>
+  <script src="libs/html2canvas.min.js"></script>
+
+  <!-- Favicon: set from tome.json branding.favicon on load -->
+  <link id="favicon" rel="icon">
+</head>
+
+<!-- Stylesheet for the app layout, sidebar, document viewer, and PDF export -->
+<link rel="stylesheet" type="text/css" href="styles.css?v=2.0.0">
+
+<body>
+  <!-- Full-screen splash overlay: covers everything until JS dismisses it -->
+  <div id="tomeSplash" class="tome-overlay">
+    <div class="splash-box">
+      <span class="splash-letter cycling" data-target="T">&nbsp;</span>
+      <span class="splash-letter cycling" data-target="O">&nbsp;</span>
+      <span class="splash-letter cycling" data-target="M">&nbsp;</span>
+      <span class="splash-letter cycling" data-target="E">&nbsp;</span>
+    </div>
+    <div class="tome-tagline">Loading&hellip;</div>
+  </div>
+  <script>
+    // Letter-cycling splash animation — runs immediately before main JS loads
+    (function () {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const letters = document.querySelectorAll(".splash-letter");
+      const cycleMs = 50;       // Speed of each letter flip
+      const stagger = 200;      // Delay between each letter resolving
+      const startDelay = 100;   // Brief pause before cycling starts
+
+      letters.forEach((el, i) => {
+        const target = el.dataset.target;
+        const resolveAt = startDelay + 400 + (i * stagger); // When this letter stops
+        const startAt = startDelay;
+        let interval;
+
+        // Start cycling through random letters
+        setTimeout(() => {
+          interval = setInterval(() => {
+            el.textContent = chars[Math.floor(Math.random() * chars.length)];
+          }, cycleMs);
+        }, startAt);
+
+        // Stop cycling and land on the correct letter
+        setTimeout(() => {
+          clearInterval(interval);
+          el.textContent = target;
+          el.classList.remove("cycling");
+          el.classList.add("resolved");
+        }, resolveAt);
+      });
+
+      // After all letters resolve, tighten spacing into the final wordmark
+      const lastResolve = startDelay + 400 + ((letters.length - 1) * stagger);
+      setTimeout(() => {
+        document.querySelector(".splash-box").classList.add("merged");
+      }, lastResolve + 300);
+    })();
+  </script>
+
+  <!-- Root layout: two-column grid (sidebar | main content) -->
+  <div class="app">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside>
+
+      <!-- Tome wordmark: subtle platform branding at the top of the sidebar -->
+      <div class="tome-wordmark tome-nav">Tome</div>
+
+      <!-- Branding: document title and classification label -->
+      <div class="brand">
+        <strong id="docTitle">Tome</strong>
+        <span id="docMeta">Internal Use Only</span>
+      </div>
+
+      <!-- Book selector: dropdown populated from books.json, switches between manuals -->
+      <div class="book-select">
+        <select id="bookPicker"></select>
+      </div>
+
+      <!-- Search: filters policies by keyword, results appear below the input -->
+      <div class="search">
+        <input id="search" type="search" placeholder="Search…" autocomplete="off" />
+        <div id="results" class="results"></div>
+      </div>
+
+      <!-- Navigation: dynamically built list of H1 groups and H2 policy links -->
+      <div class="nav-toolbar">
+        <button id="navToggleAll" class="nav-toggle-all" type="button" title="Expand all sections">Expand all</button>
+      </div>
+      <div id="nav"></div>
+
+      <!-- Sidebar footer: version only -->
+      <div class="sidebar-footer">
+        <span id="platformVersion"></span>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT AREA ===== -->
+    <main>
+      <div class="wrap">
+        <div class="card">
+
+          <!-- Top bar: hamburger (mobile), breadcrumb, settings -->
+          <div class="meta-bar">
+            <button id="navHamburger" class="nav-hamburger" type="button" title="Menu">&#9776;</button>
+            <div class="meta" id="meta"></div>
+            <button id="settingsBtn" class="settings-btn" type="button" title="Settings">&#9881;</button>
+          </div>
+
+          <!-- Rendered markdown content for the currently selected policy -->
+          <article class="doc" id="view"></article>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Mobile nav backdrop: shown when sidebar drawer is open -->
+  <div id="navBackdrop" class="nav-backdrop" hidden></div>
+
+  <!-- Back to top button: appears when main content is scrolled down -->
+  <button id="backToTop" class="back-to-top" type="button" title="Back to top">&#8679;</button>
+
+  <!-- Settings panel: slides in from the right -->
+  <div id="settingsBackdrop" class="settings-backdrop" hidden></div>
+  <div id="settingsPanel" class="settings-panel" hidden>
+
+    <!-- Panel header -->
+    <div class="settings-header">
+      <span class="settings-title">Settings</span>
+      <button id="settingsClose" class="settings-close" type="button" title="Close">&times;</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="settings">Settings</button>
+      <button class="settings-tab" data-tab="guide">Guide</button>
+      <button class="settings-tab" data-tab="about">About</button>
+    </div>
+
+    <!-- Tab: Settings -->
+    <div class="settings-content" id="tab-settings">
+      <div class="settings-group">
+        <label class="settings-label">Colour theme</label>
+        <select id="themePicker" class="theme-picker" title="Colour theme"></select>
+      </div>
+      <div class="settings-group">
+        <label class="settings-label">Export</label>
+        <div class="settings-export-btns">
+          <button class="settings-action" data-export="policy-pdf">This page &rarr; PDF</button>
+          <button class="settings-action" data-export="policy-md">This page &rarr; Markdown</button>
+          <button class="settings-action" data-export="manual-pdf">Full manual &rarr; PDF</button>
+          <button class="settings-action" data-export="manual-md">Full manual &rarr; Markdown</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Guide (accordion) -->
+    <div class="settings-content" id="tab-guide" hidden>
+
+      <!-- Authoring -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Authoring for Tome</span>
+          <span class="guide-toggle-desc">Document structure, metadata, headings, and markdown</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <h4>Document metadata</h4>
+            <p>The first non-empty lines before any heading are treated as metadata. Tome looks for:</p>
+            <ul>
+              <li>The <strong>first line</strong> of text becomes the document title (shown in the sidebar and browser tab)</li>
+              <li>A line matching <code>VE.#</code> is captured as the document version</li>
+            </ul>
+
+            <h4>Heading hierarchy</h4>
+            <table>
+              <thead><tr><th>Markdown</th><th>Tome uses it as</th></tr></thead>
+              <tbody>
+                <tr><td><code># Heading 1</code></td><td>Navigation group (collapsible section header)</td></tr>
+                <tr><td><code>## Heading 2</code></td><td>Page &mdash; each H2 becomes a separately viewable page</td></tr>
+                <tr><td><code>### &ndash; #####</code></td><td>In-page headings (auto-generates a table of contents)</td></tr>
+              </tbody>
+            </table>
+
+            <h4>Supported content</h4>
+            <ul>
+              <li>All standard Markdown: tables, code blocks, images, links, lists, blockquotes</li>
+              <li>HTML passthrough is enabled &mdash; you can embed raw HTML if needed</li>
+              <li>Deep links use the URL hash: <code>#section-heading-page-title</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Branding -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Branding</span>
+          <span class="guide-toggle-desc">Customise the title, favicon, splash screen, and PDF letterhead</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <p>All branding is configured through <code>tome.json</code>. No source code changes are needed.</p>
+
+            <h4>Sidebar &amp; browser tab</h4>
+            <table>
+              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
+              <tbody>
+                <tr><td><code>branding.defaultTitle</code></td><td>The title shown in the sidebar and browser tab before a book loads (or as a fallback if the markdown has no title)</td></tr>
+                <tr><td><code>branding.classification</code></td><td>The label beneath the title, e.g. &ldquo;Internal Use Only&rdquo; or &ldquo;Confidential&rdquo;</td></tr>
+                <tr><td><code>branding.favicon</code></td><td>Path to the browser tab icon (SVG, PNG, or ICO)</td></tr>
+              </tbody>
+            </table>
+
+            <h4>Splash screen</h4>
+            <p>On load, Tome shows a full-screen splash with the &ldquo;TOME&rdquo; wordmark. Control how long it stays visible:</p>
+            <table>
+              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
+              <tbody>
+                <tr><td><code>splash.minDurationMs</code></td><td>Minimum splash duration in milliseconds (default: 2000)</td></tr>
+              </tbody>
+            </table>
+            <p>The splash always waits for the book manifest to load. If loading takes longer than the minimum, the splash stays until loading completes.</p>
+
+            <h4>PDF letterhead</h4>
+            <p>Exported PDFs are stamped with a header logo and up to 3 lines of footer text on every page.</p>
+            <table>
+              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
+              <tbody>
+                <tr><td><code>pdf.logo</code></td><td>Path to the header image (placed top-left, scaled to 40mm wide)</td></tr>
+                <tr><td><code>pdf.footer</code></td><td>Array of up to 3 strings, centred at the bottom of each page</td></tr>
+              </tbody>
+            </table>
+
+            <h4>Example</h4>
+            <pre>{
+  "branding": {
+    "defaultTitle": "Company Handbook",
+    "classification": "Internal Use Only",
+    "favicon": "brand-icon.svg"
+  },
+  "pdf": {
+    "logo": "company-logo.png",
+    "footer": [
+      "example.com | hello@example.com | 01onal 123 456",
+      "Example Ltd, 1 High Street, London, EC1A 1BB",
+      "Registered in England 12345678"
+    ]
+  },
+  "splash": {
+    "minDurationMs": 2500
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media & Images -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Media &amp; Images</span>
+          <span class="guide-toggle-desc">How to organise and reference images in your books</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <p>Tome automatically resolves image paths relative to the book&rsquo;s directory. Keep images alongside your markdown files.</p>
+
+            <h4>Recommended structure</h4>
+            <pre>Books/
+  my-manual/
+    manual.md
+    diagram.png
+    screenshot.png
+  another-book/
+    guide.md
+    photo.jpg</pre>
+
+            <h4>Referencing images</h4>
+            <p>Just use the filename &mdash; no path prefix needed:</p>
+            <pre>![My diagram](diagram.png)</pre>
+            <p>Tome detects that the book lives at <code>Books/my-manual/manual.md</code> and resolves the image to <code>Books/my-manual/diagram.png</code>.</p>
+
+            <h4>How it works</h4>
+            <ul>
+              <li>Image <code>src</code> and link <code>href</code> attributes are resolved after rendering</li>
+              <li>Only relative paths are affected &mdash; absolute URLs, data URIs, and hash links are untouched</li>
+              <li>This applies to the viewer, PDF export, and full-manual export</li>
+            </ul>
+
+            <h4>Books in the root directory</h4>
+            <p>If a book file sits directly in the root (not in a subfolder), image paths are not modified. Place images alongside <code>index.html</code> in that case.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuration -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Configuration</span>
+          <span class="guide-toggle-desc">books.json, tome.json, and platform settings</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <h4>books.json</h4>
+            <p>Lists the available books. The first entry is loaded by default.</p>
+            <pre>[
+  { "file": "Books/manual/manual.md", "title": "My Manual" },
+  { "file": "Books/qms/qms.md",      "title": "Quality System" }
+]</pre>
+
+            <h4>tome.json</h4>
+            <p>Controls platform branding and behaviour. All fields are optional.</p>
+            <pre>{
+  "branding": {
+    "defaultTitle": "My Documentation",
+    "classification": "Internal Use Only",
+    "favicon": "my-icon.svg"
+  },
+  "pdf": {
+    "logo": "logo.png",
+    "footer": ["Line 1", "Line 2", "Line 3"]
+  },
+  "splash": {
+    "minDurationMs": 2000
+  }
+}</pre>
+            <table>
+              <thead><tr><th>Key</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>branding.defaultTitle</code></td><td>Fallback title if the markdown has none</td></tr>
+                <tr><td><code>branding.classification</code></td><td>Label shown below the title</td></tr>
+                <tr><td><code>branding.favicon</code></td><td>Path to the browser tab icon</td></tr>
+                <tr><td><code>pdf.logo</code></td><td>Letterhead image for PDF exports</td></tr>
+                <tr><td><code>pdf.footer</code></td><td>Up to 3 lines of footer text on each PDF page</td></tr>
+                <tr><td><code>splash.minDurationMs</code></td><td>Minimum splash screen duration in milliseconds</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDF Export -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">PDF Export</span>
+          <span class="guide-toggle-desc">How exports work, letterhead, and footer configuration</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <h4>Single page export</h4>
+            <p>Exports the currently viewed page as an A4 PDF at 2&times; resolution with letterhead and footer.</p>
+
+            <h4>Full manual export</h4>
+            <p>Stitches every page into a single PDF with a cover page. A progress indicator shows pages processed.</p>
+
+            <h4>Branding</h4>
+            <ul>
+              <li><strong>Header:</strong> The logo from <code>tome.json &rarr; pdf.logo</code> is placed top-left on every page</li>
+              <li><strong>Footer:</strong> Up to 3 lines from <code>tome.json &rarr; pdf.footer</code> are centred at the bottom, with a page counter on the right</li>
+            </ul>
+
+            <h4>Markdown export</h4>
+            <p>Downloads the raw <code>.md</code> source &mdash; either the current page&rsquo;s markdown or the entire book file.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard Shortcuts -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Keyboard Shortcuts</span>
+          <span class="guide-toggle-desc">Navigation and search shortcuts</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <table>
+              <thead><tr><th>Key</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><code>/</code></td><td>Focus the search box</td></tr>
+                <tr><td><code>n</code></td><td>Go to the next page</td></tr>
+                <tr><td><code>p</code></td><td>Go to the previous page</td></tr>
+                <tr><td><code>Escape</code></td><td>Clear search / close settings panel</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tab: About -->
+    <div class="settings-content" id="tab-about" hidden>
+      <div class="settings-about">
+        <div class="tome-wordmark" style="font-size:28px; margin-bottom:12px;">Tome</div>
+        <table class="settings-about-table">
+          <tbody>
+            <tr><td>Tome</td><td id="aboutPlatformVersion"></td></tr>
+            <tr><td>markdown-it</td><td id="aboutMarkdownIt"></td></tr>
+            <tr><td>markdown-it-anchor</td><td id="aboutMarkdownItAnchor"></td></tr>
+            <tr><td>html2pdf.js</td><td id="aboutHtml2pdf"></td></tr>
+            <tr><td>html2canvas</td><td id="aboutHtml2canvas"></td></tr>
+          </tbody>
+        </table>
+        <button id="changelogBtn" class="changelog-btn" type="button">View changelog</button>
+        <div class="settings-copyright">&copy; 2026 Jason Mcdill. All rights reserved.</div>
+        <div class="settings-proprietary">Proprietary software. Unauthorised use, copying, or distribution is prohibited.</div>
+      </div>
+
+      <!-- Changelog sub-view (hidden by default, replaces about content) -->
+      <div id="changelogView" class="changelog-view" hidden>
+        <button id="changelogBack" class="changelog-back" type="button">&larr; Back</button>
+        <div class="changelog-content">
+          <h3>Changelog</h3>
+
+          <h4>v2.0.0</h4>
+          <ul>
+            <li>Named the platform <strong>Tome</strong> with branded splash screen, wordmark, and loading overlay</li>
+            <li>Settings panel (slide-out) with three tabs: Settings, Guide, About</li>
+            <li>Guide tab with accordion-style expandable sections: Authoring, Branding, Media &amp; Images, Configuration, PDF Export, Keyboard Shortcuts</li>
+            <li>About page showing platform and library versions, copyright, and proprietary notice</li>
+            <li>Changelog accessible from About tab via &ldquo;View changelog&rdquo; button</li>
+            <li>Colour themes: Dark, Light, Midnight, Ember, Forest, Sand, plus System auto-detect</li>
+            <li>Theme picker dropdown with <code>data-tone</code> system for clean light/dark CSS overrides</li>
+            <li>Export options (PDF and Markdown) for single page or full manual, accessible from settings</li>
+            <li>PDF export progress overlay with live page counter</li>
+            <li>Mobile responsive: hamburger menu with slide-out nav drawer (replaces 50/50 split)</li>
+            <li>Collapsible nav sections with expand/collapse all toggle, collapsed by default</li>
+            <li>Back to top button on scroll</li>
+            <li>Keyboard navigation: <code>/</code> to search, <code>n</code>/<code>p</code> to move between pages</li>
+            <li>In-page table of contents auto-generated from H3/H4/H5 headings</li>
+            <li>Copy link icon on page headings for deep-linking</li>
+            <li>Broken hash fallback with branded message</li>
+            <li><code>tome.json</code> configuration file for branding, PDF settings, favicon, and splash duration</li>
+            <li>Self-hosted libraries (markdown-it, markdown-it-anchor, html2pdf, html2canvas) &mdash; no CDN dependency</li>
+            <li>Automatic image path resolution relative to book directory &mdash; images live alongside their markdown files</li>
+            <li>Restructured Books directory: each book in its own subfolder with co-located images</li>
+            <li>Print stylesheet hides all chrome, prints document content only</li>
+            <li>Cache-busting via version query strings on JS and CSS</li>
+            <li>Removed all Digital Origin branding from platform code &mdash; all branding now configurable via <code>tome.json</code></li>
+            <li>Genericised all user-facing language from &ldquo;policy&rdquo; to &ldquo;page&rdquo;</li>
+            <li>Copyright and proprietary software notice (Jason Mcdill)</li>
+            <li>Settings button moved to meta bar (top-right) for spatial proximity to panel</li>
+            <li>Default book loaded from first entry in <code>books.json</code> rather than hardcoded filename</li>
+          </ul>
+
+          <h4>v1.4.0</h4>
+          <ul>
+            <li>Multi-book support: <code>books.json</code> manifest with dropdown book picker</li>
+            <li>Dynamic book loading &mdash; first entry in manifest is the default</li>
+            <li>Sidebar branding updates dynamically from loaded book metadata</li>
+            <li>Platform versioning system introduced</li>
+          </ul>
+
+          <h4>v1.3.1</h4>
+          <ul>
+            <li>Rewrote PDF export engine using jsPDF bootstrap approach</li>
+            <li>H2 title retained in single-page PDF exports</li>
+            <li>Fixed canvas rendering issues in full-manual export</li>
+          </ul>
+
+          <h4>v1.3.0</h4>
+          <ul>
+            <li>Full-manual PDF export: all pages stitched into a single branded document</li>
+            <li>Canvas-slicing approach for accurate A4 page breaks</li>
+            <li>Letterhead header and footer stamped on every PDF page</li>
+            <li>SVG favicon support</li>
+          </ul>
+
+          <h4>v1.2.0</h4>
+          <ul>
+            <li>Single-page PDF export with branded letterhead</li>
+            <li>Collision-proof heading IDs (H1+H2 composite slugs)</li>
+            <li>Meta bar with breadcrumb navigation</li>
+          </ul>
+
+          <h4>v1.1.0</h4>
+          <ul>
+            <li>Separated code into three files: <code>index.html</code>, <code>index.js</code>, <code>styles.css</code></li>
+            <li>Dynamic document metadata extraction (title, version from markdown)</li>
+            <li>Indent system for nested content rendering</li>
+            <li>CSS custom properties for theming groundwork</li>
+          </ul>
+
+          <h4>v1.0.0</h4>
+          <ul>
+            <li>Initial release: single-file application</li>
+            <li>Markdown rendering via markdown-it with anchor plugin</li>
+            <li>Sidebar navigation built from H1/H2 heading structure</li>
+            <li>Hash-based routing for deep-linking to individual pages</li>
+            <li>Full-text search with highlighted results</li>
+            <li>Dark theme by default with system light preference support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export progress overlay: shown during PDF generation -->
+  <div id="exportProgress" class="export-progress" hidden>
+    <div class="export-progress-inner">
+      <div class="tome-wordmark">Tome</div>
+      <div id="exportProgressText" class="export-progress-text">Exporting&hellip;</div>
+    </div>
+  </div>
+</body>
+
+<!-- Application logic: markdown parsing, navigation, search, PDF export -->
+<script src="index.js?v=2.0.0"></script>
+
+</html>

@@ -1,0 +1,18 @@
+{
+  "branding": {
+    "defaultTitle": "TOME Markdown",
+    "classification": "",
+    "favicon": "digitalOranges.svg"
+  },
+  "pdf": {
+    "logo": "letterhead_logo.png",
+    "footer": [
+      "Jason Mcdill",
+      "",
+      ""
+    ]
+  },
+  "splash": {
+    "minDurationMs": 2000
+  }
+}

@@ -39,60 +39,93 @@ const metaEl = document.getElementById("meta");         // Breadcrumb text (H1 >
 
 const searchInput = document.getElementById("search");  // Search input field
 const resultsEl = document.getElementById("results");   // Search results container
-const exportBtn = document.getElementById("exportPdf"); // Single-policy PDF export button
 const bookPicker = document.getElementById("bookPicker"); // Book selector dropdown
 const platformVersionEl = document.getElementById("platformVersion"); // Sidebar footer version label
-const themeToggleBtn = document.getElementById("themeToggle");       // Theme toggle button
+const themePickerEl = document.getElementById("themePicker");         // Theme picker dropdown
 const backToTopBtn = document.getElementById("backToTop");           // Back to top button
 const mainEl = document.querySelector("main");                       // Main scrollable pane
 
-// Bind the full-manual export button if it exists
-const exportManualBtn = document.getElementById("exportManualPdf");
-if (exportManualBtn) {
-  exportManualBtn.addEventListener("click", exportFullManualPdf);
-}
 
 // ==========================================================================
 // APPLICATION STATE
 // ==========================================================================
 
-/** Platform version (semantic versioning). Updated when the viewer code changes.
- *  v1.0.0 - VE.3:  Baseline single-file app (nav, search, hash routing)
- *  v1.1.0 - VE.4:  File separation (HTML/JS/CSS), dynamic metadata, indent system
- *  v1.2.0 - VE.6:  Single-policy PDF export, collision-proof IDs, meta-bar
- *  v1.3.0 - VE.7:  Full-manual PDF export, company letterhead/footer, SVG favicon
- *  v1.3.1 - VE.8:  Export rewrite (jsPDF bootstrap), H2 title retained in PDF
- *  v1.4.0 - VE.11: Multi-book selector (books.json), comprehensive code docs
- *  v1.5.0 - VE.11: Collapsible nav, back-to-top, keyboard nav, theme toggle,
- *                   in-policy ToC, copy link icon, broken hash fallback
- */
-const PLATFORM_VERSION = "v1.5.0";
+/** Tome platform version (semantic versioning). See changelog in settings for details. */
+const PLATFORM_VERSION = "v2.0.0";
 
 let CURRENT_QUERY = "";       // Active search query (empty = no search)
 let CURRENT_POLICY = null;    // Currently rendered policy object
-let CURRENT_BOOK = "manual.md"; // Filename of the currently loaded book
+let CURRENT_BOOK = null;      // Filename of the currently loaded book (set from books.json)
 let BOOKS = [];               // Array of { file, title } from books.json
+let TOME_CONFIG = {};         // Configuration loaded from tome.json
 
 // ==========================================================================
 // HELPERS
 // ==========================================================================
 
 /**
- * Extracts the document title (first non-empty line) and version string
- * (e.g. "VE.11") from the raw markdown text. Used to update the page
- * title and sidebar branding when a book is loaded.
+ * Extracts document metadata from structured lines at the top of the markdown:
+ *   Document Title: [title]
+ *   Document Version: [version]
+ *   Document Date: [date]
+ * Scans up to 20 lines or the first heading, whichever comes first.
+ * Falls back to tome.json defaultTitle if no title line is found.
  */
 function extractDocMeta(mdText) {
   const lines = mdText.split(/\r?\n/);
+  const defaultTitle = TOME_CONFIG.branding?.defaultTitle || "Manual";
 
-  // Title is the first non-empty line of the markdown
-  const title = (lines.find((l) => l.trim()) || "Helpdesk Operations Manual").trim();
+  let title = null;
+  let version = null;
+  let date = null;
 
-  // Version is a standalone line matching "VE.XX"
-  const verLine = lines.find((l) => /^\s*VE\.\d+\s*$/i.test(l));
-  const version = verLine ? verLine.trim().toUpperCase() : null;
+  for (let i = 0; i < Math.min(lines.length, 20); i++) {
+    const line = lines[i].trim();
+    if (line.startsWith("#")) break;
 
-  return { title, version };
+    const titleMatch = /^Document\s+Title:\s*(.+)/i.exec(line);
+    const versionMatch = /^Document\s+Version:\s*(.+)/i.exec(line);
+    const dateMatch = /^Document\s+Date:\s*(.+)/i.exec(line);
+
+    if (titleMatch) title = titleMatch[1].trim();
+    if (versionMatch) version = versionMatch[1].trim();
+    if (dateMatch) date = dateMatch[1].trim();
+  }
+
+  return {
+    title: title || defaultTitle,
+    version: version || null,
+    date: date || null
+  };
+}
+
+/**
+ * Resolves relative image and link URLs within a rendered DOM container
+ * so they are relative to the book's directory rather than the page root.
+ * E.g. if CURRENT_BOOK is "Books/manual/manual.md", an <img src="diagram.png">
+ * becomes <img src="Books/manual/diagram.png">.
+ */
+function resolveBookPaths(container) {
+  if (!CURRENT_BOOK) return;
+  const bookDir = CURRENT_BOOK.substring(0, CURRENT_BOOK.lastIndexOf("/") + 1);
+  if (!bookDir) return; // Book is in root, nothing to resolve
+
+  const isRelative = (url) => url && !url.startsWith("http") && !url.startsWith("//")
+    && !url.startsWith("data:") && !url.startsWith("#") && !url.startsWith("/");
+
+  container.querySelectorAll("img[src]").forEach((img) => {
+    if (isRelative(img.getAttribute("src"))) {
+      img.setAttribute("src", bookDir + img.getAttribute("src"));
+    }
+  });
+
+  container.querySelectorAll("a[href]").forEach((a) => {
+    const href = a.getAttribute("href");
+    // Only resolve file links, not hash links or external URLs
+    if (isRelative(href) && !href.startsWith("#")) {
+      a.setAttribute("href", bookDir + href);
+    }
+  });
 }
 
 /**
@@ -140,7 +173,21 @@ function applyIndent(root) {
  *   { id, title, policies: [{ id, title, h1Title, mdText }] }
  */
 function parseManual(markdown) {
-  const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+  const allLines = markdown.replace(/\r\n/g, "\n").split("\n");
+
+  // Strip metadata lines from the top (Document Title:, Document Version:, Document Date:)
+  const metaPattern = /^Document\s+(Title|Version|Date):\s*/i;
+  let firstContentLine = 0;
+  for (let i = 0; i < Math.min(allLines.length, 20); i++) {
+    const trimmed = allLines[i].trim();
+    if (trimmed.startsWith("#")) break;
+    if (metaPattern.test(trimmed) || trimmed === "") {
+      firstContentLine = i + 1;
+      continue;
+    }
+    break;
+  }
+  const lines = allLines.slice(firstContentLine);
 
   // Root group catches any content before the first H1
   let currentH1 = { id: "root", title: "Manual", policies: [] };
@@ -240,6 +287,22 @@ function buildIndexFromGroups() {
 // ==========================================================================
 
 /**
+ * Loads the tome.json configuration file. Falls back to sensible defaults
+ * if the file is missing so the platform still works without it.
+ */
+async function loadConfig() {
+  try {
+    const url = new URL("tome.json", document.baseURI);
+    const res = await fetch(url.href, { cache: "no-store" });
+    if (!res.ok) throw new Error(`${res.status}`);
+    TOME_CONFIG = await res.json();
+  } catch (e) {
+    console.warn("Could not load tome.json, using defaults:", e);
+    TOME_CONFIG = {};
+  }
+}
+
+/**
  * Fetches a markdown file relative to the current page URL.
  * Uses cache-busting to ensure the latest version is always loaded.
  */
@@ -265,8 +328,9 @@ async function loadBooks() {
     if (!res.ok) throw new Error(`Failed to load books.json (${res.status})`);
     BOOKS = await res.json();
   } catch (e) {
-    console.warn("Could not load books.json, defaulting to manual.md:", e);
-    BOOKS = [{ file: "manual.md", title: "Helpdesk Operations Manual" }];
+    console.warn("Could not load books.json, falling back to Books/manual/:", e);
+    BOOKS = [{ file: "Books/manual/manualVE12.md", title: TOME_CONFIG.branding?.defaultTitle || "Manual" }];
+    CURRENT_BOOK = BOOKS[0].file;
   }
 
   // Populate the dropdown with available books
@@ -297,17 +361,21 @@ async function loadBooks() {
 async function loadBook(filename) {
   try {
     const mdText = await loadManualMd(filename);
-    const { title, version } = extractDocMeta(mdText);
+    const { title, version, date } = extractDocMeta(mdText);
+    const classification = TOME_CONFIG.branding?.classification || "";
 
-    // Update sidebar branding with book title and version
+    // Update sidebar branding with book title, version, and date
     const titleEl = document.getElementById("docTitle");
     const metaEl2 = document.getElementById("docMeta");
 
     if (titleEl) titleEl.textContent = title;
-    if (metaEl2) metaEl2.textContent = `${version ? version + " | " : ""}Internal Use Only`;
+    if (metaEl2) {
+      const parts = [version, date, classification].filter(Boolean);
+      metaEl2.textContent = parts.join(" | ");
+    }
 
     // Update browser tab title
-    document.title = title + (version ? ` — ${version}` : "");
+    document.title = title + (version ? ` \u2014 ${version}` : "");
 
     // Parse the markdown and rebuild all indexes and navigation
     POLICY_INDEX = new Map();
@@ -328,9 +396,38 @@ async function loadBook(filename) {
  */
 async function init() {
   // Display the platform version in the sidebar footer
-  if (platformVersionEl) platformVersionEl.textContent = `Platform ${PLATFORM_VERSION}`;
+  if (platformVersionEl) platformVersionEl.textContent = `Tome ${PLATFORM_VERSION}`;
+
+  const splashEl = document.getElementById("tomeSplash");
+  const splashStart = Date.now();
+
+  // Load configuration and book manifest while the splash is visible
+  await loadConfig();
+
+  // Apply config: favicon
+  const faviconPath = TOME_CONFIG.branding?.favicon;
+  if (faviconPath) {
+    const faviconEl = document.getElementById("favicon");
+    if (faviconEl) faviconEl.href = faviconPath;
+  }
 
   await loadBooks();
+  if (!CURRENT_BOOK && BOOKS.length > 0) CURRENT_BOOK = BOOKS[0].file;
+
+  // Wait for the remainder of the minimum splash duration
+  const splashMs = TOME_CONFIG.splash?.minDurationMs ?? 2000;
+  const elapsed = Date.now() - splashStart;
+  if (elapsed < splashMs) {
+    await new Promise(r => setTimeout(r, splashMs - elapsed));
+  }
+
+  // Fade out the splash overlay, then remove it from the DOM
+  if (splashEl) {
+    splashEl.classList.add("dismissed");
+    splashEl.addEventListener("transitionend", () => splashEl.remove(), { once: true });
+  }
+
+  // Render the first page
   await loadBook(CURRENT_BOOK);
 }
 
@@ -387,14 +484,45 @@ function buildNav() {
         group.classList.remove("collapsed");
         group.style.maxHeight = group.scrollHeight + "px";
       }
+      updateNavToggleLabel();
     });
 
-    // Start expanded: set max-height to natural height after layout
-    requestAnimationFrame(() => {
-      group.style.maxHeight = group.scrollHeight + "px";
-    });
+    // Start collapsed by default
+    h.classList.add("collapsed");
+    group.classList.add("collapsed");
+    group.style.maxHeight = "0";
   }
 }
+
+/** Updates the Expand/Collapse all button label based on current nav state */
+function updateNavToggleLabel() {
+  const btn = document.getElementById("navToggleAll");
+  if (!btn || !navEl) return;
+  const allCollapsed = navEl.querySelectorAll(".nav-group:not(.collapsed)").length === 0;
+  btn.textContent = allCollapsed ? "Expand all" : "Collapse all";
+  btn.title = allCollapsed ? "Expand all sections" : "Collapse all sections";
+}
+
+// Expand / Collapse all nav sections
+document.getElementById("navToggleAll")?.addEventListener("click", () => {
+  if (!navEl) return;
+  const groups = navEl.querySelectorAll(".nav-group");
+  const headers = navEl.querySelectorAll(".nav-h1");
+  const anyExpanded = navEl.querySelectorAll(".nav-group:not(.collapsed)").length > 0;
+
+  groups.forEach((g, i) => {
+    if (anyExpanded) {
+      g.classList.add("collapsed");
+      g.style.maxHeight = "0";
+      headers[i]?.classList.add("collapsed");
+    } else {
+      g.classList.remove("collapsed");
+      g.style.maxHeight = g.scrollHeight + "px";
+      headers[i]?.classList.remove("collapsed");
+    }
+  });
+  updateNavToggleLabel();
+});
 
 /**
  * Toggles the "active" class on the nav link matching the given policy ID.
@@ -512,12 +640,13 @@ function renderPolicy(id) {
     if (viewEl) {
       viewEl.innerHTML = `
         <div class="hash-fallback">
+          <div class="tome-wordmark">Tome</div>
           <div class="hash-fallback-title">Section not found</div>
           <div class="hash-fallback-detail">
-            No policy matches <code>${id.replace(/</g, "&lt;")}</code>. It may have been moved or renamed.
+            No page matches <code>${id.replace(/</g, "&lt;")}</code>. It may have been moved or renamed.
           </div>
           <button class="hash-fallback-action" onclick="location.hash='${ALL_POLICIES[0].id}'">
-            Go to first policy
+            Go to first page
           </button>
         </div>`;
     }
@@ -529,7 +658,7 @@ function renderPolicy(id) {
   const target = policy || GROUPS?.[0]?.policies?.[0];
 
   if (!target) {
-    if (metaEl) metaEl.textContent = "No H2 policies found.";
+    if (metaEl) metaEl.textContent = "No H2 pages found.";
     if (viewEl) viewEl.innerHTML = "";
     return;
   }
@@ -537,6 +666,7 @@ function renderPolicy(id) {
   // Render markdown to HTML and apply indent formatting
   if (viewEl) {
     viewEl.innerHTML = md.render(target.mdText);
+    resolveBookPaths(viewEl);
     applyIndent(viewEl);
 
     // --- Copy/share link icon on the H2 heading ---
@@ -545,7 +675,7 @@ function renderPolicy(id) {
       const linkIcon = document.createElement("span");
       linkIcon.className = "heading-link";
       linkIcon.textContent = "\uD83D\uDD17"; // link emoji
-      linkIcon.title = "Copy link to this policy";
+      linkIcon.title = "Copy link to this page";
       linkIcon.tabIndex = 0;
       linkIcon.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -566,7 +696,7 @@ function renderPolicy(id) {
 
       const tocTitle = document.createElement("div");
       tocTitle.className = "policy-toc-title";
-      tocTitle.textContent = "In this policy";
+      tocTitle.textContent = "In this page";
       toc.appendChild(tocTitle);
 
       for (const heading of subHeadings) {
@@ -631,9 +761,30 @@ function waitForImages(root) {
 }
 
 // ==========================================================================
-// PDF EXPORT: SINGLE POLICY
-// Exports the currently viewed policy as a branded A4 PDF with
-// letterhead logo, page numbers, and company footer.
+// EXPORT PROGRESS OVERLAY
+// Shows/hides a branded overlay with status text during PDF generation.
+// ==========================================================================
+
+const exportProgressEl = document.getElementById("exportProgress");
+const exportProgressTextEl = document.getElementById("exportProgressText");
+
+function showExportProgress(text) {
+  if (exportProgressTextEl) exportProgressTextEl.textContent = text || "Exporting\u2026";
+  if (exportProgressEl) exportProgressEl.hidden = false;
+}
+
+function updateExportProgress(text) {
+  if (exportProgressTextEl) exportProgressTextEl.textContent = text;
+}
+
+function hideExportProgress() {
+  if (exportProgressEl) exportProgressEl.hidden = true;
+}
+
+// ==========================================================================
+// PDF EXPORT: SINGLE PAGE
+// Exports the currently viewed page as a branded A4 PDF with
+// letterhead logo, page numbers, and footer.
 // ==========================================================================
 
 async function exportCurrentPolicyPdf() {
@@ -643,6 +794,8 @@ async function exportCurrentPolicyPdf() {
     alert("PDF export library failed to load (html2pdf).");
     return;
   }
+
+  showExportProgress(`Exporting "${CURRENT_POLICY.title}" to PDF\u2026`);
 
   /**
    * Fetches a file and converts it to a base64 data URL.
@@ -666,6 +819,7 @@ async function exportCurrentPolicyPdf() {
     // Render the policy markdown to a detached DOM element
     const body = document.createElement("div");
     body.innerHTML = md.render(CURRENT_POLICY.mdText);
+    resolveBookPaths(body);
     applyIndent(body);
 
     // Wrap in pdf-export class for print-friendly styling
@@ -699,13 +853,15 @@ async function exportCurrentPolicyPdf() {
       .trim()
       .slice(0, 120) || "policy";
 
-    // Load the company letterhead logo as a data URL for embedding
-    const letterheadLogoDataUrl = await loadAsDataUrl("letterhead_logo.png");
+    // Load the letterhead logo from config (or default) as a data URL
+    const logoPath = TOME_CONFIG.pdf?.logo || "letterhead_logo.png";
+    const letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
 
-    // Company footer text
-    const footerLine1 = "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787";
-    const footerLine2 = "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L";
-    const footerLine3 = "Registered in England 04121501";
+    // Footer text from config
+    const pdfFooter = TOME_CONFIG.pdf?.footer || [];
+    const footerLine1 = pdfFooter[0] || "";
+    const footerLine2 = pdfFooter[1] || "";
+    const footerLine3 = pdfFooter[2] || "";
 
     // html2pdf configuration
     const opt = {
@@ -765,7 +921,8 @@ async function exportCurrentPolicyPdf() {
     console.error(e);
     alert(String(e));
   } finally {
-    staging?.remove(); // Clean up the off-screen staging element
+    staging?.remove();
+    hideExportProgress();
   }
 }
 
@@ -790,6 +947,10 @@ async function exportFullManualPdf() {
     return;
   }
 
+  const totalPages = ALL_POLICIES.length;
+  let pagesProcessed = 0;
+  showExportProgress(`Exporting full manual\u2026 0 / ${totalPages} pages`);
+
   /**
    * Fetches a file and converts it to a base64 data URL.
    * Used to embed the letterhead logo into the PDF.
@@ -811,18 +972,20 @@ async function exportFullManualPdf() {
   const mTop = 20, mLeft = 10, mBottom = 15, mRight = 10;
   const usableW = pageW - mLeft - mRight;   // 190mm printable width
   const usableH = pageH - mTop - mBottom;   // 262mm printable height
-  const renderWidthPx = 980;                // Matches staging div width for consistent scaling
 
   let staging; // Off-screen container for rendering
 
   try {
-    // Load branding assets
-    const letterheadLogoDataUrl = await loadAsDataUrl("letterhead_logo.png");
-    const footerLine1 = "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787";
-    const footerLine2 = "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L";
-    const footerLine3 = "Registered in England 04121501";
+    // Load branding assets from config
+    const logoPath = TOME_CONFIG.pdf?.logo || "letterhead_logo.png";
+    const letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
+    const pdfFooter = TOME_CONFIG.pdf?.footer || [];
+    const footerLine1 = pdfFooter[0] || "";
+    const footerLine2 = pdfFooter[1] || "";
+    const footerLine3 = pdfFooter[2] || "";
 
-    const docTitle = (document.getElementById("docTitle")?.textContent || "Helpdesk Operations Manual").trim();
+    const defaultTitle = TOME_CONFIG.branding?.defaultTitle || "Manual";
+    const docTitle = (document.getElementById("docTitle")?.textContent || defaultTitle).trim();
     const versionMeta = (document.getElementById("docMeta")?.textContent || "").trim();
 
     // Bootstrap a jsPDF instance from html2pdf's bundled copy
@@ -917,11 +1080,15 @@ async function exportFullManualPdf() {
       groupBlock.innerHTML = `<h1>${g.title}</h1>`;
       await addElementToPdf(groupBlock);
 
-      // Each H2 policy within the group
+      // Each H2 page within the group
       for (const p of g.policies) {
+        pagesProcessed++;
+        updateExportProgress(`Exporting full manual\u2026 ${pagesProcessed} / ${totalPages} pages`);
+
         const block = document.createElement("div");
         block.className = "pdf-export";
         block.innerHTML = md.render(p.mdText);
+        resolveBookPaths(block);
         applyIndent(block);
         await addElementToPdf(block);
       }
@@ -959,7 +1126,62 @@ async function exportFullManualPdf() {
     console.error(e);
     alert(String(e));
   } finally {
-    staging?.remove(); // Clean up the off-screen staging element
+    staging?.remove();
+    hideExportProgress();
+  }
+}
+
+// ==========================================================================
+// MARKDOWN EXPORT
+// Downloads raw markdown for the current policy or the full manual.
+// ==========================================================================
+
+/**
+ * Triggers a file download from an in-memory string.
+ */
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Exports the currently viewed policy as a standalone .md file.
+ */
+function exportCurrentPolicyMd() {
+  if (!CURRENT_POLICY) {
+    alert("No page is currently selected.");
+    return;
+  }
+  const safeName = CURRENT_POLICY.title
+    .replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim().slice(0, 140) || "policy";
+  downloadText(`${safeName}.md`, CURRENT_POLICY.mdText.trim());
+}
+
+/**
+ * Exports the entire loaded manual as a single .md file by fetching
+ * the raw source file (same file the parser loaded).
+ */
+async function exportFullManualMd() {
+  if (!CURRENT_BOOK) {
+    alert("No manual is currently loaded.");
+    return;
+  }
+  try {
+    const mdText = await loadManualMd(CURRENT_BOOK);
+    const docTitle = (document.getElementById("docTitle")?.textContent || "manual").trim();
+    const safeName = docTitle
+      .replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ").trim().slice(0, 140) || "manual";
+    downloadText(`${safeName}.md`, mdText);
+  } catch (e) {
+    console.error(e);
+    alert(`Failed to export: ${e.message}`);
   }
 }
 
@@ -1093,11 +1315,6 @@ window.addEventListener("hashchange", onHash);
 // Boot the application
 init();
 
-// Bind single-policy PDF export button
-if (exportBtn) {
-  exportBtn.addEventListener("click", exportCurrentPolicyPdf);
-}
-
 // Bind search input with debounced handler (140ms delay) and Escape to clear
 if (searchInput) {
   searchInput.addEventListener("input", debounce((e) => runSearch(e.target.value), 140));
@@ -1122,6 +1339,41 @@ if (mainEl && backToTopBtn) {
 
   backToTopBtn.addEventListener("click", () => {
     mainEl.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+// ==========================================================================
+// MOBILE NAV DRAWER
+// Hamburger button toggles the sidebar as a slide-out drawer on small screens.
+// ==========================================================================
+
+const navHamburger = document.getElementById("navHamburger");
+const navBackdrop = document.getElementById("navBackdrop");
+const asideEl = document.querySelector("aside");
+
+function openDrawer() {
+  if (!asideEl) return;
+  navBackdrop.hidden = false;
+  asideEl.classList.add("drawer-open");
+}
+
+function closeDrawer() {
+  if (!asideEl) return;
+  asideEl.classList.remove("drawer-open");
+  asideEl.addEventListener("transitionend", () => {
+    navBackdrop.hidden = true;
+  }, { once: true });
+}
+
+if (navHamburger) navHamburger.addEventListener("click", openDrawer);
+if (navBackdrop) navBackdrop.addEventListener("click", closeDrawer);
+
+// Close drawer when a nav link is tapped (mobile navigation)
+if (navEl) {
+  navEl.addEventListener("click", (e) => {
+    if (e.target.closest(".nav-h2") && asideEl?.classList.contains("drawer-open")) {
+      closeDrawer();
+    }
   });
 }
 
@@ -1163,38 +1415,174 @@ window.addEventListener("keydown", (e) => {
 });
 
 // ==========================================================================
-// THEME TOGGLE
-// Cycles: system (default) → light → dark → system.
-// Persists choice in localStorage. System = remove data-theme attribute.
+// THEME PICKER
+// Dropdown selector for colour themes. "system" defers to prefers-color-scheme;
+// all others set data-theme on <html>. Choice persisted in localStorage.
 // ==========================================================================
 
-/** Theme icon map */
-const THEME_ICONS = { system: "\u25D0", light: "\u2600", dark: "\u263E" };
+/** Available themes — value maps to data-theme, tone indicates light/dark for CSS */
+const THEMES = [
+  { value: "system",   tone: null,    label: "\u25D0  System" },
+  { value: "dark",     tone: "dark",  label: "\u263E  Dark" },
+  { value: "light",    tone: "light", label: "\u2600  Light" },
+  { value: "midnight", tone: "dark",  label: "\u2726  Midnight" },
+  { value: "ember",    tone: "dark",  label: "\u2622  Ember" },
+  { value: "forest",   tone: "dark",  label: "\u2618  Forest" },
+  { value: "sand",     tone: "light", label: "\u2600  Sand" },
+];
 
 /**
  * Applies the given theme setting to the document.
- * "system" removes the data-theme attribute, letting prefers-color-scheme rule.
+ * Sets data-theme for colour tokens and data-tone (light/dark) for
+ * broad light-vs-dark overrides. "system" removes both attributes,
+ * letting prefers-color-scheme rule.
  */
 function applyTheme(setting) {
-  if (setting === "system") {
-    document.documentElement.removeAttribute("data-theme");
+  const theme = THEMES.find(t => t.value === setting);
+  const root = document.documentElement;
+
+  if (setting === "system" || !theme) {
+    root.removeAttribute("data-theme");
+    root.removeAttribute("data-tone");
   } else {
-    document.documentElement.setAttribute("data-theme", setting);
+    root.setAttribute("data-theme", setting);
+    if (theme.tone) {
+      root.setAttribute("data-tone", theme.tone);
+    } else {
+      root.removeAttribute("data-tone");
+    }
   }
-  if (themeToggleBtn) themeToggleBtn.textContent = THEME_ICONS[setting] || THEME_ICONS.system;
-  if (themeToggleBtn) themeToggleBtn.title = `Theme: ${setting}`;
+  if (themePickerEl) themePickerEl.value = setting;
+}
+
+// Populate the theme picker dropdown
+if (themePickerEl) {
+  for (const t of THEMES) {
+    const opt = document.createElement("option");
+    opt.value = t.value;
+    opt.textContent = t.label;
+    themePickerEl.appendChild(opt);
+  }
+
+  themePickerEl.addEventListener("change", () => {
+    localStorage.setItem("theme", themePickerEl.value);
+    applyTheme(themePickerEl.value);
+  });
 }
 
 // Initialise theme from localStorage (default: system)
 const savedTheme = localStorage.getItem("theme") || "system";
 applyTheme(savedTheme);
 
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener("click", () => {
-    const current = localStorage.getItem("theme") || "system";
-    const order = ["system", "light", "dark"];
-    const next = order[(order.indexOf(current) + 1) % order.length];
-    localStorage.setItem("theme", next);
-    applyTheme(next);
+// ==========================================================================
+// SETTINGS PANEL
+// Slide-out panel with tabs for Settings, Guide, and About.
+// ==========================================================================
+
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsPanel = document.getElementById("settingsPanel");
+const settingsBackdrop = document.getElementById("settingsBackdrop");
+const settingsClose = document.getElementById("settingsClose");
+
+function openSettings() {
+  if (!settingsPanel) return;
+  settingsPanel.hidden = false;
+  settingsBackdrop.hidden = false;
+  // Trigger reflow so the CSS transition plays
+  void settingsPanel.offsetWidth;
+  settingsPanel.classList.add("open");
+}
+
+function closeSettings() {
+  if (!settingsPanel) return;
+  settingsPanel.classList.remove("open");
+  settingsPanel.addEventListener("transitionend", () => {
+    settingsPanel.hidden = true;
+    settingsBackdrop.hidden = true;
+  }, { once: true });
+}
+
+if (settingsBtn) settingsBtn.addEventListener("click", openSettings);
+if (settingsClose) settingsClose.addEventListener("click", closeSettings);
+if (settingsBackdrop) settingsBackdrop.addEventListener("click", closeSettings);
+
+// Close settings on Escape
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && settingsPanel && settingsPanel.classList.contains("open")) {
+    closeSettings();
+  }
+});
+
+// Tab switching
+document.querySelectorAll(".settings-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    // Deactivate all tabs and hide all content
+    document.querySelectorAll(".settings-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".settings-content").forEach(c => c.hidden = true);
+
+    // Activate clicked tab and show its content
+    tab.classList.add("active");
+    const target = document.getElementById(`tab-${tab.dataset.tab}`);
+    if (target) target.hidden = false;
+  });
+});
+
+// Export buttons within settings panel
+document.querySelectorAll(".settings-action[data-export]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    closeSettings();
+    // Small delay to let the panel close before potentially heavy export work
+    await new Promise(r => setTimeout(r, 300));
+
+    switch (btn.dataset.export) {
+      case "policy-pdf":  await exportCurrentPolicyPdf(); break;
+      case "policy-md":   exportCurrentPolicyMd(); break;
+      case "manual-pdf":  await exportFullManualPdf(); break;
+      case "manual-md":   await exportFullManualMd(); break;
+    }
+  });
+});
+
+// Populate About tab with library versions
+function populateAbout() {
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+  set("aboutPlatformVersion", PLATFORM_VERSION);
+  set("aboutMarkdownIt", window.markdownit ? "14.1.0" : "not loaded");
+  set("aboutMarkdownItAnchor", window.markdownItAnchor ? "9.1.0" : "not loaded");
+  set("aboutHtml2pdf", window.html2pdf ? "0.10.1" : "not loaded");
+  set("aboutHtml2canvas", window.html2canvas ? "1.4.1" : "not loaded");
+}
+populateAbout();
+
+// Guide accordion toggles
+document.querySelectorAll(".guide-toggle").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const body = btn.nextElementSibling;
+    const isOpen = !body.hidden;
+    body.hidden = isOpen;
+    btn.classList.toggle("open", !isOpen);
+  });
+});
+
+// Changelog toggle within the About tab
+const changelogBtn = document.getElementById("changelogBtn");
+const changelogView = document.getElementById("changelogView");
+const changelogBack = document.getElementById("changelogBack");
+const aboutMain = document.querySelector(".settings-about");
+
+if (changelogBtn && changelogView && aboutMain) {
+  changelogBtn.addEventListener("click", () => {
+    aboutMain.hidden = true;
+    changelogView.hidden = false;
+  });
+}
+
+if (changelogBack && changelogView && aboutMain) {
+  changelogBack.addEventListener("click", () => {
+    changelogView.hidden = true;
+    aboutMain.hidden = false;
   });
 }
