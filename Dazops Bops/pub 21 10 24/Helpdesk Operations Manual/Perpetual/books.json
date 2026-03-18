@@ -1,13 +1,10 @@
 [
-  { "file": "Books/manual/manualVE12.md", "title": "Helpdesk Operations Manual (VE.12)" },
-  { "file": "Books/qms/qms.md", "title": "Quality Management System" },
-  { "file": "Books/archive/manualVE11.md", "title": "Helpdesk Operations Manual (VE.11)" },
-  { "file": "Books/archive/manualVE10.md", "title": "Helpdesk Operations Manual (VE.10)" },
-  { "file": "Books/archive/manualVE9.md", "title": "Helpdesk Operations Manual (VE.9)" },
-  { "file": "Books/archive/manualVE8.md", "title": "Helpdesk Operations Manual (VE.8)" },
-  { "file": "Books/archive/manualVE7.md", "title": "Helpdesk Operations Manual (VE.7)" },
-  { "file": "Books/archive/manualVE6.md", "title": "Helpdesk Operations Manual (VE.6)" },
-  { "file": "Books/archive/manualVE5.md", "title": "Helpdesk Operations Manual (VE.5)" },
-  { "file": "Books/archive/manualVE4.md", "title": "Helpdesk Operations Manual (VE.4)" },
-  { "file": "Books/archive/manualVE3.md", "title": "Helpdesk Operations Manual (VE.3)" }
+  {
+    "file": "Books/manualVE12/manualVE12.md",
+    "title": "Helpdesk Operations Manual (VE.12)"
+  },
+  {
+    "file": "Books/qms/qms.md",
+    "title": "Quality Management System"
+  }
 ]

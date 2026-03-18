@@ -967,7 +967,6 @@ main {
     align-items: center;
     justify-content: center;
     background: var(--bg);
-    animation: tomeFadeIn 0.4s ease-out;
     transition: opacity 0.4s ease;
 }
 
