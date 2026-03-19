@@ -20,7 +20,7 @@
   <link id="favicon" rel="icon">
 
   <!-- Stylesheet for the app layout, sidebar, document viewer, and PDF export -->
-  <link rel="stylesheet" type="text/css" href="styles.css?v=2.0.0">
+  <link rel="stylesheet" type="text/css" href="styles.css?v=2.2.0">
 </head>
 
 <body>
@@ -116,11 +116,10 @@
       <div class="wrap">
         <div class="card">
 
-          <!-- Top bar: hamburger (mobile), breadcrumb, settings -->
+          <!-- Top bar: hamburger (mobile), breadcrumb -->
           <div class="meta-bar">
             <button id="navHamburger" class="nav-hamburger" type="button" title="Menu">&#9776;</button>
             <div class="meta" id="meta"></div>
-            <button id="settingsBtn" class="settings-btn" type="button" title="Settings">&#9881;</button>
           </div>
 
           <!-- Rendered markdown content for the currently selected policy -->
@@ -132,6 +131,9 @@
 
   <!-- Mobile nav backdrop: shown when sidebar drawer is open -->
   <div id="navBackdrop" class="nav-backdrop" hidden></div>
+
+  <!-- Settings button: fixed top-right with tube extending to screen edge -->
+  <button id="settingsBtn" class="settings-btn-fixed" type="button" title="Settings"></button>
 
   <!-- Back to top button: appears when main content is scrolled down -->
   <button id="backToTop" class="back-to-top" type="button" title="Back to top">&#8679;</button>
@@ -428,6 +430,30 @@
         <div class="changelog-content">
           <h3>Changelog</h3>
 
+          <h4>v2.2.0</h4>
+          <ul>
+            <li>Automatic update check: on load, Tome fetches <code>version.json</code> from the canonical published URL and compares it to the running version</li>
+            <li>If a newer version is available, a dismissible banner appears at the bottom of the screen showing the current and latest versions</li>
+            <li>Update check is non-blocking and fails silently &mdash; no impact on offline or air-gapped deployments</li>
+            <li>Added <code>version.json</code> to the platform project for deployed instances to check against</li>
+          </ul>
+
+          <h4>v2.1.0</h4>
+          <ul>
+            <li>Settings button redesigned as a fixed pill-shaped tab in the top-right corner, rotated 90&deg; so the tube extends off the top edge of the screen &mdash; always visible while scrolling</li>
+            <li>Settings button uses theme heading colour as background for contrast across all themes</li>
+            <li>Gear icon rendered via CSS pseudo-element with counter-rotation to stay upright</li>
+            <li>Code blocks (<code>pre</code>) now use theme tokens (<code>--bg</code>, <code>--text</code>, <code>--border</code>) instead of hardcoded colours</li>
+            <li>Inline code now uses theme tokens (<code>--h1bg</code>, <code>--border</code>) instead of hardcoded colours</li>
+            <li>Blockquote background switched from hardcoded colour to <code>--h1bg</code> theme token</li>
+            <li>Added <code>.doc blockquote</code> base style: left border in heading colour, tinted background, rounded right corners</li>
+            <li>Added <code>.doc ol</code> base style to match existing <code>ul</code> margin and spacing</li>
+            <li>Fixed indentation for tables and ordered lists: uses <code>margin-left</code> instead of <code>padding-left</code> to preserve borders and number gutters</li>
+            <li>Fixed indentation for code blocks (<code>pre</code>): <code>margin-left</code> override so <code>padding: 12px</code> no longer silently cancels the indent</li>
+            <li>Fixed indentation for horizontal rules (<code>hr</code>): switched to <code>margin-left</code> since padding has no effect on void elements</li>
+            <li>Fixed indentation for blockquotes: uses <code>margin-left</code> to shift the entire element (including left border) to the indent position</li>
+          </ul>
+
           <h4>v2.0.0</h4>
           <ul>
             <li>Named the platform <strong>Tome</strong> with branded splash screen, wordmark, and loading overlay</li>
@@ -521,6 +547,6 @@
 </body>
 
 <!-- Application logic: markdown parsing, navigation, search, PDF export -->
-<script src="index.js?v=2.0.0"></script>
+<script src="index.js?v=2.2.0"></script>
 
 </html>

@@ -588,7 +588,9 @@ main {
 
 /* --- Indentation levels ---
    Applied by JS (applyIndent) based on heading hierarchy.
-   H3 content gets indent 1, H4 gets indent 2, H5/H6 gets indent 3. */
+   H3 content gets indent 1, H4 gets indent 2, H5/H6 gets indent 3.
+   Tables and ordered lists use margin-left instead of padding-left
+   so their internal formatting (borders, number gutters) stays intact. */
 
 .doc [data-indent="1"] {
     padding-left: 20px;
@@ -602,6 +604,31 @@ main {
     padding-left: 50px;
 }
 
+/* Tables: margin-left keeps the table border/background whole */
+.doc table[data-indent="1"] { padding-left: 0; margin-left: 20px; width: calc(100% - 20px); }
+.doc table[data-indent="2"] { padding-left: 0; margin-left: 35px; width: calc(100% - 35px); }
+.doc table[data-indent="3"] { padding-left: 0; margin-left: 50px; width: calc(100% - 50px); }
+
+/* Ordered lists: margin-left preserves the number gutter */
+.doc ol[data-indent="1"] { padding-left: 0; margin-left: 38px; }
+.doc ol[data-indent="2"] { padding-left: 0; margin-left: 53px; }
+.doc ol[data-indent="3"] { padding-left: 0; margin-left: 68px; }
+
+/* Code blocks: margin-left so padding: 12px inside is not overridden */
+.doc pre[data-indent="1"] { padding-left: 12px; margin-left: 20px; }
+.doc pre[data-indent="2"] { padding-left: 12px; margin-left: 35px; }
+.doc pre[data-indent="3"] { padding-left: 12px; margin-left: 50px; }
+
+/* Horizontal rules: void elements ignore padding, need margin-left */
+.doc hr[data-indent="1"] { padding-left: 0; margin-left: 20px; }
+.doc hr[data-indent="2"] { padding-left: 0; margin-left: 35px; }
+.doc hr[data-indent="3"] { padding-left: 0; margin-left: 50px; }
+
+/* Blockquotes: margin-left keeps the left border at the indent position */
+.doc blockquote[data-indent="1"] { padding-left: 16px; margin-left: 20px; }
+.doc blockquote[data-indent="2"] { padding-left: 16px; margin-left: 35px; }
+.doc blockquote[data-indent="3"] { padding-left: 16px; margin-left: 50px; }
+
 /* --- Block elements --- */
 
 .doc p {
@@ -609,6 +636,10 @@ main {
 }
 
 .doc ul {
+    margin: 8px 0 8px 18px;
+}
+
+.doc ol {
     margin: 8px 0 8px 18px;
 }
 
@@ -620,20 +651,32 @@ main {
     color: var(--link);
 }
 
+/* Blockquote base style */
+.doc blockquote {
+    margin: 12px 0;
+    padding: 8px 16px;
+    border-left: 3px solid var(--heading);
+    background: var(--h1bg);
+    border-radius: 0 8px 8px 0;
+}
+
+.doc blockquote p:first-child { margin-top: 0; }
+.doc blockquote p:last-child  { margin-bottom: 0; }
+
 /* Code blocks (fenced / pre) */
 .doc pre {
-    background: #0b1220;
-    color: #e5e7eb;
+    background: var(--bg);
+    color: var(--text);
     padding: 12px;
     border-radius: 12px;
     overflow: auto;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
 }
 
 /* Inline code */
 .doc code {
-    background: rgba(125, 211, 252, 0.08);
-    border: 1px solid rgba(125, 211, 252, 0.15);
+    background: var(--h1bg);
+    border: 1px solid var(--border);
     padding: 1px 6px;
     border-radius: 8px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -1173,23 +1216,47 @@ main {
    Slide-out panel from the right with tabs for Settings, Guide, About.
    ========================================================================== */
 
-.settings-btn {
+/* --- Fixed settings button: top-right pill with tube to screen edge --- */
+
+.settings-btn-fixed {
+    position: fixed;
+    top: -10px;
+    right: 6px;
+    z-index: 200;
     appearance: none;
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 18px;
+    height: 50px;
+    width: 90px;
+    padding: 0 20px 0 18px;
+    border: 2px solid var(--border);
+    border-radius: 25px;
+    background: var(--heading);
+    color: var(--bg);
+    font-size: 24px;
     line-height: 1;
-    padding: 4px;
-    flex-shrink: 0;
-    opacity: 0.5;
-    transition: opacity 0.15s, color 0.15s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-shadow: -3px 3px 14px rgba(0, 0, 0, 0.4);
+    opacity: 0.85;
+    transform: rotate(90deg);
+    transform-origin: center center;
+    transition: opacity 0.2s, color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.settings-btn:hover {
-    color: var(--text);
+/* Keep the gear icon upright */
+.settings-btn-fixed::before {
+    content: "\2699";
+    display: block;
+    transform: rotate(-90deg);
+}
+
+.settings-btn-fixed:hover {
     opacity: 1;
+    color: var(--heading);
+    background: var(--h1bg);
+    border-color: var(--heading);
+    box-shadow: -4px 4px 18px rgba(0, 0, 0, 0.5);
 }
 
 .settings-backdrop {
@@ -1626,10 +1693,51 @@ main {
     letter-spacing: 0.05em;
 }
 
+/* ==========================================================================
+   UPDATE BANNER
+   Dismissible notification shown when a newer Tome version is available.
+   ========================================================================== */
+
+.update-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: var(--heading);
+    color: var(--bg);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.update-banner-dismiss {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--bg);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.7;
+}
+
+.update-banner-dismiss:hover {
+    opacity: 1;
+}
+
 @media print {
     aside,
     .meta-bar,
     .back-to-top,
+    .settings-btn-fixed,
+    .update-banner,
     .tome-overlay,
     .policy-toc,
     .heading-link,

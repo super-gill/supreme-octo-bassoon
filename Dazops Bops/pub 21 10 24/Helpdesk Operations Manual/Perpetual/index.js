@@ -51,7 +51,10 @@ const mainEl = document.querySelector("main");                       // Main scr
 // ==========================================================================
 
 /** Tome platform version (semantic versioning). See changelog in settings for details. */
-const PLATFORM_VERSION = "v2.0.0";
+const PLATFORM_VERSION = "v2.2.0";
+
+/** Canonical URL where the latest version.json is published */
+const VERSION_CHECK_URL = "https://super-gill.github.io/my-projects/TOME%20md/version.json";
 
 let CURRENT_QUERY = "";       // Active search query (empty = no search)
 let CURRENT_POLICY = null;    // Currently rendered policy object
@@ -429,6 +432,59 @@ async function init() {
 
   // Render the first page
   await loadBook(CURRENT_BOOK);
+
+  // Check for platform updates (non-blocking)
+  checkForUpdate();
+}
+
+// ==========================================================================
+// VERSION CHECK
+// Fetches the latest version.json from the canonical published URL and
+// shows a notification banner if this instance is running an older version.
+// ==========================================================================
+
+/**
+ * Compares two semver strings (e.g. "v2.1.0" vs "v2.2.0").
+ * Returns true if remote is newer than local.
+ */
+function isNewerVersion(local, remote) {
+  const parse = (v) => v.replace(/^v/, "").split(".").map(Number);
+  const l = parse(local);
+  const r = parse(remote);
+  for (let i = 0; i < 3; i++) {
+    if ((r[i] || 0) > (l[i] || 0)) return true;
+    if ((r[i] || 0) < (l[i] || 0)) return false;
+  }
+  return false;
+}
+
+/**
+ * Fetches the latest version from the canonical URL and displays
+ * a dismissible banner if this instance is outdated.
+ */
+async function checkForUpdate() {
+  try {
+    const res = await fetch(VERSION_CHECK_URL, { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    const latest = data.version;
+
+    if (!latest || !isNewerVersion(PLATFORM_VERSION, latest)) return;
+
+    // Build and inject the update banner
+    const banner = document.createElement("div");
+    banner.className = "update-banner";
+    banner.innerHTML = `
+      <span>A newer version of Tome is available: <strong>${latest}</strong> (you are running ${PLATFORM_VERSION})</span>
+      <button class="update-banner-dismiss" title="Dismiss">&times;</button>
+    `;
+    banner.querySelector(".update-banner-dismiss").addEventListener("click", () => {
+      banner.remove();
+    });
+    document.body.appendChild(banner);
+  } catch {
+    // Silently ignore — update check is non-critical
+  }
 }
 
 // ==========================================================================
