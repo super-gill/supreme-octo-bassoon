@@ -51,7 +51,7 @@ const mainEl = document.querySelector("main");                       // Main scr
 // ==========================================================================
 
 /** Tome platform version (semantic versioning). See changelog in settings for details. */
-const PLATFORM_VERSION = "v2.2.0";
+const PLATFORM_VERSION = "v2.3.0";
 
 /** Canonical URL where the latest version.json is published */
 const VERSION_CHECK_URL = "https://super-gill.github.io/my-projects/TOME%20md/version.json";
@@ -61,6 +61,8 @@ let CURRENT_POLICY = null;    // Currently rendered policy object
 let CURRENT_BOOK = null;      // Filename of the currently loaded book (set from books.json)
 let BOOKS = [];               // Array of { file, title } from books.json
 let TOME_CONFIG = {};         // Configuration loaded from tome.json
+let EXPORT_BRANDS = [];       // Array of { id, label, config, basePath } from export-branding/
+let ACTIVE_BRAND = null;      // Currently selected export brand
 
 // ==========================================================================
 // HELPERS
@@ -324,6 +326,103 @@ async function loadManualMd(filename) {
  * If books.json is missing or fails, falls back to a single manual.md entry.
  * Attaches a change listener so selecting a different book triggers a reload.
  */
+// ==========================================================================
+// EXPORT BRAND LOADING
+// Loads the brands.json manifest and each brand's brand.json configuration.
+// ==========================================================================
+
+/**
+ * Loads the export branding manifest and each brand's config.
+ * Falls back to tome.json PDF settings if no brands are found.
+ */
+async function loadBrands() {
+  try {
+    const manifestUrl = new URL("export-branding/brands.json", document.baseURI);
+    const res = await fetch(manifestUrl.href, { cache: "no-store" });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const brandIds = await res.json();
+
+    const brands = [];
+    for (const id of brandIds) {
+      try {
+        const brandUrl = new URL(`export-branding/${id}/brand.json`, document.baseURI);
+        const bRes = await fetch(brandUrl.href, { cache: "no-store" });
+        if (!bRes.ok) continue;
+        const config = await bRes.json();
+        brands.push({
+          id,
+          label: config.label || id,
+          config,
+          basePath: `export-branding/${id}/`
+        });
+      } catch (e) {
+        console.warn(`Could not load brand "${id}":`, e);
+      }
+    }
+
+    if (brands.length > 0) {
+      EXPORT_BRANDS = brands;
+      ACTIVE_BRAND = brands[0];
+    }
+  } catch (e) {
+    console.warn("Could not load export-branding/brands.json, using tome.json PDF settings:", e);
+    EXPORT_BRANDS = [];
+    ACTIVE_BRAND = null;
+  }
+}
+
+/**
+ * Returns the resolved PDF settings for the active brand.
+ * Falls back to tome.json settings if no brand is active.
+ */
+function getExportSettings() {
+  if (!ACTIVE_BRAND) {
+    // Fallback to tome.json settings
+    const pdfConf = TOME_CONFIG.pdf || {};
+    return {
+      pageSize: "a4",
+      orientation: "portrait",
+      margins: { top: 20, right: 10, bottom: 15, left: 10 },
+      header: {
+        logo: pdfConf.logo || "letterhead_logo.png",
+        logoWidth: 40,
+        logoAspect: 4.04,
+        x: 15,
+        y: 8
+      },
+      footer: {
+        lines: pdfConf.footer || ["", "", ""],
+        fontSize: 9,
+        color: 80
+      },
+      coverPage: true,
+      coverTitle: null,
+      _basePath: ""
+    };
+  }
+
+  const c = ACTIVE_BRAND.config;
+  return {
+    pageSize: c.pageSize || "a4",
+    orientation: c.orientation || "portrait",
+    margins: c.margins || { top: 20, right: 10, bottom: 15, left: 10 },
+    header: c.header || { logo: "media/letterhead_logo.png", logoWidth: 40, logoAspect: 4.04, x: 15, y: 8 },
+    footer: c.footer || { lines: ["", "", ""], fontSize: 9, color: 80 },
+    coverPage: c.coverPage !== false,
+    coverTitle: c.coverTitle || null,
+    _basePath: ACTIVE_BRAND.basePath
+  };
+}
+
+/**
+ * Resolves a media path within a brand's directory.
+ */
+function resolveBrandPath(relativePath, basePath) {
+  if (!relativePath) return relativePath;
+  if (relativePath.startsWith("http") || relativePath.startsWith("data:")) return relativePath;
+  return basePath + relativePath;
+}
+
 async function loadBooks() {
   try {
     const url = new URL("books.json", document.baseURI);
@@ -415,6 +514,8 @@ async function init() {
   }
 
   await loadBooks();
+  await loadBrands();
+  buildBrandPicker();
   if (!CURRENT_BOOK && BOOKS.length > 0) CURRENT_BOOK = BOOKS[0].file;
 
   // Wait for the remainder of the minimum splash duration
@@ -853,6 +954,8 @@ async function exportCurrentPolicyPdf() {
 
   showExportProgress(`Exporting "${CURRENT_POLICY.title}" to PDF\u2026`);
 
+  const brand = getExportSettings();
+
   /**
    * Fetches a file and converts it to a base64 data URL.
    * Used to embed the letterhead logo into the PDF.
@@ -909,19 +1012,25 @@ async function exportCurrentPolicyPdf() {
       .trim()
       .slice(0, 120) || "policy";
 
-    // Load the letterhead logo from config (or default) as a data URL
-    const logoPath = TOME_CONFIG.pdf?.logo || "letterhead_logo.png";
-    const letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
+    // Load the letterhead logo from brand config as a data URL (if set)
+    let letterheadLogoDataUrl = null;
+    if (brand.header.logo) {
+      const logoPath = resolveBrandPath(brand.header.logo, brand._basePath);
+      letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
+    }
 
-    // Footer text from config
-    const pdfFooter = TOME_CONFIG.pdf?.footer || [];
-    const footerLine1 = pdfFooter[0] || "";
-    const footerLine2 = pdfFooter[1] || "";
-    const footerLine3 = pdfFooter[2] || "";
+    // Footer text from brand config
+    const footerLines = brand.footer.lines || [];
+    const footerLine1 = footerLines[0] || "";
+    const footerLine2 = footerLines[1] || "";
+    const footerLine3 = footerLines[2] || "";
+    const hasFooter = footerLines.some(l => l);
+
+    const m = brand.margins;
 
     // html2pdf configuration
     const opt = {
-      margin: [20, 10, 15, 10],    // [top, right, bottom, left] in mm
+      margin: [m.top, m.right, m.bottom, m.left],
       filename: `${safeName}.pdf`,
       image: { type: "jpeg", quality: 0.95 },
       html2canvas: {
@@ -931,7 +1040,7 @@ async function exportCurrentPolicyPdf() {
         backgroundColor: "#ffffff",
         logging: false
       },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation },
       pagebreak: {
         mode: ["avoid-all", "css", "legacy"],
         avoid: ["p", "li", "h1", "h2", "h3", "h4", "table", "blockquote", "pre"]
@@ -949,25 +1058,29 @@ async function exportCurrentPolicyPdf() {
       for (let i = 1; i <= pageCount; i++) {
         pdf.setPage(i);
 
-        // Header: company logo top-left
-        const logoW = 40;
-        const logoH = logoW / 4.04; // Maintain aspect ratio
-        const headerX = 15;
-        const headerY = 8;
-        pdf.addImage(letterheadLogoDataUrl, "PNG", headerX, headerY, logoW, logoH);
+        // Header: company logo (if brand has one)
+        if (letterheadLogoDataUrl) {
+          const logoW = brand.header.logoWidth || 40;
+          const logoH = logoW / (brand.header.logoAspect || 4.04);
+          const headerX = brand.header.x || 15;
+          const headerY = brand.header.y || 8;
+          pdf.addImage(letterheadLogoDataUrl, "PNG", headerX, headerY, logoW, logoH);
+        }
 
         // Footer: company details centred, page number bottom-right
-        pdf.setFontSize(9);
-        pdf.setTextColor(80);
+        pdf.setFontSize(brand.footer.fontSize || 9);
+        pdf.setTextColor(brand.footer.color || 80);
 
-        const centerX = pageWidth / 2;
-        pdf.text(footerLine1, centerX, pageHeight - 13, { align: "center" });
-        pdf.text(footerLine2, centerX, pageHeight - 9, { align: "center" });
-        pdf.text(footerLine3, centerX, pageHeight - 5, { align: "center" });
+        if (hasFooter) {
+          const centerX = pageWidth / 2;
+          pdf.text(footerLine1, centerX, pageHeight - 13, { align: "center" });
+          pdf.text(footerLine2, centerX, pageHeight - 9, { align: "center" });
+          pdf.text(footerLine3, centerX, pageHeight - 5, { align: "center" });
+        }
 
         const pageLabel = `Page ${i} of ${pageCount}`;
         const textWidth = pdf.getTextWidth(pageLabel);
-        pdf.text(pageLabel, pageWidth - 10 - textWidth, pageHeight - 5);
+        pdf.text(pageLabel, pageWidth - m.right - textWidth, pageHeight - 5);
       }
     });
 
@@ -1007,6 +1120,8 @@ async function exportFullManualPdf() {
   let pagesProcessed = 0;
   showExportProgress(`Exporting full manual\u2026 0 / ${totalPages} pages`);
 
+  const brand = getExportSettings();
+
   /**
    * Fetches a file and converts it to a base64 data URL.
    * Used to embed the letterhead logo into the PDF.
@@ -1023,29 +1138,36 @@ async function exportFullManualPdf() {
     });
   }
 
-  // A4 dimensions and margins (mm)
-  const pageW = 210, pageH = 297;
-  const mTop = 20, mLeft = 10, mBottom = 15, mRight = 10;
-  const usableW = pageW - mLeft - mRight;   // 190mm printable width
-  const usableH = pageH - mTop - mBottom;   // 262mm printable height
+  // Page dimensions from brand settings
+  const pageSizes = { a4: [210, 297], letter: [215.9, 279.4], legal: [215.9, 355.6] };
+  const [defaultW, defaultH] = pageSizes[brand.pageSize] || pageSizes.a4;
+  const pageW = brand.orientation === "landscape" ? defaultH : defaultW;
+  const pageH = brand.orientation === "landscape" ? defaultW : defaultH;
+  const m = brand.margins;
+  const mTop = m.top, mLeft = m.left, mBottom = m.bottom, mRight = m.right;
+  const usableW = pageW - mLeft - mRight;
+  const usableH = pageH - mTop - mBottom;
 
   let staging; // Off-screen container for rendering
 
   try {
-    // Load branding assets from config
-    const logoPath = TOME_CONFIG.pdf?.logo || "letterhead_logo.png";
-    const letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
-    const pdfFooter = TOME_CONFIG.pdf?.footer || [];
-    const footerLine1 = pdfFooter[0] || "";
-    const footerLine2 = pdfFooter[1] || "";
-    const footerLine3 = pdfFooter[2] || "";
+    // Load branding assets from brand config (if set)
+    let letterheadLogoDataUrl = null;
+    if (brand.header.logo) {
+      const logoPath = resolveBrandPath(brand.header.logo, brand._basePath);
+      letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
+    }
+    const footerLines = brand.footer.lines || [];
+    const footerLine1 = footerLines[0] || "";
+    const footerLine2 = footerLines[1] || "";
+    const footerLine3 = footerLines[2] || "";
+    const hasFooter = footerLines.some(l => l);
 
     const defaultTitle = TOME_CONFIG.branding?.defaultTitle || "Manual";
     const docTitle = (document.getElementById("docTitle")?.textContent || defaultTitle).trim();
     const versionMeta = (document.getElementById("docMeta")?.textContent || "").trim();
 
     // Bootstrap a jsPDF instance from html2pdf's bundled copy
-    // (avoids needing a separate jsPDF script tag)
     let pdf = null;
     let firstPage = true;
 
@@ -1064,21 +1186,20 @@ async function exportFullManualPdf() {
     _bootstrapEl.style.cssText = "width:1px;height:1px;overflow:hidden;";
     staging.appendChild(_bootstrapEl);
     await window.html2pdf()
-      .set({ margin: [20,10,15,10], jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, html2canvas: { scale:1, backgroundColor:"#ffffff" } })
+      .set({ margin: [mTop, mRight, mBottom, mLeft], jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation }, html2canvas: { scale:1, backgroundColor:"#ffffff" } })
       .from(_bootstrapEl).toPdf()
       .get("pdf").then(p => { pdf = p; });
     staging.removeChild(_bootstrapEl);
 
     /**
      * Renders a DOM element to a canvas, slices the canvas into
-     * A4-page-height strips, and appends each strip as a new page
+     * page-height strips, and appends each strip as a new page
      * in the master PDF document.
      */
     async function addElementToPdf(el) {
       staging.appendChild(el);
       await waitForImages(el);
 
-      // Capture the element as a high-resolution canvas
       const canvas = await window.html2canvas(el, {
         scale: 2,
         useCORS: true,
@@ -1091,28 +1212,24 @@ async function exportFullManualPdf() {
 
       if (canvas.width === 0 || canvas.height === 0) return;
 
-      // Calculate how many canvas pixels fit in one printable page height
       const pxPerMm = canvas.width / usableW;
       const sliceHeightPx = Math.floor(usableH * pxPerMm);
 
-      // Slice the canvas into page-height strips and add each to the PDF
       let y = 0;
       while (y < canvas.height) {
         const sliceH = Math.min(sliceHeightPx, canvas.height - y);
 
-        // Extract the strip from the full canvas
         const slice = document.createElement("canvas");
         slice.width = canvas.width;
         slice.height = sliceH;
         slice.getContext("2d").drawImage(
           canvas,
-          0, y, canvas.width, sliceH,  // Source rectangle
-          0, 0, canvas.width, sliceH    // Destination rectangle
+          0, y, canvas.width, sliceH,
+          0, 0, canvas.width, sliceH
         );
 
-        // Convert the strip to JPEG and add as a new PDF page
         const imgData = slice.toDataURL("image/jpeg", 0.95);
-        const sliceHmm = (sliceH / canvas.width) * usableW; // Convert pixel height to mm
+        const sliceHmm = (sliceH / canvas.width) * usableW;
 
         if (!firstPage) pdf.addPage();
         pdf.addImage(imgData, "JPEG", mLeft, mTop, usableW, sliceHmm);
@@ -1123,20 +1240,21 @@ async function exportFullManualPdf() {
     }
 
     // --- COVER PAGE ---
-    const cover = document.createElement("div");
-    cover.className = "pdf-export";
-    cover.innerHTML = `<h1 style="margin:0 0 8px 0;">${docTitle}</h1><p style="margin:0;">${versionMeta}</p>`;
-    await addElementToPdf(cover);
+    if (brand.coverPage) {
+      const coverTitle = brand.coverTitle || docTitle;
+      const cover = document.createElement("div");
+      cover.className = "pdf-export";
+      cover.innerHTML = `<h1 style="margin:0 0 8px 0;">${coverTitle}</h1><p style="margin:0;">${versionMeta}</p>`;
+      await addElementToPdf(cover);
+    }
 
     // --- CONTENT PAGES: iterate through all groups and policies ---
     for (const g of GROUPS) {
-      // H1 section title page
       const groupBlock = document.createElement("div");
       groupBlock.className = "pdf-export";
       groupBlock.innerHTML = `<h1>${g.title}</h1>`;
       await addElementToPdf(groupBlock);
 
-      // Each H2 page within the group
       for (const p of g.policies) {
         pagesProcessed++;
         updateExportProgress(`Exporting full manual\u2026 ${pagesProcessed} / ${totalPages} pages`);
@@ -1155,18 +1273,22 @@ async function exportFullManualPdf() {
     for (let i = 1; i <= pageCount; i++) {
       pdf.setPage(i);
 
-      // Header: company logo top-left
-      const logoW = 40;
-      const logoH = logoW / 4.04;
-      pdf.addImage(letterheadLogoDataUrl, "PNG", 15, 8, logoW, logoH);
+      // Header: company logo (if brand has one)
+      if (letterheadLogoDataUrl) {
+        const logoW = brand.header.logoWidth || 40;
+        const logoH = logoW / (brand.header.logoAspect || 4.04);
+        pdf.addImage(letterheadLogoDataUrl, "PNG", brand.header.x || 15, brand.header.y || 8, logoW, logoH);
+      }
 
-      // Footer: company details centred, page number bottom-right
-      pdf.setFontSize(9);
-      pdf.setTextColor(80);
-      const cx = pageW / 2;
-      pdf.text(footerLine1, cx, pageH - 13, { align: "center" });
-      pdf.text(footerLine2, cx, pageH - 9,  { align: "center" });
-      pdf.text(footerLine3, cx, pageH - 5,  { align: "center" });
+      pdf.setFontSize(brand.footer.fontSize || 9);
+      pdf.setTextColor(brand.footer.color || 80);
+
+      if (hasFooter) {
+        const cx = pageW / 2;
+        pdf.text(footerLine1, cx, pageH - 13, { align: "center" });
+        pdf.text(footerLine2, cx, pageH - 9,  { align: "center" });
+        pdf.text(footerLine3, cx, pageH - 5,  { align: "center" });
+      }
 
       const label = `Page ${i} of ${pageCount}`;
       pdf.text(label, pageW - mRight - pdf.getTextWidth(label), pageH - 5);
@@ -1582,6 +1704,43 @@ document.querySelectorAll(".settings-tab").forEach((tab) => {
     if (target) target.hidden = false;
   });
 });
+
+/**
+ * Builds the brand picker dropdown in the export section of settings.
+ * Always visible so the user can see which branding will be applied.
+ */
+function buildBrandPicker() {
+  const container = document.getElementById("brandPickerGroup");
+  const picker = document.getElementById("brandPicker");
+  if (!container || !picker) return;
+
+  container.hidden = false;
+  picker.innerHTML = "";
+
+  if (EXPORT_BRANDS.length === 0) {
+    // No brands loaded — show a disabled fallback option
+    const opt = document.createElement("option");
+    opt.textContent = "No branding";
+    opt.disabled = true;
+    opt.selected = true;
+    picker.appendChild(opt);
+    picker.disabled = true;
+  } else {
+    picker.disabled = false;
+    for (const b of EXPORT_BRANDS) {
+      const opt = document.createElement("option");
+      opt.value = b.id;
+      opt.textContent = b.label;
+      picker.appendChild(opt);
+    }
+
+    if (ACTIVE_BRAND) picker.value = ACTIVE_BRAND.id;
+
+    picker.addEventListener("change", () => {
+      ACTIVE_BRAND = EXPORT_BRANDS.find(b => b.id === picker.value) || EXPORT_BRANDS[0];
+    });
+  }
+}
 
 // Export buttons within settings panel
 document.querySelectorAll(".settings-action[data-export]").forEach((btn) => {

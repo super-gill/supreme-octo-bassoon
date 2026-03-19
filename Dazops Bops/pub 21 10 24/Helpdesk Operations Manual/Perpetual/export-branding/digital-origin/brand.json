@@ -1,0 +1,25 @@
+{
+  "label": "Digital Origin",
+  "pageSize": "a4",
+  "orientation": "portrait",
+  "margins": {
+    "top": 20,
+    "right": 10,
+    "bottom": 15,
+    "left": 10
+  },
+  "header": {
+    "logo": "media/letterhead_logo.png",
+    "logoWidth": 40,
+    "logoAspect": 4.04,
+    "x": 15,
+    "y": 8
+  },
+  "footer": {
+    "lines": ["Jason Mcdill", "", ""],
+    "fontSize": 9,
+    "color": 80
+  },
+  "coverPage": true,
+  "coverTitle": null
+}

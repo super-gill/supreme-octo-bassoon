@@ -1,0 +1,21 @@
+{
+  "label": "No branding",
+  "pageSize": "a4",
+  "orientation": "portrait",
+  "margins": {
+    "top": 10,
+    "right": 10,
+    "bottom": 10,
+    "left": 10
+  },
+  "header": {
+    "logo": null
+  },
+  "footer": {
+    "lines": [],
+    "fontSize": 9,
+    "color": 80
+  },
+  "coverPage": true,
+  "coverTitle": null
+}

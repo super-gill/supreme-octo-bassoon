@@ -20,7 +20,7 @@
   <link id="favicon" rel="icon">
 
   <!-- Stylesheet for the app layout, sidebar, document viewer, and PDF export -->
-  <link rel="stylesheet" type="text/css" href="styles.css?v=2.2.0">
+  <link rel="stylesheet" type="text/css" href="styles.css?v=2.3.0">
 </head>
 
 <body>
@@ -161,6 +161,10 @@
         <label class="settings-label">Colour theme</label>
         <select id="themePicker" class="theme-picker" title="Colour theme"></select>
       </div>
+      <div class="settings-group" id="brandPickerGroup">
+        <label class="settings-label">Export brand</label>
+        <select id="brandPicker" class="theme-picker" title="Export brand profile"></select>
+      </div>
       <div class="settings-group">
         <label class="settings-label">Export</label>
         <div class="settings-export-btns">
@@ -241,14 +245,8 @@
             <p>The splash always waits for the book manifest to load. If loading takes longer than the minimum, the splash stays until loading completes.</p>
 
             <h4>PDF letterhead</h4>
-            <p>Exported PDFs are stamped with a header logo and up to 3 lines of footer text on every page.</p>
-            <table>
-              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
-              <tbody>
-                <tr><td><code>pdf.logo</code></td><td>Path to the header image (placed top-left, scaled to 40mm wide)</td></tr>
-                <tr><td><code>pdf.footer</code></td><td>Array of up to 3 strings, centred at the bottom of each page</td></tr>
-              </tbody>
-            </table>
+            <p>PDF export branding is configured through brand profiles in <code>export-branding/</code>. See the <strong>Export Branding</strong> section for details.</p>
+            <p>For backwards compatibility, <code>tome.json</code> still supports <code>pdf.logo</code> and <code>pdf.footer</code> as a fallback when no brand profiles are configured.</p>
 
             <h4>Example</h4>
             <pre>{
@@ -348,8 +346,8 @@
                 <tr><td><code>branding.defaultTitle</code></td><td>Fallback title if the markdown has none</td></tr>
                 <tr><td><code>branding.classification</code></td><td>Label shown below the title</td></tr>
                 <tr><td><code>branding.favicon</code></td><td>Path to the browser tab icon</td></tr>
-                <tr><td><code>pdf.logo</code></td><td>Letterhead image for PDF exports</td></tr>
-                <tr><td><code>pdf.footer</code></td><td>Up to 3 lines of footer text on each PDF page</td></tr>
+                <tr><td><code>pdf.logo</code></td><td>Fallback letterhead image (used when no brand profiles exist)</td></tr>
+                <tr><td><code>pdf.footer</code></td><td>Fallback footer text (used when no brand profiles exist)</td></tr>
                 <tr><td><code>splash.minDurationMs</code></td><td>Minimum splash screen duration in milliseconds</td></tr>
               </tbody>
             </table>
@@ -366,19 +364,97 @@
         <div class="guide-body" hidden>
           <div class="settings-guide">
             <h4>Single page export</h4>
-            <p>Exports the currently viewed page as an A4 PDF at 2&times; resolution with letterhead and footer.</p>
+            <p>Exports the currently viewed page as a PDF at 2&times; resolution with letterhead and footer.</p>
 
             <h4>Full manual export</h4>
             <p>Stitches every page into a single PDF with a cover page. A progress indicator shows pages processed.</p>
 
-            <h4>Branding</h4>
-            <ul>
-              <li><strong>Header:</strong> The logo from <code>tome.json &rarr; pdf.logo</code> is placed top-left on every page</li>
-              <li><strong>Footer:</strong> Up to 3 lines from <code>tome.json &rarr; pdf.footer</code> are centred at the bottom, with a page counter on the right</li>
-            </ul>
-
             <h4>Markdown export</h4>
             <p>Downloads the raw <code>.md</code> source &mdash; either the current page&rsquo;s markdown or the entire book file.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Branding -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Export Branding</span>
+          <span class="guide-toggle-desc">Brand profiles for PDF exports: logos, footers, page sizes</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <p>PDF exports use brand profiles stored in <code>export-branding/</code>. Each brand has its own directory with a configuration file and media assets.</p>
+
+            <h4>Directory structure</h4>
+            <pre>export-branding/
+  brands.json
+  default/
+    brand.json
+    media/
+      letterhead_logo.png
+  client-a/
+    brand.json
+    media/
+      logo.png
+      watermark.png</pre>
+
+            <h4>brands.json</h4>
+            <p>An array of brand directory names. The first entry is the default.</p>
+            <pre>["default", "client-a"]</pre>
+
+            <h4>brand.json</h4>
+            <p>Each brand&rsquo;s configuration file. All fields are optional and fall back to sensible defaults.</p>
+            <pre>{
+  "label": "Client A Branded",
+  "pageSize": "a4",
+  "orientation": "portrait",
+  "margins": {
+    "top": 20, "right": 10,
+    "bottom": 15, "left": 10
+  },
+  "header": {
+    "logo": "media/logo.png",
+    "logoWidth": 40,
+    "logoAspect": 4.04,
+    "x": 15, "y": 8
+  },
+  "footer": {
+    "lines": [
+      "Client A Corp",
+      "123 Main Street",
+      "Confidential"
+    ],
+    "fontSize": 9,
+    "color": 80
+  },
+  "coverPage": true,
+  "coverTitle": "Operations Manual"
+}</pre>
+
+            <table>
+              <thead><tr><th>Key</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>label</code></td><td>Display name in the brand picker dropdown</td></tr>
+                <tr><td><code>pageSize</code></td><td>PDF page size: <code>a4</code>, <code>letter</code>, or <code>legal</code></td></tr>
+                <tr><td><code>orientation</code></td><td><code>portrait</code> or <code>landscape</code></td></tr>
+                <tr><td><code>margins</code></td><td>Page margins in mm (top, right, bottom, left)</td></tr>
+                <tr><td><code>header.logo</code></td><td>Path to logo image, relative to the brand directory</td></tr>
+                <tr><td><code>header.logoWidth</code></td><td>Logo width in mm (default: 40)</td></tr>
+                <tr><td><code>header.logoAspect</code></td><td>Logo width-to-height ratio (default: 4.04)</td></tr>
+                <tr><td><code>header.x</code> / <code>header.y</code></td><td>Logo position in mm from the top-left corner</td></tr>
+                <tr><td><code>footer.lines</code></td><td>Array of up to 3 strings, centred at the bottom of each page</td></tr>
+                <tr><td><code>footer.fontSize</code></td><td>Footer text size in points (default: 9)</td></tr>
+                <tr><td><code>footer.color</code></td><td>Footer text colour as a greyscale value 0&ndash;255 (default: 80)</td></tr>
+                <tr><td><code>coverPage</code></td><td>Whether to include a cover page in full-manual export (default: true)</td></tr>
+                <tr><td><code>coverTitle</code></td><td>Override the cover page title (defaults to the document title)</td></tr>
+              </tbody>
+            </table>
+
+            <h4>Multiple brands</h4>
+            <p>When two or more brands are defined in <code>brands.json</code>, a dropdown appears in the Settings &rarr; Export section. Select a brand before exporting to apply its letterhead, footer, and page settings.</p>
+
+            <h4>Fallback</h4>
+            <p>If <code>export-branding/brands.json</code> is missing or fails to load, Tome falls back to the PDF settings in <code>tome.json</code> (the <code>pdf.logo</code> and <code>pdf.footer</code> keys).</p>
           </div>
         </div>
       </div>
@@ -429,6 +505,16 @@
         <button id="changelogBack" class="changelog-back" type="button">&larr; Back</button>
         <div class="changelog-content">
           <h3>Changelog</h3>
+
+          <h4>v2.3.0</h4>
+          <ul>
+            <li>Export branding profiles: PDF exports now use pluggable brand configurations stored in <code>export-branding/</code></li>
+            <li>Each brand has its own directory with a <code>brand.json</code> config and a <code>media/</code> folder for logos and assets</li>
+            <li>Brand profiles control page size, orientation, margins, header logo, footer text, cover page, and cover title</li>
+            <li>When multiple brands are configured, a dropdown appears in Settings &rarr; Export to select the active brand</li>
+            <li>Falls back to <code>tome.json</code> PDF settings when no brand profiles are present (backwards compatible)</li>
+            <li>Added Export Branding section to the Guide tab with full configuration reference</li>
+          </ul>
 
           <h4>v2.2.0</h4>
           <ul>
@@ -547,6 +633,6 @@
 </body>
 
 <!-- Application logic: markdown parsing, navigation, search, PDF export -->
-<script src="index.js?v=2.2.0"></script>
+<script src="index.js?v=2.3.0"></script>
 
 </html>
