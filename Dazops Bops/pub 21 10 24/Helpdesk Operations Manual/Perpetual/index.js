@@ -51,7 +51,7 @@ const mainEl = document.querySelector("main");                       // Main scr
 // ==========================================================================
 
 /** Tome platform version (semantic versioning). See changelog in settings for details. */
-const PLATFORM_VERSION = "v2.4.0";
+const PLATFORM_VERSION = "v2.4.1";
 
 /** Canonical URL where the latest version.json is published */
 const VERSION_CHECK_URL = "https://super-gill.github.io/tome.md/version.json";
@@ -430,7 +430,7 @@ function resolveBrandPath(relativePath, basePath) {
 
 async function loadBooks() {
   try {
-    const url = new URL("books.json", document.baseURI);
+    const url = new URL("books/books.json", document.baseURI);
     const res = await fetch(url.href, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load books.json (${res.status})`);
     BOOKS = await res.json();
