@@ -19,7 +19,6 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 # Everything else in the repo is considered platform and will be updated.
 $Protected = @(
     "Books/"
-    "books.json"
     "tome.json"
     "export-branding/"
 )

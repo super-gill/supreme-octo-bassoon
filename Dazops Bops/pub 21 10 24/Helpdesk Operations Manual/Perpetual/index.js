@@ -50,8 +50,8 @@ const mainEl = document.querySelector("main");                       // Main scr
 // APPLICATION STATE
 // ==========================================================================
 
-/** Tome platform version (semantic versioning). See changelog in settings for details. */
-const PLATFORM_VERSION = "v2.4.1";
+/** Tome platform version — loaded from version.json at startup */
+let PLATFORM_VERSION = "";
 
 /** Canonical URL where the latest version.json is published */
 const VERSION_CHECK_URL = "https://super-gill.github.io/tome.md/version.json";
@@ -112,8 +112,8 @@ function extractDocMeta(mdText) {
 /**
  * Resolves relative image and link URLs within a rendered DOM container
  * so they are relative to the book's directory rather than the page root.
- * E.g. if CURRENT_BOOK is "Books/manual/manual.md", an <img src="diagram.png">
- * becomes <img src="Books/manual/diagram.png">.
+ * E.g. if CURRENT_BOOK is "Books/my-docs/guide.md", an <img src="diagram.png">
+ * becomes <img src="Books/my-docs/diagram.png">.
  */
 function resolveBookPaths(container) {
   if (!CURRENT_BOOK) return;
@@ -293,7 +293,7 @@ function buildIndexFromGroups() {
 
 // ==========================================================================
 // BOOK LOADING
-// Fetches markdown files and the books.json manifest.
+// Fetches markdown files and the Books/books.json manifest.
 // ==========================================================================
 
 /**
@@ -328,7 +328,7 @@ async function loadManualMd(filename) {
 
 /**
  * Loads the books.json manifest and populates the book picker dropdown.
- * If books.json is missing or fails, falls back to a single manual.md entry.
+ * If Books/books.json is missing or empty, BOOKS is set to an empty array.
  * Attaches a change listener so selecting a different book triggers a reload.
  */
 // ==========================================================================
@@ -430,15 +430,17 @@ function resolveBrandPath(relativePath, basePath) {
 
 async function loadBooks() {
   try {
-    const url = new URL("books/books.json", document.baseURI);
+    const url = new URL("Books/books.json", document.baseURI);
     const res = await fetch(url.href, { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to load books.json (${res.status})`);
+    if (!res.ok) throw new Error(`Failed to load Books/books.json (${res.status})`);
     BOOKS = await res.json();
   } catch (e) {
-    console.warn("Could not load books.json, falling back to Books/manual/:", e);
-    BOOKS = [{ file: "Books/manual/manualVE12.md", title: TOME_CONFIG.branding?.defaultTitle || "Manual" }];
-    CURRENT_BOOK = BOOKS[0].file;
+    console.warn("Could not load Books/books.json:", e);
+    BOOKS = [];
   }
+
+  // Default to the first book if none is set yet
+  if (!CURRENT_BOOK && BOOKS.length > 0) CURRENT_BOOK = BOOKS[0].file;
 
   // Populate the dropdown with available books
   if (bookPicker) {
@@ -498,15 +500,55 @@ async function loadBook(filename) {
 }
 
 /**
+ * Displays a welcome/getting-started message when no books are configured.
+ */
+function showWelcome() {
+  const titleEl = document.getElementById("docTitle");
+  if (titleEl) titleEl.textContent = "Welcome to Tome";
+  if (metaEl) metaEl.textContent = "";
+  if (navEl) navEl.innerHTML = "";
+  if (bookPicker) bookPicker.style.display = "none";
+  if (viewEl) {
+    viewEl.innerHTML = `
+      <div style="max-width:600px;margin:40px auto;line-height:1.7">
+        <h2 style="margin-bottom:8px">No books found</h2>
+        <p>Tome is running, but there are no books configured yet.</p>
+        <h3 style="margin-top:24px">Getting started</h3>
+        <ol>
+          <li>Create a folder inside <code>Books/</code> for your document</li>
+          <li>Add a markdown file (e.g. <code>Books/my-docs/guide.md</code>)</li>
+          <li>Register it in <code>Books/books.json</code>:</li>
+        </ol>
+<pre>[
+  { "file": "Books/my-docs/guide.md", "title": "My Guide" }
+]</pre>
+        <ol start="4">
+          <li>Refresh this page</li>
+        </ol>
+        <p>See the <strong>Guide</strong> tab in Settings for authoring and configuration details.</p>
+      </div>`;
+  }
+}
+
+/**
  * Application entry point. Loads the book manifest, then loads and
  * renders the default book.
  */
 async function init() {
-  // Display the platform version in the sidebar footer
-  if (platformVersionEl) platformVersionEl.textContent = `Tome ${PLATFORM_VERSION}`;
-
   const splashEl = document.getElementById("tomeSplash");
   const splashStart = Date.now();
+
+  // Load platform version from version.json (single source of truth)
+  try {
+    const vRes = await fetch(new URL("version.json", document.baseURI).href, { cache: "no-store" });
+    if (vRes.ok) {
+      const vData = await vRes.json();
+      PLATFORM_VERSION = vData.version || "";
+    }
+  } catch (e) {
+    console.warn("Could not load version.json:", e);
+  }
+  if (platformVersionEl) platformVersionEl.textContent = `Tome ${PLATFORM_VERSION}`;
 
   // Load configuration and book manifest while the splash is visible
   await loadConfig();
@@ -521,7 +563,6 @@ async function init() {
   await loadBooks();
   await loadBrands();
   buildBrandPicker();
-  if (!CURRENT_BOOK && BOOKS.length > 0) CURRENT_BOOK = BOOKS[0].file;
 
   // Wait for the remainder of the minimum splash duration
   const splashMs = TOME_CONFIG.splash?.minDurationMs ?? 2000;
@@ -536,8 +577,12 @@ async function init() {
     splashEl.addEventListener("transitionend", () => splashEl.remove(), { once: true });
   }
 
-  // Render the first page
-  await loadBook(CURRENT_BOOK);
+  // Render the first page, or show a welcome screen if no books are configured
+  if (CURRENT_BOOK) {
+    await loadBook(CURRENT_BOOK);
+  } else {
+    showWelcome();
+  }
 
   // Check for platform updates (non-blocking)
   checkForUpdate();
@@ -1047,8 +1092,7 @@ async function exportCurrentPolicyPdf() {
       },
       jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation },
       pagebreak: {
-        mode: ["avoid-all", "css", "legacy"],
-        avoid: ["p", "li", "h1", "h2", "h3", "h4", "table", "blockquote", "pre"]
+        mode: ["css"]
       }
     };
 
@@ -1205,8 +1249,38 @@ async function exportFullManualPdf() {
       staging.appendChild(el);
       await waitForImages(el);
 
+      // Measure heading positions before capturing to canvas.
+      // - "keep zones" prevent slice boundaries from landing between a
+      //   heading and its first content sibling (H2–H5).
+      // - "force breaks" ensure H2s that follow body content (not H1)
+      //   always start on a new page.
+      const elRect = el.getBoundingClientRect();
+      const scale = 2; // must match html2canvas scale
+      const keepZones = [];
+      const forceBreaks = []; // Y positions where a new page must start
+      el.querySelectorAll("h2, h3, h4, h5").forEach(h => {
+        const hRect = h.getBoundingClientRect();
+        const top = (hRect.top - elRect.top) * scale;
+        // Extend the zone to include the first content sibling
+        let bottom = (hRect.bottom - elRect.top) * scale;
+        const sib = h.nextElementSibling;
+        if (sib) {
+          const sibRect = sib.getBoundingClientRect();
+          bottom = (sibRect.bottom - elRect.top) * scale;
+        }
+        keepZones.push({ top, bottom });
+
+        // H2s force a page break unless they directly follow an H1
+        if (h.tagName === "H2") {
+          const prev = h.previousElementSibling;
+          if (prev && prev.tagName !== "H1" && top > 0) {
+            forceBreaks.push(top);
+          }
+        }
+      });
+
       const canvas = await window.html2canvas(el, {
-        scale: 2,
+        scale,
         useCORS: true,
         allowTaint: false,
         backgroundColor: "#ffffff",
@@ -1220,9 +1294,39 @@ async function exportFullManualPdf() {
       const pxPerMm = canvas.width / usableW;
       const sliceHeightPx = Math.floor(usableH * pxPerMm);
 
+      // Minimum slice height to prevent blank pages (10mm worth of pixels)
+      const minSlicePx = Math.floor(10 * pxPerMm);
+
       let y = 0;
       while (y < canvas.height) {
-        const sliceH = Math.min(sliceHeightPx, canvas.height - y);
+        let sliceH = Math.min(sliceHeightPx, canvas.height - y);
+
+        // Check for forced H2 breaks within this slice.
+        // Find the FIRST force break that falls inside the slice,
+        // but only if it would leave a meaningful amount of content.
+        let forcedCut = false;
+        for (const bp of forceBreaks) {
+          if (bp > y + minSlicePx && bp < y + sliceH) {
+            sliceH = Math.floor(bp - y);
+            forcedCut = true;
+            break;
+          }
+        }
+
+        // If no forced cut, check keep zones — if the slice boundary
+        // lands inside a keep zone, pull it back to before the heading,
+        // but only if the resulting slice is tall enough.
+        if (!forcedCut && y + sliceH < canvas.height) {
+          for (const zone of keepZones) {
+            if (y + sliceH > zone.top && y + sliceH < zone.bottom) {
+              const adjusted = Math.floor(zone.top - y);
+              if (adjusted >= minSlicePx) {
+                sliceH = adjusted;
+              }
+              break;
+            }
+          }
+        }
 
         const slice = document.createElement("canvas");
         slice.width = canvas.width;
@@ -1253,24 +1357,26 @@ async function exportFullManualPdf() {
       await addElementToPdf(cover);
     }
 
-    // --- CONTENT PAGES: iterate through all groups and policies ---
+    // --- CONTENT PAGES: render each group as a single block ---
+    // The entire group (H1 + all policies) is rendered as one continuous
+    // element. The keep-zone slicer handles page breaks, ensuring headings
+    // are never separated from their following content.
     for (const g of GROUPS) {
-      const groupBlock = document.createElement("div");
-      groupBlock.className = "pdf-export";
-      groupBlock.innerHTML = `<h1>${g.title}</h1>`;
-      await addElementToPdf(groupBlock);
+      pagesProcessed += g.policies.length;
+      updateExportProgress(`Exporting full manual\u2026 ${pagesProcessed} / ${totalPages} pages`);
 
+      const block = document.createElement("div");
+      block.className = "pdf-export";
+
+      let html = `<h1>${g.title}</h1>`;
       for (const p of g.policies) {
-        pagesProcessed++;
-        updateExportProgress(`Exporting full manual\u2026 ${pagesProcessed} / ${totalPages} pages`);
-
-        const block = document.createElement("div");
-        block.className = "pdf-export";
-        block.innerHTML = md.render(p.mdText);
-        resolveBookPaths(block);
-        applyIndent(block);
-        await addElementToPdf(block);
+        html += md.render(p.mdText);
       }
+      block.innerHTML = html;
+
+      resolveBookPaths(block);
+      applyIndent(block);
+      await addElementToPdf(block);
     }
 
     // --- STAMP HEADERS AND FOOTERS ON EVERY PAGE ---

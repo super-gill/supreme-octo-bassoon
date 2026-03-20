@@ -16,7 +16,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Everything else in the repo is considered platform and will be updated.
 PROTECTED=(
   "Books/"
-  "books.json"
   "tome.json"
   "export-branding/"
 )

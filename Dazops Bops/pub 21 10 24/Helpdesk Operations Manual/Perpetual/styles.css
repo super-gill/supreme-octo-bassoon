@@ -238,29 +238,39 @@ main {
     color: #444;
 }
 
-/* Prevent headings from being stranded at the bottom of a page */
-.pdf-export h1,
-.pdf-export h2,
+/* H1: starts a new page, sticks to whatever follows (H2 or body) */
+.pdf-export h1 {
+    color: #000;
+    break-before: page;
+    page-break-before: always;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* H2: starts a new page when following body content, but not after a header */
+.pdf-export h2 {
+    color: #000;
+    break-before: page;
+    page-break-before: always;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* H2 directly after H1 — no page break, stay together */
+.pdf-export h1 + h2 {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+/* H3–H5: no breaks, stick to following content */
 .pdf-export h3,
 .pdf-export h4,
 .pdf-export h5 {
     color: #000;
-    break-after: avoid-page;
-    page-break-after: avoid;
-}
-
-/* Keep the first paragraph/list after a heading on the same page */
-.pdf-export h2 + p,
-.pdf-export h3 + p,
-.pdf-export h4 + p,
-.pdf-export h2 + ul,
-.pdf-export h3 + ul,
-.pdf-export h4 + ul,
-.pdf-export h2 + ol,
-.pdf-export h3 + ol,
-.pdf-export h4 + ol {
-    break-before: avoid-page;
+    break-before: avoid;
     page-break-before: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
 }
 
 /* Prevent content blocks from being split across pages */
@@ -326,7 +336,7 @@ main {
 
 /* ==========================================================================
    SIDEBAR: BOOK SELECTOR
-   Dropdown to switch between different .md manuals (e.g. manual.md, qms.md).
+   Dropdown to switch between different books loaded from Books/books.json.
    ========================================================================== */
 
 .book-select {

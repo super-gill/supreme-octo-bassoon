@@ -88,7 +88,7 @@
         <span id="docMeta">Internal Use Only</span>
       </div>
 
-      <!-- Book selector: dropdown populated from books.json, switches between manuals -->
+      <!-- Book selector: dropdown populated from Books/books.json -->
       <div class="book-select">
         <select id="bookPicker"></select>
       </div>
@@ -190,17 +190,32 @@
             <h4>Document metadata</h4>
             <p>The first non-empty lines before any heading are treated as metadata. Tome looks for:</p>
             <ul>
-              <li>The <strong>first line</strong> of text becomes the document title (shown in the sidebar and browser tab)</li>
+              <li>The <strong>first line</strong> of text becomes the document title (shown in the sidebar and browser
+                tab)</li>
               <li>A line matching <code>VE.#</code> is captured as the document version</li>
             </ul>
 
             <h4>Heading hierarchy</h4>
             <table>
-              <thead><tr><th>Markdown</th><th>Tome uses it as</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Markdown</th>
+                  <th>Tome uses it as</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code># Heading 1</code></td><td>Navigation group (collapsible section header)</td></tr>
-                <tr><td><code>## Heading 2</code></td><td>Page &mdash; each H2 becomes a separately viewable page</td></tr>
-                <tr><td><code>### &ndash; #####</code></td><td>In-page headings (auto-generates a table of contents)</td></tr>
+                <tr>
+                  <td><code># Heading 1</code></td>
+                  <td>Navigation group (collapsible section header)</td>
+                </tr>
+                <tr>
+                  <td><code>## Heading 2</code></td>
+                  <td>Page &mdash; each H2 becomes a separately viewable page</td>
+                </tr>
+                <tr>
+                  <td><code>### &ndash; #####</code></td>
+                  <td>In-page headings (auto-generates a table of contents)</td>
+                </tr>
               </tbody>
             </table>
 
@@ -226,27 +241,57 @@
 
             <h4>Sidebar &amp; browser tab</h4>
             <table>
-              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>What it controls</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code>branding.defaultTitle</code></td><td>The title shown in the sidebar and browser tab before a book loads (or as a fallback if the markdown has no title)</td></tr>
-                <tr><td><code>branding.classification</code></td><td>The label beneath the title, e.g. &ldquo;Internal Use Only&rdquo; or &ldquo;Confidential&rdquo;</td></tr>
-                <tr><td><code>branding.favicon</code></td><td>Path to the browser tab icon (SVG, PNG, or ICO)</td></tr>
+                <tr>
+                  <td><code>branding.defaultTitle</code></td>
+                  <td>The title shown in the sidebar and browser tab before a book loads (or as a fallback if the
+                    markdown has no title)</td>
+                </tr>
+                <tr>
+                  <td><code>branding.classification</code></td>
+                  <td>The label beneath the title, e.g. &ldquo;Internal Use Only&rdquo; or &ldquo;Confidential&rdquo;
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>branding.favicon</code></td>
+                  <td>Path to the browser tab icon (SVG, PNG, or ICO)</td>
+                </tr>
               </tbody>
             </table>
 
             <h4>Splash screen</h4>
-            <p>On load, Tome shows a full-screen splash with the &ldquo;TOME&rdquo; wordmark. Control how long it stays visible:</p>
+            <p>On load, Tome shows a full-screen splash with the &ldquo;TOME&rdquo; wordmark. Control how long it stays
+              visible:</p>
             <table>
-              <thead><tr><th>Key</th><th>What it controls</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>What it controls</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code>splash.minDurationMs</code></td><td>Minimum splash duration in milliseconds (default: 2000)</td></tr>
+                <tr>
+                  <td><code>splash.minDurationMs</code></td>
+                  <td>Minimum splash duration in milliseconds (default: 2000)</td>
+                </tr>
               </tbody>
             </table>
-            <p>The splash always waits for the book manifest to load. If loading takes longer than the minimum, the splash stays until loading completes.</p>
+            <p>The splash always waits for the book manifest to load. If loading takes longer than the minimum, the
+              splash stays until loading completes.</p>
 
             <h4>PDF letterhead</h4>
-            <p>PDF export branding is configured through brand profiles in <code>export-branding/</code>. See the <strong>Export Branding</strong> section for details.</p>
-            <p>For backwards compatibility, <code>tome.json</code> still supports <code>pdf.logo</code> and <code>pdf.footer</code> as a fallback when no brand profiles are configured.</p>
+            <p>PDF export branding is configured through brand profiles in <code>export-branding/</code>. See the
+              <strong>Export Branding</strong> section for details.
+            </p>
+            <p>For backwards compatibility, <code>tome.json</code> still supports <code>pdf.logo</code> and
+              <code>pdf.footer</code> as a fallback when no brand profiles are configured.
+            </p>
 
             <h4>Example</h4>
             <pre>{
@@ -279,7 +324,8 @@
         </button>
         <div class="guide-body" hidden>
           <div class="settings-guide">
-            <p>Tome automatically resolves image paths relative to the book&rsquo;s directory. Keep images alongside your markdown files.</p>
+            <p>Tome automatically resolves image paths relative to the book&rsquo;s directory. Keep images alongside
+              your markdown files.</p>
 
             <h4>Recommended structure</h4>
             <pre>Books/
@@ -294,7 +340,9 @@
             <h4>Referencing images</h4>
             <p>Just use the filename &mdash; no path prefix needed:</p>
             <pre>![My diagram](diagram.png)</pre>
-            <p>Tome detects that the book lives at <code>Books/my-manual/manual.md</code> and resolves the image to <code>Books/my-manual/diagram.png</code>.</p>
+            <p>Tome detects that the book lives at <code>Books/my-manual/manual.md</code> and resolves the image to
+              <code>Books/my-manual/diagram.png</code>.
+            </p>
 
             <h4>How it works</h4>
             <ul>
@@ -304,7 +352,8 @@
             </ul>
 
             <h4>Books in the root directory</h4>
-            <p>If a book file sits directly in the root (not in a subfolder), image paths are not modified. Place images alongside <code>index.html</code> in that case.</p>
+            <p>If a book file sits directly in the root (not in a subfolder), image paths are not modified. Place images
+              alongside <code>index.html</code> in that case.</p>
           </div>
         </div>
       </div>
@@ -313,15 +362,15 @@
       <div class="guide-accordion">
         <button class="guide-toggle" type="button">
           <span class="guide-toggle-title">Configuration</span>
-          <span class="guide-toggle-desc">books.json, tome.json, and platform settings</span>
+          <span class="guide-toggle-desc">Books/books.json, tome.json, and platform settings</span>
         </button>
         <div class="guide-body" hidden>
           <div class="settings-guide">
-            <h4>books.json</h4>
-            <p>Lists the available books. The first entry is loaded by default.</p>
+            <h4>Books/books.json</h4>
+            <p>Lists the available books. The first entry is loaded by default. This file lives inside the <code>Books/</code> directory alongside your content.</p>
             <pre>[
-  { "file": "Books/manual/manual.md", "title": "My Manual" },
-  { "file": "Books/qms/qms.md",      "title": "Quality System" }
+  { "file": "Books/my-docs/guide.md",  "title": "My Guide" },
+  { "file": "Books/handbook/handbook.md", "title": "Handbook" }
 ]</pre>
 
             <h4>tome.json</h4>
@@ -341,14 +390,37 @@
   }
 }</pre>
             <table>
-              <thead><tr><th>Key</th><th>Purpose</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code>branding.defaultTitle</code></td><td>Fallback title if the markdown has none</td></tr>
-                <tr><td><code>branding.classification</code></td><td>Label shown below the title</td></tr>
-                <tr><td><code>branding.favicon</code></td><td>Path to the browser tab icon</td></tr>
-                <tr><td><code>pdf.logo</code></td><td>Fallback letterhead image (used when no brand profiles exist)</td></tr>
-                <tr><td><code>pdf.footer</code></td><td>Fallback footer text (used when no brand profiles exist)</td></tr>
-                <tr><td><code>splash.minDurationMs</code></td><td>Minimum splash screen duration in milliseconds</td></tr>
+                <tr>
+                  <td><code>branding.defaultTitle</code></td>
+                  <td>Fallback title if the markdown has none</td>
+                </tr>
+                <tr>
+                  <td><code>branding.classification</code></td>
+                  <td>Label shown below the title</td>
+                </tr>
+                <tr>
+                  <td><code>branding.favicon</code></td>
+                  <td>Path to the browser tab icon</td>
+                </tr>
+                <tr>
+                  <td><code>pdf.logo</code></td>
+                  <td>Fallback letterhead image (used when no brand profiles exist)</td>
+                </tr>
+                <tr>
+                  <td><code>pdf.footer</code></td>
+                  <td>Fallback footer text (used when no brand profiles exist)</td>
+                </tr>
+                <tr>
+                  <td><code>splash.minDurationMs</code></td>
+                  <td>Minimum splash screen duration in milliseconds</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -370,7 +442,8 @@
             <p>Stitches every page into a single PDF with a cover page. A progress indicator shows pages processed.</p>
 
             <h4>Markdown export</h4>
-            <p>Downloads the raw <code>.md</code> source &mdash; either the current page&rsquo;s markdown or the entire book file.</p>
+            <p>Downloads the raw <code>.md</code> source &mdash; either the current page&rsquo;s markdown or the entire
+              book file.</p>
           </div>
         </div>
       </div>
@@ -383,7 +456,8 @@
         </button>
         <div class="guide-body" hidden>
           <div class="settings-guide">
-            <p>PDF exports use brand profiles stored in <code>export-branding/</code>. Each brand has its own directory with a configuration file and media assets.</p>
+            <p>PDF exports use brand profiles stored in <code>export-branding/</code>. Each brand has its own directory
+              with a configuration file and media assets.</p>
 
             <h4>Directory structure</h4>
             <pre>export-branding/
@@ -432,29 +506,76 @@
 }</pre>
 
             <table>
-              <thead><tr><th>Key</th><th>Purpose</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code>label</code></td><td>Display name in the brand picker dropdown</td></tr>
-                <tr><td><code>pageSize</code></td><td>PDF page size: <code>a4</code>, <code>letter</code>, or <code>legal</code></td></tr>
-                <tr><td><code>orientation</code></td><td><code>portrait</code> or <code>landscape</code></td></tr>
-                <tr><td><code>margins</code></td><td>Page margins in mm (top, right, bottom, left)</td></tr>
-                <tr><td><code>header.logo</code></td><td>Path to logo image, relative to the brand directory</td></tr>
-                <tr><td><code>header.logoWidth</code></td><td>Logo width in mm (default: 40)</td></tr>
-                <tr><td><code>header.logoAspect</code></td><td>Logo width-to-height ratio (default: 4.04)</td></tr>
-                <tr><td><code>header.x</code> / <code>header.y</code></td><td>Logo position in mm from the top-left corner</td></tr>
-                <tr><td><code>footer.lines</code></td><td>Array of up to 3 strings, centred at the bottom of each page</td></tr>
-                <tr><td><code>footer.fontSize</code></td><td>Footer text size in points (default: 9)</td></tr>
-                <tr><td><code>footer.color</code></td><td>Footer text colour as a greyscale value 0&ndash;255 (default: 80)</td></tr>
-                <tr><td><code>coverPage</code></td><td>Whether to include a cover page in full-manual export (default: true)</td></tr>
-                <tr><td><code>coverTitle</code></td><td>Override the cover page title (defaults to the document title)</td></tr>
+                <tr>
+                  <td><code>label</code></td>
+                  <td>Display name in the brand picker dropdown</td>
+                </tr>
+                <tr>
+                  <td><code>pageSize</code></td>
+                  <td>PDF page size: <code>a4</code>, <code>letter</code>, or <code>legal</code></td>
+                </tr>
+                <tr>
+                  <td><code>orientation</code></td>
+                  <td><code>portrait</code> or <code>landscape</code></td>
+                </tr>
+                <tr>
+                  <td><code>margins</code></td>
+                  <td>Page margins in mm (top, right, bottom, left)</td>
+                </tr>
+                <tr>
+                  <td><code>header.logo</code></td>
+                  <td>Path to logo image, relative to the brand directory</td>
+                </tr>
+                <tr>
+                  <td><code>header.logoWidth</code></td>
+                  <td>Logo width in mm (default: 40)</td>
+                </tr>
+                <tr>
+                  <td><code>header.logoAspect</code></td>
+                  <td>Logo width-to-height ratio (default: 4.04)</td>
+                </tr>
+                <tr>
+                  <td><code>header.x</code> / <code>header.y</code></td>
+                  <td>Logo position in mm from the top-left corner</td>
+                </tr>
+                <tr>
+                  <td><code>footer.lines</code></td>
+                  <td>Array of up to 3 strings, centred at the bottom of each page</td>
+                </tr>
+                <tr>
+                  <td><code>footer.fontSize</code></td>
+                  <td>Footer text size in points (default: 9)</td>
+                </tr>
+                <tr>
+                  <td><code>footer.color</code></td>
+                  <td>Footer text colour as a greyscale value 0&ndash;255 (default: 80)</td>
+                </tr>
+                <tr>
+                  <td><code>coverPage</code></td>
+                  <td>Whether to include a cover page in full-manual export (default: true)</td>
+                </tr>
+                <tr>
+                  <td><code>coverTitle</code></td>
+                  <td>Override the cover page title (defaults to the document title)</td>
+                </tr>
               </tbody>
             </table>
 
             <h4>Multiple brands</h4>
-            <p>When two or more brands are defined in <code>brands.json</code>, a dropdown appears in the Settings &rarr; Export section. Select a brand before exporting to apply its letterhead, footer, and page settings.</p>
+            <p>When two or more brands are defined in <code>brands.json</code>, a dropdown appears in the Settings
+              &rarr; Export section. Select a brand before exporting to apply its letterhead, footer, and page settings.
+            </p>
 
             <h4>Fallback</h4>
-            <p>If <code>export-branding/brands.json</code> is missing or fails to load, Tome falls back to the PDF settings in <code>tome.json</code> (the <code>pdf.logo</code> and <code>pdf.footer</code> keys).</p>
+            <p>If <code>export-branding/brands.json</code> is missing or fails to load, Tome falls back to the PDF
+              settings in <code>tome.json</code> (the <code>pdf.logo</code> and <code>pdf.footer</code> keys).</p>
           </div>
         </div>
       </div>
@@ -468,12 +589,29 @@
         <div class="guide-body" hidden>
           <div class="settings-guide">
             <table>
-              <thead><tr><th>Key</th><th>Action</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><td><code>/</code></td><td>Focus the search box</td></tr>
-                <tr><td><code>n</code></td><td>Go to the next page</td></tr>
-                <tr><td><code>p</code></td><td>Go to the previous page</td></tr>
-                <tr><td><code>Escape</code></td><td>Clear search / close settings panel</td></tr>
+                <tr>
+                  <td><code>/</code></td>
+                  <td>Focus the search box</td>
+                </tr>
+                <tr>
+                  <td><code>n</code></td>
+                  <td>Go to the next page</td>
+                </tr>
+                <tr>
+                  <td><code>p</code></td>
+                  <td>Go to the previous page</td>
+                </tr>
+                <tr>
+                  <td><code>Escape</code></td>
+                  <td>Clear search / close settings panel</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -488,16 +626,32 @@
         <div class="tome-wordmark" style="font-size:28px; margin-bottom:12px;">Tome</div>
         <table class="settings-about-table">
           <tbody>
-            <tr><td>Tome</td><td id="aboutPlatformVersion"></td></tr>
-            <tr><td>markdown-it</td><td id="aboutMarkdownIt"></td></tr>
-            <tr><td>markdown-it-anchor</td><td id="aboutMarkdownItAnchor"></td></tr>
-            <tr><td>html2pdf.js</td><td id="aboutHtml2pdf"></td></tr>
-            <tr><td>html2canvas</td><td id="aboutHtml2canvas"></td></tr>
+            <tr>
+              <td>Tome</td>
+              <td id="aboutPlatformVersion"></td>
+            </tr>
+            <tr>
+              <td>markdown-it</td>
+              <td id="aboutMarkdownIt"></td>
+            </tr>
+            <tr>
+              <td>markdown-it-anchor</td>
+              <td id="aboutMarkdownItAnchor"></td>
+            </tr>
+            <tr>
+              <td>html2pdf.js</td>
+              <td id="aboutHtml2pdf"></td>
+            </tr>
+            <tr>
+              <td>html2canvas</td>
+              <td id="aboutHtml2canvas"></td>
+            </tr>
           </tbody>
         </table>
         <button id="changelogBtn" class="changelog-btn" type="button">View changelog</button>
         <div class="settings-copyright">&copy; 2026 Jason Mcdill. All rights reserved.</div>
-        <div class="settings-proprietary">Proprietary software. Unauthorised use, copying, or distribution is prohibited.</div>
+        <div class="settings-proprietary">Proprietary software. Unauthorised use, copying, or distribution is
+          prohibited.</div>
       </div>
 
       <!-- Changelog sub-view (hidden by default, replaces about content) -->
@@ -506,52 +660,104 @@
         <div class="changelog-content">
           <h3>Changelog</h3>
 
+          <h4>v2.5.2</h4>
+          <ul>
+            <li>Improved PDF export page breaks: headings (H2&ndash;H5) now stay with their following content instead of being stranded at the bottom of a page</li>
+            <li>H1 group headers start on a new page and flow directly into their first policy</li>
+            <li>Full manual export renders each group as a single continuous block for smarter page slicing</li>
+            <li>PDF page break rules moved entirely to CSS &mdash; removed conflicting <code>avoid-all</code> mode from html2pdf config</li>
+          </ul>
+
+          <h4>v2.5.1</h4>
+          <ul>
+            <li>Platform version now loaded from <code>version.json</code> at startup &mdash; single source of truth, no more duplicate version strings</li>
+            <li>Fixed book picker dropdown showing blank instead of the loaded book title on startup</li>
+          </ul>
+
+          <h4>v2.5.0</h4>
+          <ul>
+            <li>Welcome screen shown when no books are configured, with getting-started instructions</li>
+            <li>Platform update scripts: <code>update.sh</code> (bash) and <code>update.ps1</code> (PowerShell) for one-click updates from GitHub</li>
+            <li>Moved <code>books.json</code> manifest into the <code>Books/</code> directory alongside user content</li>
+            <li>Added <code>README.md</code> with project documentation, quick start, and configuration reference</li>
+            <li>Removed external branding from platform defaults &mdash; all branding fully user-configurable</li>
+          </ul>
+
+          <h4>v2.4.1</h4>
+          <ul>
+            <li>Fixed issue with relative path resolution for images and links</li>
+          </ul>
+
           <h4>v2.4.0</h4>
           <ul>
             <li>Migrated Tome to its own dedicated GitHub repository (<code>tome.md</code>)</li>
-            <li>Flattened project structure: removed nested <code>TOME md/</code> directory so all files live at the repository root</li>
-            <li>Updated version check URL to point to the new canonical location at <code>super-gill.github.io/tome.md/</code></li>
+            <li>Flattened project structure: removed nested <code>TOME md/</code> directory so all files live at the
+              repository root</li>
+            <li>Updated version check URL to point to the new canonical location at
+              <code>super-gill.github.io/tome.md/</code>
+            </li>
           </ul>
 
           <h4>v2.3.0</h4>
           <ul>
-            <li>Export branding profiles: PDF exports now use pluggable brand configurations stored in <code>export-branding/</code></li>
-            <li>Each brand has its own directory with a <code>brand.json</code> config and a <code>media/</code> folder for logos and assets</li>
-            <li>Brand profiles control page size, orientation, margins, header logo, footer text, cover page, and cover title</li>
-            <li>When multiple brands are configured, a dropdown appears in Settings &rarr; Export to select the active brand</li>
-            <li>Falls back to <code>tome.json</code> PDF settings when no brand profiles are present (backwards compatible)</li>
+            <li>Export branding profiles: PDF exports now use pluggable brand configurations stored in
+              <code>export-branding/</code>
+            </li>
+            <li>Each brand has its own directory with a <code>brand.json</code> config and a <code>media/</code> folder
+              for logos and assets</li>
+            <li>Brand profiles control page size, orientation, margins, header logo, footer text, cover page, and cover
+              title</li>
+            <li>When multiple brands are configured, a dropdown appears in Settings &rarr; Export to select the active
+              brand</li>
+            <li>Falls back to <code>tome.json</code> PDF settings when no brand profiles are present (backwards
+              compatible)</li>
             <li>Added Export Branding section to the Guide tab with full configuration reference</li>
           </ul>
 
           <h4>v2.2.0</h4>
           <ul>
-            <li>Automatic update check: on load, Tome fetches <code>version.json</code> from the canonical published URL and compares it to the running version</li>
-            <li>If a newer version is available, a dismissible banner appears at the bottom of the screen showing the current and latest versions</li>
-            <li>Update check is non-blocking and fails silently &mdash; no impact on offline or air-gapped deployments</li>
+            <li>Automatic update check: on load, Tome fetches <code>version.json</code> from the canonical published URL
+              and compares it to the running version</li>
+            <li>If a newer version is available, a dismissible banner appears at the bottom of the screen showing the
+              current and latest versions</li>
+            <li>Update check is non-blocking and fails silently &mdash; no impact on offline or air-gapped deployments
+            </li>
             <li>Added <code>version.json</code> to the platform project for deployed instances to check against</li>
           </ul>
 
           <h4>v2.1.0</h4>
           <ul>
-            <li>Settings button redesigned as a fixed pill-shaped tab in the top-right corner, rotated 90&deg; so the tube extends off the top edge of the screen &mdash; always visible while scrolling</li>
+            <li>Settings button redesigned as a fixed pill-shaped tab in the top-right corner, rotated 90&deg; so the
+              tube extends off the top edge of the screen &mdash; always visible while scrolling</li>
             <li>Settings button uses theme heading colour as background for contrast across all themes</li>
             <li>Gear icon rendered via CSS pseudo-element with counter-rotation to stay upright</li>
-            <li>Code blocks (<code>pre</code>) now use theme tokens (<code>--bg</code>, <code>--text</code>, <code>--border</code>) instead of hardcoded colours</li>
-            <li>Inline code now uses theme tokens (<code>--h1bg</code>, <code>--border</code>) instead of hardcoded colours</li>
+            <li>Code blocks (<code>pre</code>) now use theme tokens (<code>--bg</code>, <code>--text</code>,
+              <code>--border</code>) instead of hardcoded colours
+            </li>
+            <li>Inline code now uses theme tokens (<code>--h1bg</code>, <code>--border</code>) instead of hardcoded
+              colours</li>
             <li>Blockquote background switched from hardcoded colour to <code>--h1bg</code> theme token</li>
-            <li>Added <code>.doc blockquote</code> base style: left border in heading colour, tinted background, rounded right corners</li>
+            <li>Added <code>.doc blockquote</code> base style: left border in heading colour, tinted background, rounded
+              right corners</li>
             <li>Added <code>.doc ol</code> base style to match existing <code>ul</code> margin and spacing</li>
-            <li>Fixed indentation for tables and ordered lists: uses <code>margin-left</code> instead of <code>padding-left</code> to preserve borders and number gutters</li>
-            <li>Fixed indentation for code blocks (<code>pre</code>): <code>margin-left</code> override so <code>padding: 12px</code> no longer silently cancels the indent</li>
-            <li>Fixed indentation for horizontal rules (<code>hr</code>): switched to <code>margin-left</code> since padding has no effect on void elements</li>
-            <li>Fixed indentation for blockquotes: uses <code>margin-left</code> to shift the entire element (including left border) to the indent position</li>
+            <li>Fixed indentation for tables and ordered lists: uses <code>margin-left</code> instead of
+              <code>padding-left</code> to preserve borders and number gutters
+            </li>
+            <li>Fixed indentation for code blocks (<code>pre</code>): <code>margin-left</code> override so
+              <code>padding: 12px</code> no longer silently cancels the indent
+            </li>
+            <li>Fixed indentation for horizontal rules (<code>hr</code>): switched to <code>margin-left</code> since
+              padding has no effect on void elements</li>
+            <li>Fixed indentation for blockquotes: uses <code>margin-left</code> to shift the entire element (including
+              left border) to the indent position</li>
           </ul>
 
           <h4>v2.0.0</h4>
           <ul>
             <li>Named the platform <strong>Tome</strong> with branded splash screen, wordmark, and loading overlay</li>
             <li>Settings panel (slide-out) with three tabs: Settings, Guide, About</li>
-            <li>Guide tab with accordion-style expandable sections: Authoring, Branding, Media &amp; Images, Configuration, PDF Export, Keyboard Shortcuts</li>
+            <li>Guide tab with accordion-style expandable sections: Authoring, Branding, Media &amp; Images,
+              Configuration, PDF Export, Keyboard Shortcuts</li>
             <li>About page showing platform and library versions, copyright, and proprietary notice</li>
             <li>Changelog accessible from About tab via &ldquo;View changelog&rdquo; button</li>
             <li>Colour themes: Dark, Light, Midnight, Ember, Forest, Sand, plus System auto-detect</li>
@@ -566,14 +772,18 @@
             <li>Copy link icon on page headings for deep-linking</li>
             <li>Broken hash fallback with branded message</li>
             <li><code>tome.json</code> configuration file for branding, PDF settings, favicon, and splash duration</li>
-            <li>Self-hosted libraries (markdown-it, markdown-it-anchor, html2pdf, html2canvas) &mdash; no CDN dependency</li>
-            <li>Automatic image path resolution relative to book directory &mdash; images live alongside their markdown files</li>
+            <li>Self-hosted libraries (markdown-it, markdown-it-anchor, html2pdf, html2canvas) &mdash; no CDN dependency
+            </li>
+            <li>Automatic image path resolution relative to book directory &mdash; images live alongside their markdown
+              files</li>
             <li>Restructured Books directory: each book in its own subfolder with co-located images</li>
             <li>Print stylesheet hides all chrome, prints document content only</li>
             <li>Cache-busting via version query strings on JS and CSS</li>
-            <li>Removed all Digital Origin branding from platform code &mdash; all branding now configurable via <code>tome.json</code></li>
+            <li>Removed all external branding from platform code &mdash; all branding now configurable via
+              <code>tome.json</code>
+            </li>
             <li>Genericised all user-facing language from &ldquo;policy&rdquo; to &ldquo;page&rdquo;</li>
-            <li>Copyright and proprietary software notice (Jason Mcdill)</li>
+            <li>Copyright and proprietary software notice</li>
             <li>Settings button moved to meta bar (top-right) for spatial proximity to panel</li>
             <li>Default book loaded from first entry in <code>books.json</code> rather than hardcoded filename</li>
           </ul>
@@ -610,7 +820,8 @@
 
           <h4>v1.1.0</h4>
           <ul>
-            <li>Separated code into three files: <code>index.html</code>, <code>index.js</code>, <code>styles.css</code></li>
+            <li>Separated code into three files: <code>index.html</code>, <code>index.js</code>, <code>styles.css</code>
+            </li>
             <li>Dynamic document metadata extraction (title, version from markdown)</li>
             <li>Indent system for nested content rendering</li>
             <li>CSS custom properties for theming groundwork</li>
