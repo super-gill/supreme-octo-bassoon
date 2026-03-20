@@ -51,10 +51,10 @@ const mainEl = document.querySelector("main");                       // Main scr
 // ==========================================================================
 
 /** Tome platform version (semantic versioning). See changelog in settings for details. */
-const PLATFORM_VERSION = "v2.3.0";
+const PLATFORM_VERSION = "v2.4.0";
 
 /** Canonical URL where the latest version.json is published */
-const VERSION_CHECK_URL = "https://super-gill.github.io/my-projects/TOME%20md/version.json";
+const VERSION_CHECK_URL = "https://super-gill.github.io/tome.md/version.json";
 
 let CURRENT_QUERY = "";       // Active search query (empty = no search)
 let CURRENT_POLICY = null;    // Currently rendered policy object
@@ -73,6 +73,7 @@ let ACTIVE_BRAND = null;      // Currently selected export brand
  *   Document Title: [title]
  *   Document Version: [version]
  *   Document Date: [date]
+ *   Document Classification: [classification]
  * Scans up to 20 lines or the first heading, whichever comes first.
  * Falls back to tome.json defaultTitle if no title line is found.
  */
@@ -83,6 +84,7 @@ function extractDocMeta(mdText) {
   let title = null;
   let version = null;
   let date = null;
+  let classification = null;
 
   for (let i = 0; i < Math.min(lines.length, 20); i++) {
     const line = lines[i].trim();
@@ -91,16 +93,19 @@ function extractDocMeta(mdText) {
     const titleMatch = /^Document\s+Title:\s*(.+)/i.exec(line);
     const versionMatch = /^Document\s+Version:\s*(.+)/i.exec(line);
     const dateMatch = /^Document\s+Date:\s*(.+)/i.exec(line);
+    const classificationMatch = /^Document\s+Classification:\s*(.+)/i.exec(line);
 
     if (titleMatch) title = titleMatch[1].trim();
     if (versionMatch) version = versionMatch[1].trim();
     if (dateMatch) date = dateMatch[1].trim();
+    if (classificationMatch) classification = classificationMatch[1].trim();
   }
 
   return {
     title: title || defaultTitle,
     version: version || null,
-    date: date || null
+    date: date || null,
+    classification: classification || null
   };
 }
 
@@ -180,8 +185,8 @@ function applyIndent(root) {
 function parseManual(markdown) {
   const allLines = markdown.replace(/\r\n/g, "\n").split("\n");
 
-  // Strip metadata lines from the top (Document Title:, Document Version:, Document Date:)
-  const metaPattern = /^Document\s+(Title|Version|Date):\s*/i;
+  // Strip metadata lines from the top (Document Title:, Document Version:, Document Date:, Document Classification:)
+  const metaPattern = /^Document\s+(Title|Version|Date|Classification):\s*/i;
   let firstContentLine = 0;
   for (let i = 0; i < Math.min(allLines.length, 20); i++) {
     const trimmed = allLines[i].trim();
@@ -463,8 +468,8 @@ async function loadBooks() {
 async function loadBook(filename) {
   try {
     const mdText = await loadManualMd(filename);
-    const { title, version, date } = extractDocMeta(mdText);
-    const classification = TOME_CONFIG.branding?.classification || "";
+    const { title, version, date, classification: docClassification } = extractDocMeta(mdText);
+    const classification = docClassification || TOME_CONFIG.branding?.classification || "";
 
     // Update sidebar branding with book title, version, and date
     const titleEl = document.getElementById("docTitle");
