@@ -1,12 +1,46 @@
+Document Title: Quality Management System (Helpdesk)
+Document Version: VE.1 (VE.13)
+Document Date: 20/03/2026
+
 # Quality Management System
 
 ## About This Manual
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
+
+### Policy Alignemnt
+Applies to Helpdesk Operations Manual VE.13
 
 ### What is a Quality Management System?
 
@@ -14,15 +48,15 @@ A Quality Management System (QMS) is a documented framework that defines how an 
 
 ISO 9001:2015 is the internationally recognised standard for QMS. It does not prescribe *what* quality looks like for any specific organisation  - it prescribes *how* an organisation should govern, measure, and improve whatever quality means in its context. For Digital Origin Helpdesk, that means SLA performance, ticket handling standards, communication quality, and the processes that support them.
 
-Achieving ISO 9001 certification means an independent body has assessed the QMS against the standard and found it to be genuinely implemented and effective  - not just documented. The documentation in this section supports that goal, but the documentation alone is not the system. The system is the documented framework *plus* the evidence that it is being followed.
+Achieving ISO 9001 certification means an independent body has assessed the QMS against the standard and found it to be genuinely implemented and effective  - not just documented. The documentation in this document supports that goal, but the documentation alone is not the system. The system is the documented framework *plus* the evidence that it is being followed.
 
-### What this section contains
+### What this document contains
 
-This section contains the management system layer of the manual  - the governance policies that sit above and around the operational content in the rest of the document. Where the rest of this manual tells agents and Team Leaders what to do and how, this section tells the organisation how the whole system is governed, measured, and kept current.
+This document contains the management system layer  - the governance policies that sit above and around the operational content in the Helpdesk Operations Manual. Where the Helpdesk Operations Manual tells agents and Team Leaders what to do and how, this document tells the organisation how the whole system is governed, measured, and kept current.
 
-The pages in this section map to specific clauses of ISO 9001:2015. Each page notes which clause it satisfies. Taken together, they are intended to provide an auditable, complete QMS documented information set.
+The pages in this document map to specific clauses of ISO 9001:2015. Each page notes which clause it satisfies. Taken together, they are intended to provide an auditable, complete QMS documented information set.
 
-### Current status of this section
+### Current status of this document
 
 > **This section describes the QMS as it is intended to operate. Not all elements are fully operational at the time of writing. The notes below describe where the framework is in place and working, where it is defined but not yet fully implemented, and where input is still required before the section can be considered complete.**
 
@@ -39,7 +73,7 @@ The pages in this section map to specific clauses of ISO 9001:2015. Each page no
 | Leadership and Commitment                        | 𐄂 Incomplete | Requires a named senior authority to complete and sign the statement of commitment |
 | Planning of Changes                              | ✓ Complete | -                                                            |
 | Resources and Infrastructure                     | 𐄂 Partial | Storage locations and platform names require confirmation    |
-| Competence and Awareness                         | 𐄂 Partial | Onboarding section is a placeholder pending the New Starter policy |
+| Competence and Awareness                         | ✓ Complete | New Starter & Onboarding policy now populated               |
 | Document Control                                 | 𐄂 Partial | Record storage locations require confirmation                |
 | Operational Planning and Control                 | ✓ Complete | -                                                            |
 | Customer Requirements                            | 𐄂 Partial | Requires confirmation of contract scope and data access process |
@@ -55,37 +89,66 @@ The pages in this section map to specific clauses of ISO 9001:2015. Each page no
 | Nonconformity and Corrective Action              | ✓ Complete | -                                                            |
 | Continual Improvement                            | ✓ Complete | Improvement log template defined; not yet in active use      |
 
-### A note on Management Reviews
+### Adoption Transparancy
 
-The Management Review policy in this section describes the process as it should operate under a functioning QMS  - a formal quarterly meeting attended by the Helpdesk Manager and a named senior authority, reviewing the full performance picture and making documented decisions about the QMS.
+#### A note on Management Reviews
+
+The Management Review policy in this document describes the process as it should operate under a functioning QMS  - a formal quarterly meeting attended by the Helpdesk Manager and a named senior authority, reviewing the full performance picture and making documented decisions about the QMS.
 
 **Digital Origin Helpdesk does not currently conduct Management Reviews in this form.**
 
-This is noted transparently rather than obscured, because a QMS that claims to conduct reviews it doesn't is worse than one that honestly documents an implementation gap. The framework is complete and ready. What is required before Management Reviews can formally begin is:
+The framework is complete and ready. What is required before Management Reviews can formally begin is:
 
 - A named senior attendee agreed and confirmed above Helpdesk Manager level
 - A scheduled quarterly cadence established
 - The first review convened and minuted
 
-Until that happens, the management review function is performed informally through Helpdesk Manager oversight, weekly statistics review, and the continual improvement log. These provide a partial substitute but do not satisfy the ISO 9001:2015 requirement in full.
+Until that happens, the management review function is performed informally through Helpdesk Manager oversight and weekly statistics review. These provide a partial substitute but do not satisfy the ISO 9001:2015 requirement in full.
 
-### A note on internal audits
+#### A note on internal audits
 
-Similarly, the Internal Audit Programme policy defines a complete audit schedule and process, but no audits have yet been conducted. The first annual audit is due to be scheduled.
+The Internal Audit Programme policy defines a complete audit schedule and process, but no audits have yet been conducted. The first annual audit is due to be scheduled.
 
-### Relationship to the rest of this manual
+### Relationship to the Helpdesk Operations Manual
 
-The policies in this section reference and depend on the operational policies throughout the rest of this manual. The QMS does not replace those policies  - it governs them. Where a QMS policy refers to a specific operational control (such as QA sampling, SLA breach classification, or the disciplinary process), the detail of that control is in the relevant operational policy, not here.
+The policies in this document reference and depend on the operational policies throughout the Helpdesk Operations Manual. The QMS does not replace those policies  - it governs them. Where a QMS policy refers to a specific operational control (such as QA sampling, SLA breach classification, or the disciplinary process), the detail of that control is in the relevant operational policy, not here.
 
-Readers who want to understand how a specific process works should use the operational sections of this manual. Readers who want to understand how the whole system is governed, measured, and kept accountable should read this section.
+Readers who want to understand how a specific process works should use the Helpdesk Operations Manual. Readers who want to understand how the whole system is governed, measured, and kept accountable should read this document.
 
 ## Quality Policy 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 > **This policy requires sign-off from a named senior authority above Helpdesk Manager level before it is considered formally adopted. See [REQUIRES SIGN-OFF] markers below.
 
@@ -117,11 +180,11 @@ This policy is reviewed as part of the Management Review cycle and updated where
 
 #### How we measure compliance 
 
-Compliance with the intent of this policy is measured through the full monitoring and measurement framework defined in this manual - SLA performance, QA sampling, ticket hygiene checks, internal audit outcomes, and customer satisfaction data - reviewed at Management Review.
+Compliance with the intent of this policy is measured through the full monitoring and measurement framework defined across the Helpdesk Operations Manual and this QMS - SLA performance, QA sampling, ticket hygiene checks, internal audit outcomes, and customer satisfaction data - reviewed at Management Review.
 
 #### Record keeping and documentation 
 
-This policy is version-controlled within this manual. Previous versions are retained for reference.
+This policy is version-controlled within this document. Previous versions are retained for reference.
 
 #### How we address shortfall
 
@@ -129,11 +192,38 @@ Where the commitments in this policy are not being met across the team, this is 
 
 ## QMS Scope 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -168,7 +258,7 @@ The scope is reviewed at each Management Review to confirm it remains accurate. 
 
 #### Record keeping and documentation 
 
-The scope statement is version-controlled within this manual.
+The scope statement is version-controlled within this document.
 
 #### How we address shortfall 
 
@@ -176,11 +266,38 @@ Where the actual scope of helpdesk activity has drifted from the documented scop
 
 ## Context of the Organisation 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -190,7 +307,7 @@ To identify and document the internal and external factors that affect Digital O
 
 | Factor                           | Description                                                  | Potential Impact on QMS                                      |
 | -------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Customer SLA commitments         | Contracted response and resolution targets vary by customer and priority level | Directly drives the SLA framework and performance expectations in this manual |
+| Customer SLA commitments         | Contracted response and resolution targets vary by customer and priority level | Directly drives the SLA framework and performance expectations in the Helpdesk Operations Manual |
 | Technology vendor support        | Reliance on third-party platforms (Halo PSA, Microsoft stack) for ticket management and tooling | Platform limitations or outages affect service delivery and reporting capability |
 | Vendor responsiveness            | Third-party vendors are part of the resolution chain for many tickets | Slow or unresponsive vendors can affect resolution SLAs outside helpdesk control |
 | Regulatory and legal environment | Employment law, UK GDPR, Cyber Essentials obligations        | Affects disciplinary process, data handling, administrator account policy, and AI tool usage |
@@ -226,11 +343,38 @@ Where the context analysis is found to be materially out of date, it is updated 
 
 ## Interested Parties 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -268,11 +412,38 @@ Where a relevant interested party has been omitted or their requirements have ch
 
 ## Risk Register 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -300,7 +471,7 @@ Risks are scored on a simple matrix:
 | R08  | Key personnel absence (Team Leader or Helpdesk Manager) degrading quality controls | 2    | 2    | 4     | Dispatch resource availability policy, cover expectations in incident policies | Ensure documented cover arrangements exist for both TL roles |
 | R09  | Agent non-compliance with policy due to lack of awareness or unclear expectation | 2    | 2    | 4     | This manual, onboarding, corrective training, QA programme   | Track via QA sampling; address gaps through policy updates and corrective training |
 | R10  | Customer dissatisfaction not identified until escalation or formal complaint | 2    | 2    | 4     | Communication policy, telephony-first approach, escalation policy | Formalise customer satisfaction monitoring - see Customer Satisfaction policy |
-| R11  | Sensitive customer or company data exposed through AI tool misuse | 1    | 3    | 3     | AI Usage Policy (Appendix)                                   | Periodic awareness check; review compliance at Management Review |
+| R11  | Sensitive customer or company data exposed through AI tool misuse | 1    | 3    | 3     | Appendix – AI Usage Policy (Draft)                           | Periodic awareness check; review compliance at Management Review |
 | R12  | Disciplinary process applied inconsistently across agents or Team Leaders | 1    | 2    | 2     | Helpdesk Manager authorisation requirement, documented process | Review consistency at Management Review; track warning issuance |
 | R13  | Process maturity gap - placeholder policies not enforced create inconsistency | 2    | 2    | 4     | Placeholder policies identified and marked in manual         | Track placeholder policy completion at Management Review as an improvement action |
 
@@ -322,11 +493,38 @@ Where a risk has materialised and existing controls were insufficient, the risk 
 
 ## Quality Objectives 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -376,7 +574,7 @@ To define Digital Origin Helpdesk's measurable quality objectives, the targets a
 | Owner            | Team Leaders / Helpdesk Manager                              |
 | Measured by      | QA sampling outcomes (Tuesdays and Thursdays, 3 tickets per agent per session) |
 | Review frequency | Monthly (one-to-ones); quarterly (Management Review)         |
-| Related policy   | Ticket Quality Sampling                                      |
+| Related policy   | Ticket Quality Sampling (Not enforced)                       |
 
 #### Objective 5 - Customer Satisfaction
 
@@ -418,15 +616,42 @@ Where an objective is not being met, the Helpdesk Manager initiates a review of 
 
 ## Roles and Responsibilities 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
+
 ### Purpose 
 
-To provide a consolidated view of the roles operating within the Helpdesk QMS, their quality-related responsibilities, and the limits of their authority. Detailed operational responsibilities are defined in individual policies throughout this manual; this section provides the management-system-level view.
+To provide a consolidated view of the roles operating within the Helpdesk QMS, their quality-related responsibilities, and the limits of their authority. Detailed operational responsibilities are defined in individual policies throughout the Helpdesk Operations Manual; this section provides the management-system-level view.
 
 ### Role Definitions 
 
@@ -434,7 +659,7 @@ To provide a consolidated view of the roles operating within the Helpdesk QMS, t
 
 Overall accountability for the QMS and its outcomes.
 
-- Owns and maintains this manual and the quality policy
+- Owns and maintains this QMS, the Helpdesk Operations Manual, and the quality policy
 - Authorises all formal disciplinary proceedings
 - Chairs Management Reviews and owns the management review process
 - Reviews and approves all Development Plans
@@ -446,7 +671,7 @@ Overall accountability for the QMS and its outcomes.
 
 Day-to-day responsibility for quality across their assigned agents.
 
-- Enforces the policies in this manual through observation, coaching, and feedback
+- Enforces the policies in the Helpdesk Operations Manual through observation, coaching, and feedback
 - Conducts daily and formal ticket hygiene checks (twice daily)
 - Delivers QA ticket sampling and feeds results back to agents and the Helpdesk Manager
 - Initiates and manages informal disciplinary action - verbal feedback, documented coaching, corrective training
@@ -468,7 +693,7 @@ First point of contact for inbound tickets and calls.
 Responsible for the quality of their own ticket handling.
 
 - Owns each assigned ticket from dispatch through to confirmed resolution
-- Responsible for accurate classification, timely updates, and customer communication in line with this manual
+- Responsible for accurate classification, timely updates, and customer communication in line with the Helpdesk Operations Manual
 - Expected to engage constructively with QA feedback, corrective training, and Development Plans
 - Escalates where required - does not use escalation to avoid ownership
 
@@ -511,11 +736,38 @@ Where a role has acted outside its defined authority, this is addressed through 
 
 ## Communication Plan 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -568,11 +820,38 @@ Communication failures identified through QA are addressed with the relevant age
 
 ## Customer Satisfaction 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -633,11 +912,38 @@ Where satisfaction scores fall below target or trend negatively, the Helpdesk Ma
 
 ## External Provider Management 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 > **This policy is written at framework level. [REQUIRES INPUT] markers indicate where vendor-specific details should be added once known.**
 
@@ -696,11 +1002,38 @@ Where a specific provider is consistently affecting SLA performance, this is rai
 
 ## Internal Audit Programme 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -708,7 +1041,7 @@ To define the internal audit programme for Digital Origin Helpdesk's QMS, ensuri
 
 ### Scope 
 
-The internal audit programme covers all elements of the QMS defined in this manual, including policies, processes, records, and all management system components.
+The internal audit programme covers all elements of the QMS defined in this document, including policies, processes, records, and all management system components.
 
 ### Audit Schedule 
 
@@ -782,11 +1115,38 @@ Where an audit identifies nonconformities, corrective actions are raised through
 
 ## Management Review 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -847,11 +1207,38 @@ Where a Management Review is missed or significantly delayed, this is escalated 
 
 ## Continual Improvement 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -912,11 +1299,38 @@ Where improvement actions are consistently not being completed, this is escalate
 
 ## Leadership and Commitment [TBD] 
 
-| Field        | Value                                           |
-| ------------ | ----------------------------------------------- |
-| Last Updated | 11/03/2026                                      |
-| Updated By   | Jason Mcdill                                    |
-| Owner        | [TBD - senior authority above Helpdesk Manager] |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
+| ------------ | ------------ |
+| Last Updated | 20/03/2026   |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 > **This page cannot be completed without input from senior management above Helpdesk Manager level. It must be authored or formally countersigned by that authority to satisfy ISO 9001:2015 Clause 5.1.**
 
@@ -963,11 +1377,38 @@ Where evidence of leadership commitment cannot be demonstrated - for example, wh
 
 ## Planning of Changes 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -975,7 +1416,7 @@ To define how planned changes to the QMS - including changes to policies, proces
 
 ### Scope 
 
-This policy applies to all changes to the documented QMS, including additions, amendments, and removals of policies or processes. It does not apply to minor editorial corrections to this manual (correcting typos, formatting), which may be made without a formal change assessment.
+This policy applies to all changes to the documented QMS, including additions, amendments, and removals of policies or processes. It does not apply to minor editorial corrections to this document (correcting typos, formatting), which may be made without a formal change assessment.
 
 ### What Constitutes a Planned Change 
 
@@ -1006,8 +1447,8 @@ Significant changes (e.g. changes to scope, objectives, or role structure) must 
 
 Once approved:
 
-- The relevant section of this manual is updated and the version incremented
-- The change is recorded in the Changes log within this manual
+- The relevant section of this document is updated and the version incremented
+- The change is recorded in the Changes log within this document
 - Affected personnel are informed through the communication process defined in the Communication Plan
 - Where training is required as a result of the change, this is arranged before the change takes effect where possible
 
@@ -1017,7 +1458,7 @@ Changes to the QMS are reviewed at Management Review to confirm they were implem
 
 #### Record keeping and documentation 
 
-All planned changes are recorded in the Changes log within this manual. Significant changes are documented in Management Review minutes. The manual is version-controlled with each update.
+All planned changes are recorded in the Changes log within this document. Significant changes are documented in Management Review minutes. This document is version-controlled with each update.
 
 #### How we address shortfall 
 
@@ -1025,11 +1466,38 @@ Where a change has been implemented without appropriate assessment - for example
 
 ## Resources and Infrastructure 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1086,7 +1554,7 @@ The Helpdesk maintains and develops the knowledge required to deliver quality se
 - PIR outputs - operational lessons captured and fed back into process updates
 - Knowledge Base [Placeholder] - intended repository for technical resolution knowledge
 
-[TBD - Knowledge Management and Knowledge Base Management policies are currently placeholder. Until these are completed, organisational knowledge is managed informally through this manual and Team Leader oversight.]
+[TBD - Knowledge Management and Knowledge Base Management policies are currently placeholder. Until these are completed, organisational knowledge is managed informally through the Helpdesk Operations Manual and Team Leader oversight.]
 
 #### How we measure compliance 
 
@@ -1102,11 +1570,38 @@ Resource inadequacies identified through Management Review or operational monito
 
 ## Competence and Awareness 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1118,7 +1613,7 @@ Competence requirements for each role are defined through:
 
 - The Professional Advancement framework - which sets the minimum qualifications, certifications, technical interview requirements, and performance standards for each tier
 - The role definitions in the Roles and Responsibilities policy - which define the quality-related responsibilities for each role
-- Individual policies throughout this manual - which define the expected standard of work for specific activities
+- Individual policies throughout the Helpdesk Operations Manual - which define the expected standard of work for specific activities
 
 Competence is assessed and evidenced through:
 
@@ -1135,7 +1630,7 @@ Where a competence gap is identified, it is addressed through corrective trainin
 
 The QMS requires that no person performs work affecting service quality until they are competent to do so. For the helpdesk, this means all new personnel must, before handling tickets independently:
 
-- Be provided with access to this manual and given sufficient time to read the relevant sections for their role
+- Be provided with access to the Helpdesk Operations Manual and this QMS, and given sufficient time to read the relevant sections for their role
 - Receive a briefing from their Team Leader covering the key policies applicable to their role
 - Confirm they have read and understood the Quality Policy
 - Be supervised during their initial ticket handling period, with the duration determined by the Team Leader based on experience level
@@ -1148,13 +1643,13 @@ All personnel operating under this QMS must be aware of:
 
 - The Quality Policy and what it means for their day-to-day work
 - Their specific contribution to QMS effectiveness and how their role affects the customer experience
-- The performance standards expected of them as defined in this manual
+- The performance standards expected of them as defined in the Helpdesk Operations Manual
 - The consequences of not conforming to QMS requirements, as defined in the Disciplinary Process policy
 - Their right to raise concerns about process or quality through the Grievance Process
 
 Awareness is maintained through:
 
-- Access to this manual at all times
+- Access to the Helpdesk Operations Manual and this QMS at all times
 - Regular one-to-one meetings with the Team Leader covering performance and standards
 - QA feedback at the point of ticket sampling
 - Team briefings when policies are updated
@@ -1174,11 +1669,38 @@ Competence shortfalls are addressed through the corrective training and Developm
 
 ## Document Control 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1186,22 +1708,22 @@ To define how documented information within the QMS is created, updated, control
 
 ### Scope 
 
-This policy applies to all documents that form part of the QMS, including this manual, QMS records (statistics reports, audit findings, Management Review minutes, Development Plans, disciplinary records), and any supporting documents referenced within this manual.
+This policy applies to all documents that form part of the QMS, including this document, QMS records (statistics reports, audit findings, Management Review minutes, Development Plans, disciplinary records), and any supporting documents referenced within this document.
 
 ### This Manual 
 
 This manual is the primary documented information of the QMS. It is controlled as follows:
 
-- **Version numbering** - the manual carries a version number (currently VE.10) which is incremented with each substantive update
+- **Version numbering** - the manual carries a version number (currently VE.13) which is incremented with each substantive update
 - **Ownership** - the Helpdesk Manager owns the manual and is responsible for its accuracy and currency
-- **Editing** - the manual is edited in accordance with the Markdown Guide within this document. Only the Helpdesk Manager or their nominated delegate may publish changes
+- **Editing** - the manual is edited in Markdown format. Only the Helpdesk Manager or their nominated delegate may publish changes
 - **Distribution** - the manual is accessible to all personnel through the internal document platform. All personnel access the same version; there are no separately distributed copies
 - **Changes log** - all substantive changes are recorded in the Changes section of the Overview
 - **Review cycle** - the manual as a whole is reviewed annually as part of the Management Review process. Individual policies are reviewed when: they are found to be inaccurate, a PIR or QA finding identifies a gap, or a planned change requires an update
 
 ### QMS Records 
 
-QMS records - the documented outputs of QMS processes - are controlled separately from this manual:
+QMS records - the documented outputs of QMS processes - are controlled separately from this document:
 
 | Record Type                         | Created By        | Stored                            | Retention                                                    |
 | ----------------------------------- | ----------------- | --------------------------------- | ------------------------------------------------------------ |
@@ -1234,38 +1756,65 @@ Where documents are found to be out of date, inaccessible, or improperly stored,
 
 ## Operational Planning and Control 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
+
 ### Purpose 
 
-To confirm that Digital Origin Helpdesk plans, implements, controls, and maintains the processes needed to deliver quality services and meet QMS requirements. This satisfies the requirements of ISO 9001:2015 Clause 8.1 and acts as a reference page linking the management system to the operational content of this manual.
+To confirm that Digital Origin Helpdesk plans, implements, controls, and maintains the processes needed to deliver quality services and meet QMS requirements. This satisfies the requirements of ISO 9001:2015 Clause 8.1 and acts as a reference page linking the management system to the operational content of the Helpdesk Operations Manual.
 
 ### How Operational Processes Are Controlled 
 
-The Helpdesk's operational processes are defined, implemented, and controlled through the individual policies contained within this manual. The processes covered are:
+The Helpdesk's operational processes are defined, implemented, and controlled through the individual policies contained within the Helpdesk Operations Manual. The processes covered are:
 
 | Process Area                             | Governing Policies                                           |
 | ---------------------------------------- | ------------------------------------------------------------ |
 | Ticket receipt and triage                | Triage Policy                                                |
 | Ticket classification and prioritisation | Priority Classification Policy, Ticket Type Usage Policy     |
-| Dispatch                                 | Dispatch Policy, Dispatch Limitations (Appendix)             |
-| Ticket lifecycle management              | Ticket Status Usage Policy, Ticket Communication Policy, Ticket Closure Policy |
+| Dispatch                                 | Dispatch Policy                                              |
+| Ticket lifecycle management              | Ticket Status Usage Policy, Ticket Communication Policy, Ticket Closure, Reopen and Recurrence |
 | Escalation                               | Escalation Policy                                            |
 | Critical and major incident handling     | Critical Incident Policy, Major Operational Incident Policy, Major Security Incident Policy |
 | Post-incident review                     | Post Incident Review (PIR)                                   |
-| Quality monitoring                       | Ticket Hygiene Tooling, Ticket Quality Sampling, Daily Ticket Checks (Appendix) |
+| Quality monitoring                       | Ticket Hygiene Tooling, Ticket Quality Sampling (Not enforced) |
 | External provider management             | External Provider Management, Ticket Status Usage Policy (With Vendor) |
 | IT operations                            | Use of Local Administrator, Password and Credential Handling, Tooling and Asset Management |
-| Customer service                         | Phone Etiquette Guide, Handling Complaints                   |
-| Projects interface                       | Projects to Helpdesk Handover, Ticket Screening (Appendix)   |
+| Customer service                         | Phone Etiquette Guide, Handling Complaints and Difficult Customers |
+| Projects interface                       | Projects to Helpdesk Handover, Appendix – Helpdesk Ticket Screening for Live Projects (Draft) |
 
 ### Criteria for Processes 
 
-Each policy in this manual defines, where applicable:
+Each policy in the Helpdesk Operations Manual defines, where applicable:
 
 - The expected standard (Expectation section)
 - How compliance is measured (How we measure compliance)
@@ -1296,11 +1845,38 @@ Shortfall in operational processes is addressed through the mechanisms defined i
 
 ## Customer Requirements [TBD] 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 > **This page requires input on contracted customer requirements before it can be completed. See [TBD] markers below.**
 
@@ -1344,11 +1920,38 @@ Where the Helpdesk identifies that a customer's contractual requirements are not
 
 ## Design and Development 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1360,7 +1963,7 @@ ISO 9001:2015 Clause 8.3 requires organisations to establish, implement, and mai
 
 Digital Origin Helpdesk provides reactive technical support services. The services delivered are defined by customer requirements and resolved using existing technical knowledge, tooling, and documented processes. The Helpdesk does not design new products or develop new service lines as part of its operational scope.
 
-**Clause 8.3 is therefore excluded from the scope of this QMS** on the basis that the nature of the Helpdesk's services does not require a design and development process. Service delivery is governed by the operational policies in this manual rather than a product or service design cycle.
+**Clause 8.3 is therefore excluded from the scope of this QMS** on the basis that the nature of the Helpdesk's services does not require a design and development process. Service delivery is governed by the operational policies in the Helpdesk Operations Manual rather than a product or service design cycle.
 
 Where changes to the Helpdesk's service offer are planned - for example, the introduction of a new service type or a significant change to how services are structured - this is managed through the Planning of Changes process and may require this exclusion to be reviewed.
 
@@ -1370,11 +1973,38 @@ This exclusion and its rationale are retained as part of QMS documentation and r
 
 ## Service Delivery Standards 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1384,7 +2014,7 @@ To confirm that Digital Origin Helpdesk controls the provision of its services u
 
 The Helpdesk provides services under controlled conditions through the following mechanisms:
 
-- **Documented information** - this manual defines the required outputs, processes, and standards for all stages of service delivery
+- **Documented information** - the Helpdesk Operations Manual defines the required outputs, processes, and standards for all stages of service delivery
 - **Monitoring and measurement** - SLA tracking, daily ticket hygiene checks, QA sampling, and Breadboard monitoring provide real-time and retrospective oversight of service quality
 - **Infrastructure** - tooling infrastructure (Halo PSA, telephony, communication platforms) is maintained to support service delivery
 - **Competent personnel** - the Professional Advancement framework and corrective training process ensure personnel are competent for their assigned work
@@ -1402,7 +2032,7 @@ Where the Helpdesk handles customer property - including customer devices, crede
 
 Post-delivery activities include:
 
-- Confirmation of resolution with the customer before ticket closure (as defined in the Ticket Closure Policy)
+- Confirmation of resolution with the customer before ticket closure (as defined in the Ticket Closure, Reopen and Recurrence policy)
 - Post-Incident Reviews following major incidents (as defined in the PIR policy)
 - Customer satisfaction feedback collection following ticket closure (as defined in the Customer Satisfaction policy)
 
@@ -1420,11 +2050,38 @@ Service delivery failures are identified and addressed through the mechanisms de
 
 ## Ticket Release and Closure Control 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1458,11 +2115,38 @@ Premature closures are addressed with the agent at the time of identification. P
 
 ## Nonconforming Outputs 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1516,11 +2200,38 @@ Persistent nonconforming output rates trigger a formal corrective action review.
 
 ## Monitoring, Measurement, Analysis and Evaluation 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
@@ -1574,11 +2285,38 @@ Where monitoring data is not being collected or analysed correctly - for example
 
 ## Nonconformity and Corrective Action 
 
-| Field        | Value        |
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 11/03/2026   |
+| Last Updated | 20/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 11/03/2026 |             |
+| 1.1     | Jason Mcdill | 20/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+|         |        |      |
+|         |        |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 20/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 20/03/2026 |
 
 ### Purpose 
 
