@@ -1183,7 +1183,7 @@ async function exportFullManualPdf() {
 
     // Wait for web fonts to be ready
     if (document.fonts?.ready) {
-      try { await document.fonts.ready; } catch {}
+      try { await document.fonts.ready; } catch { }
     }
 
     // Dummy render to extract the jsPDF instance from html2pdf's internals
@@ -1191,7 +1191,7 @@ async function exportFullManualPdf() {
     _bootstrapEl.style.cssText = "width:1px;height:1px;overflow:hidden;";
     staging.appendChild(_bootstrapEl);
     await window.html2pdf()
-      .set({ margin: [mTop, mRight, mBottom, mLeft], jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation }, html2canvas: { scale:1, backgroundColor:"#ffffff" } })
+      .set({ margin: [mTop, mRight, mBottom, mLeft], jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation }, html2canvas: { scale: 1, backgroundColor: "#ffffff" } })
       .from(_bootstrapEl).toPdf()
       .get("pdf").then(p => { pdf = p; });
     staging.removeChild(_bootstrapEl);
@@ -1291,8 +1291,8 @@ async function exportFullManualPdf() {
       if (hasFooter) {
         const cx = pageW / 2;
         pdf.text(footerLine1, cx, pageH - 13, { align: "center" });
-        pdf.text(footerLine2, cx, pageH - 9,  { align: "center" });
-        pdf.text(footerLine3, cx, pageH - 5,  { align: "center" });
+        pdf.text(footerLine2, cx, pageH - 9, { align: "center" });
+        pdf.text(footerLine3, cx, pageH - 5, { align: "center" });
       }
 
       const label = `Page ${i} of ${pageCount}`;
@@ -1605,13 +1605,13 @@ window.addEventListener("keydown", (e) => {
 
 /** Available themes — value maps to data-theme, tone indicates light/dark for CSS */
 const THEMES = [
-  { value: "system",   tone: null,    label: "\u25D0  System" },
-  { value: "dark",     tone: "dark",  label: "\u263E  Dark" },
-  { value: "light",    tone: "light", label: "\u2600  Light" },
-  { value: "midnight", tone: "dark",  label: "\u2726  Midnight" },
-  { value: "ember",    tone: "dark",  label: "\u2622  Ember" },
-  { value: "forest",   tone: "dark",  label: "\u2618  Forest" },
-  { value: "sand",     tone: "light", label: "\u2600  Sand" },
+  { value: "system", tone: null, label: "\u25D0  System" },
+  { value: "dark", tone: "dark", label: "\u263E  Dark" },
+  { value: "light", tone: "light", label: "\u2600  Light" },
+  { value: "midnight", tone: "dark", label: "\u2726  Midnight" },
+  { value: "ember", tone: "dark", label: "\u2622  Ember" },
+  { value: "forest", tone: "dark", label: "\u2618  Forest" },
+  { value: "sand", tone: "light", label: "\u2600  Sand" },
 ];
 
 /**
@@ -1755,10 +1755,10 @@ document.querySelectorAll(".settings-action[data-export]").forEach((btn) => {
     await new Promise(r => setTimeout(r, 300));
 
     switch (btn.dataset.export) {
-      case "policy-pdf":  await exportCurrentPolicyPdf(); break;
-      case "policy-md":   exportCurrentPolicyMd(); break;
-      case "manual-pdf":  await exportFullManualPdf(); break;
-      case "manual-md":   await exportFullManualMd(); break;
+      case "policy-pdf": await exportCurrentPolicyPdf(); break;
+      case "policy-md": exportCurrentPolicyMd(); break;
+      case "manual-pdf": await exportFullManualPdf(); break;
+      case "manual-md": await exportFullManualMd(); break;
     }
   });
 });
