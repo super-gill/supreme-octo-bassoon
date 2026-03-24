@@ -481,11 +481,8 @@ main {
 .nav-toolbar {
     display: flex;
     justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
     padding: 0 10px;
 }
-
 
 .nav-toggle-all {
     appearance: none;
@@ -1080,15 +1077,6 @@ main {
 @keyframes splashPulse {
     0%, 100% { opacity: 0.6; }
     50%      { opacity: 1; }
-}
-
-.splash-logo {
-    max-width: 160px;
-    max-height: 80px;
-    margin: 0 0 16px;
-    opacity: 0.85;
-    object-fit: contain;
-    animation: tomeFadeIn 0.4s ease forwards;
 }
 
 .tome-tagline {
@@ -1754,134 +1742,6 @@ main {
     opacity: 1;
 }
 
-/* ==========================================================================
-   MARKDOWN EDITOR
-   Integrated editor mode that replaces the doc view when active.
-   Uses the same design tokens as the rest of the app.
-   ========================================================================== */
-
-.editor-wrap {
-    max-width: var(--maxw);
-    margin: 18px auto;
-    padding: 0 18px 40px;
-}
-
-.editor-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-}
-
-.editor-toolbar {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--panel);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.editor-btn {
-    appearance: none;
-    background: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    font-family: inherit;
-}
-
-.editor-btn:hover {
-    border-color: var(--link);
-    color: var(--link);
-}
-
-.editor-filename {
-    background: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: inherit;
-    min-width: 0;
-    width: 140px;
-}
-
-.editor-filename:focus {
-    outline: none;
-    border-color: var(--link);
-}
-
-.editor-status {
-    font-size: 12px;
-    color: var(--muted);
-    margin-left: auto;
-    white-space: nowrap;
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 999px;
-}
-
-.editor-body {
-    min-height: 70vh;
-}
-
-.editor-pane {
-    min-height: 70vh;
-    min-width: 0;
-}
-
-#editorTextarea {
-    width: 100%;
-    min-height: 70vh;
-    height: auto;
-    resize: none;
-    overflow: hidden;
-    border: 0;
-    outline: 0;
-    padding: 16px;
-    background: transparent;
-    color: var(--text);
-    font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    box-sizing: border-box;
-    display: block;
-}
-
-.editor-preview {
-    padding: 18px;
-    min-height: 70vh;
-    box-sizing: border-box;
-}
-
-/* Drag & drop overlay */
-body.editor-drag-over .editor-card {
-    outline: 2px dashed var(--link);
-    outline-offset: -4px;
-}
-
-body.editor-drag-over::after {
-    content: "Drop .md file to open";
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--link);
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 200;
-    pointer-events: none;
-}
-
 @media print {
     aside,
     .meta-bar,
@@ -1894,8 +1754,7 @@ body.editor-drag-over::after {
     .settings-panel,
     .settings-backdrop,
     .nav-backdrop,
-    .nav-hamburger,
-    .editor-wrap {
+    .nav-hamburger {
         display: none !important;
     }
 

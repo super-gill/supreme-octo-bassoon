@@ -136,10 +136,10 @@ try {
     # --- Result ---
 
     Write-Host ""
-    Write-Host ([char]0x2500 * 41)
+    Write-Host ([string]::new([char]0x2500, 41))
     if ($failed.Count -gt 0) {
         Write-Host "  UPDATE FAILED" -ForegroundColor Red
-        Write-Host ([char]0x2500 * 41)
+        Write-Host ([string]::new([char]0x2500, 41))
         Write-Host ""
         Warn "$updated files updated, $($failed.Count) failed:"
         foreach ($f in $failed) { Err "  x $f" }
@@ -148,7 +148,7 @@ try {
         exit 1
     } else {
         Write-Host "  UPDATE SUCCESSFUL" -ForegroundColor Green
-        Write-Host ([char]0x2500 * 41)
+        Write-Host ([string]::new([char]0x2500, 41))
         Write-Host ""
         Log "$localVersion -> $remoteVersion  ($updated files)"
         Log "Backup saved to .update-backup/"
