@@ -560,6 +560,56 @@ async function init() {
     if (faviconEl) faviconEl.href = faviconPath;
   }
 
+  // Apply config: custom splash text (replaces letter cycling animation)
+  const customSplash = TOME_CONFIG.branding?.splashText;
+  if (customSplash) {
+    const splashBox = document.querySelector(".splash-box");
+    if (splashBox) {
+      // Replace cycling letters with custom text letters
+      splashBox.innerHTML = "";
+      for (const ch of customSplash) {
+        const span = document.createElement("span");
+        span.className = "splash-letter resolved";
+        span.textContent = ch === " " ? "\u00A0" : ch;
+        splashBox.appendChild(span);
+      }
+      splashBox.classList.add("merged");
+    }
+  }
+
+  // Apply config: custom splash tagline
+  const customTagline = TOME_CONFIG.branding?.splashTagline;
+  if (customTagline) {
+    const taglineEl = document.querySelector(".tome-tagline");
+    if (taglineEl) taglineEl.textContent = customTagline;
+  }
+
+  // Apply config: splash logo (shown above the splash text)
+  const splashLogo = TOME_CONFIG.branding?.splashLogo;
+  if (splashLogo) {
+    const splashBox = document.querySelector(".splash-box");
+    if (splashBox) {
+      const img = document.createElement("img");
+      img.src = splashLogo;
+      img.alt = "";
+      img.className = "splash-logo";
+      splashBox.parentNode.insertBefore(img, splashBox);
+    }
+  }
+
+  // Apply config: sidebar title (replaces "Tome" wordmark in nav)
+  const sidebarTitle = TOME_CONFIG.branding?.sidebarTitle;
+  if (sidebarTitle) {
+    const navWordmark = document.querySelector(".tome-wordmark.tome-nav");
+    if (navWordmark) navWordmark.textContent = sidebarTitle;
+  }
+
+  // Apply config: export progress wordmark
+  if (customSplash || sidebarTitle) {
+    const exportWordmark = document.querySelector("#exportProgress .tome-wordmark");
+    if (exportWordmark) exportWordmark.textContent = sidebarTitle || customSplash;
+  }
+
   await loadBooks();
   await loadBrands();
   buildBrandPicker();
@@ -1001,6 +1051,10 @@ async function exportCurrentPolicyPdf() {
     alert("PDF export library failed to load (html2pdf).");
     return;
   }
+  if (!window.html2canvas) {
+    alert("html2canvas not available.");
+    return;
+  }
 
   showExportProgress(`Exporting "${CURRENT_POLICY.title}" to PDF\u2026`);
 
@@ -1022,9 +1076,31 @@ async function exportCurrentPolicyPdf() {
     });
   }
 
+  // Page dimensions from brand settings
+  const pageSizes = { a4: [210, 297], letter: [215.9, 279.4], legal: [215.9, 355.6] };
+  const [defaultW, defaultH] = pageSizes[brand.pageSize] || pageSizes.a4;
+  const pageW = brand.orientation === "landscape" ? defaultH : defaultW;
+  const pageH = brand.orientation === "landscape" ? defaultW : defaultH;
+  const m = brand.margins;
+  const mTop = m.top, mLeft = m.left, mBottom = m.bottom, mRight = m.right;
+  const usableW = pageW - mLeft - mRight;
+  const usableH = pageH - mTop - mBottom;
+
   let staging; // Off-screen container for rendering
 
   try {
+    // Load branding assets from brand config (if set)
+    let letterheadLogoDataUrl = null;
+    if (brand.header.logo) {
+      const logoPath = resolveBrandPath(brand.header.logo, brand._basePath);
+      letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
+    }
+    const footerLines = brand.footer.lines || [];
+    const footerLine1 = footerLines[0] || "";
+    const footerLine2 = footerLines[1] || "";
+    const footerLine3 = footerLines[2] || "";
+    const hasFooter = footerLines.some(l => l);
+
     // Render the policy markdown to a detached DOM element
     const body = document.createElement("div");
     body.innerHTML = md.render(CURRENT_POLICY.mdText);
@@ -1036,104 +1112,165 @@ async function exportCurrentPolicyPdf() {
     host.className = "pdf-export";
     host.appendChild(body);
 
-    // Create an off-screen staging area to render the content invisibly
+    // Create the off-screen staging container
     staging = document.createElement("div");
-    staging.style.position = "fixed";
-    staging.style.left = "-10000px";
-    staging.style.top = "0";
-    staging.style.width = "980px";
-    staging.style.opacity = "1";
-    staging.style.pointerEvents = "none";
-    staging.style.background = "#fff";
-    staging.style.zIndex = "-1";
-    staging.appendChild(host);
+    staging.style.cssText = "position:fixed;left:-10000px;top:0;width:980px;opacity:1;pointer-events:none;background:#fff;z-index:-1;";
     document.body.appendChild(staging);
 
-    // Wait for fonts and images to load before capturing
+    // Wait for web fonts to be ready
     if (document.fonts?.ready) {
       try { await document.fonts.ready; } catch { /* ignore */ }
     }
+
+    // Bootstrap a jsPDF instance from html2pdf's bundled copy
+    let pdf = null;
+    let firstPage = true;
+
+    const _bootstrapEl = document.createElement("div");
+    _bootstrapEl.style.cssText = "width:1px;height:1px;overflow:hidden;";
+    staging.appendChild(_bootstrapEl);
+    await window.html2pdf()
+      .set({ margin: [mTop, mRight, mBottom, mLeft], jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation }, html2canvas: { scale: 1, backgroundColor: "#ffffff" } })
+      .from(_bootstrapEl).toPdf()
+      .get("pdf").then(p => { pdf = p; });
+    staging.removeChild(_bootstrapEl);
+
+    // Add the policy content to the staging area and wait for images
+    staging.appendChild(host);
     await waitForImages(host);
 
-    // Generate a safe filename from the policy title
+    // Measure heading positions before capturing to canvas.
+    // - "keep zones" prevent slice boundaries from landing between a
+    //   heading and its first content sibling (H2–H5).
+    // - "force breaks" ensure H2s that follow body content (not H1)
+    //   always start on a new page.
+    const elRect = host.getBoundingClientRect();
+    const scale = 2; // must match html2canvas scale
+    const keepZones = [];
+    const forceBreaks = []; // Y positions where a new page must start
+    host.querySelectorAll("h2, h3, h4, h5").forEach(h => {
+      const hRect = h.getBoundingClientRect();
+      const top = (hRect.top - elRect.top) * scale;
+      // Extend the zone to include the first content sibling
+      let bottom = (hRect.bottom - elRect.top) * scale;
+      const sib = h.nextElementSibling;
+      if (sib) {
+        const sibRect = sib.getBoundingClientRect();
+        bottom = (sibRect.bottom - elRect.top) * scale;
+      }
+      keepZones.push({ top, bottom });
+
+      // H2s force a page break unless they directly follow an H1
+      if (h.tagName === "H2") {
+        const prev = h.previousElementSibling;
+        if (prev && prev.tagName !== "H1" && top > 0) {
+          forceBreaks.push(top);
+        }
+      }
+    });
+
+    const canvas = await window.html2canvas(host, {
+      scale,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: "#ffffff",
+      logging: false
+    });
+
+    staging.removeChild(host);
+
+    if (canvas.width > 0 && canvas.height > 0) {
+      const pxPerMm = canvas.width / usableW;
+      const sliceHeightPx = Math.floor(usableH * pxPerMm);
+
+      // Minimum slice height to prevent blank pages (10mm worth of pixels)
+      const minSlicePx = Math.floor(10 * pxPerMm);
+
+      let y = 0;
+      while (y < canvas.height) {
+        let sliceH = Math.min(sliceHeightPx, canvas.height - y);
+
+        // Check for forced H2 breaks within this slice.
+        // Find the FIRST force break that falls inside the slice,
+        // but only if it would leave a meaningful amount of content.
+        let forcedCut = false;
+        for (const bp of forceBreaks) {
+          if (bp > y + minSlicePx && bp < y + sliceH) {
+            sliceH = Math.floor(bp - y);
+            forcedCut = true;
+            break;
+          }
+        }
+
+        // If no forced cut, check keep zones — if the slice boundary
+        // lands inside a keep zone, pull it back to before the heading,
+        // but only if the resulting slice is tall enough.
+        if (!forcedCut && y + sliceH < canvas.height) {
+          for (const zone of keepZones) {
+            if (y + sliceH > zone.top && y + sliceH < zone.bottom) {
+              const adjusted = Math.floor(zone.top - y);
+              if (adjusted >= minSlicePx) {
+                sliceH = adjusted;
+              }
+              break;
+            }
+          }
+        }
+
+        const slice = document.createElement("canvas");
+        slice.width = canvas.width;
+        slice.height = sliceH;
+        slice.getContext("2d").drawImage(
+          canvas,
+          0, y, canvas.width, sliceH,
+          0, 0, canvas.width, sliceH
+        );
+
+        const imgData = slice.toDataURL("image/jpeg", 0.95);
+        const sliceHmm = (sliceH / canvas.width) * usableW;
+
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(imgData, "JPEG", mLeft, mTop, usableW, sliceHmm);
+        firstPage = false;
+
+        y += sliceH;
+      }
+    }
+
+    // --- STAMP HEADERS AND FOOTERS ON EVERY PAGE ---
+    const pageCount = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+
+      // Header: company logo (if brand has one)
+      if (letterheadLogoDataUrl) {
+        const logoW = brand.header.logoWidth || 40;
+        const logoH = logoW / (brand.header.logoAspect || 4.04);
+        pdf.addImage(letterheadLogoDataUrl, "PNG", brand.header.x || 15, brand.header.y || 8, logoW, logoH);
+      }
+
+      pdf.setFontSize(brand.footer.fontSize || 9);
+      pdf.setTextColor(brand.footer.color || 80);
+
+      if (hasFooter) {
+        const cx = pageW / 2;
+        pdf.text(footerLine1, cx, pageH - 13, { align: "center" });
+        pdf.text(footerLine2, cx, pageH - 9, { align: "center" });
+        pdf.text(footerLine3, cx, pageH - 5, { align: "center" });
+      }
+
+      const label = `Page ${i} of ${pageCount}`;
+      pdf.text(label, pageW - mRight - pdf.getTextWidth(label), pageH - 5);
+    }
+
+    // Generate a safe filename and trigger download
     const safeName = `${CURRENT_POLICY.title}`
       .replace(/[\\/:*?"<>|]+/g, "")
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, 120) || "policy";
 
-    // Load the letterhead logo from brand config as a data URL (if set)
-    let letterheadLogoDataUrl = null;
-    if (brand.header.logo) {
-      const logoPath = resolveBrandPath(brand.header.logo, brand._basePath);
-      letterheadLogoDataUrl = await loadAsDataUrl(logoPath);
-    }
-
-    // Footer text from brand config
-    const footerLines = brand.footer.lines || [];
-    const footerLine1 = footerLines[0] || "";
-    const footerLine2 = footerLines[1] || "";
-    const footerLine3 = footerLines[2] || "";
-    const hasFooter = footerLines.some(l => l);
-
-    const m = brand.margins;
-
-    // html2pdf configuration
-    const opt = {
-      margin: [m.top, m.right, m.bottom, m.left],
-      filename: `${safeName}.pdf`,
-      image: { type: "jpeg", quality: 0.95 },
-      html2canvas: {
-        scale: 2,                   // 2x resolution for sharp text
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: "#ffffff",
-        logging: false
-      },
-      jsPDF: { unit: "mm", format: brand.pageSize, orientation: brand.orientation },
-      pagebreak: {
-        mode: ["css"]
-      }
-    };
-
-    // Generate the PDF, then stamp headers and footers on each page
-    const worker = window.html2pdf().set(opt).from(host).toPdf();
-
-    await worker.get("pdf").then((pdf) => {
-      const pageCount = pdf.internal.getNumberOfPages();
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
-      for (let i = 1; i <= pageCount; i++) {
-        pdf.setPage(i);
-
-        // Header: company logo (if brand has one)
-        if (letterheadLogoDataUrl) {
-          const logoW = brand.header.logoWidth || 40;
-          const logoH = logoW / (brand.header.logoAspect || 4.04);
-          const headerX = brand.header.x || 15;
-          const headerY = brand.header.y || 8;
-          pdf.addImage(letterheadLogoDataUrl, "PNG", headerX, headerY, logoW, logoH);
-        }
-
-        // Footer: company details centred, page number bottom-right
-        pdf.setFontSize(brand.footer.fontSize || 9);
-        pdf.setTextColor(brand.footer.color || 80);
-
-        if (hasFooter) {
-          const centerX = pageWidth / 2;
-          pdf.text(footerLine1, centerX, pageHeight - 13, { align: "center" });
-          pdf.text(footerLine2, centerX, pageHeight - 9, { align: "center" });
-          pdf.text(footerLine3, centerX, pageHeight - 5, { align: "center" });
-        }
-
-        const pageLabel = `Page ${i} of ${pageCount}`;
-        const textWidth = pdf.getTextWidth(pageLabel);
-        pdf.text(pageLabel, pageWidth - m.right - textWidth, pageHeight - 5);
-      }
-    });
-
-    await worker.save();
+    pdf.save(`${safeName}.pdf`);
 
   } catch (e) {
     console.error(e);
@@ -1912,3 +2049,435 @@ if (changelogBack && changelogView && aboutMain) {
     aboutMain.hidden = false;
   });
 }
+
+// ==========================================================================
+// INTEGRATED MARKDOWN EDITOR
+// Provides an in-app editor mode with file open/save, drag-drop, and
+// live preview. Uses the same markdown-it instance and design tokens.
+// ==========================================================================
+
+(function editorModule() {
+  // --- DOM refs ---
+  const editorWrap = document.getElementById("editorWrap");
+  const docWrap = document.querySelector("main > .wrap");
+  const modeBtn = document.getElementById("editorModeBtn");
+
+  const textarea = document.getElementById("editorTextarea");
+  const previewEl = document.getElementById("editorPreview");
+  const toggleBtn = document.getElementById("editorToggleBtn");
+  const filenameInput = document.getElementById("editorFilename");
+  const openBtn = document.getElementById("editorOpenBtn");
+  const saveBtn = document.getElementById("editorSaveBtn");
+  const saveAsBtn = document.getElementById("editorSaveAsBtn");
+  const clearBtn = document.getElementById("editorClearBtn");
+  const fileInput = document.getElementById("editorFileInput");
+  const statusEl = document.getElementById("editorStatus");
+  if (!editorWrap || !textarea) return; // bail if HTML not present
+
+  // Sidebar elements to hide/show when toggling editor mode
+  const sidebarSearch = document.querySelector("aside .search");
+  const sidebarBookSelect = document.querySelector("aside .book-select");
+  const sidebarNavToolbar = document.querySelector("aside .nav-toolbar");
+  const sidebarBrand = document.querySelector("aside .brand");
+
+  // --- State ---
+  const DRAFT_KEY = "tome_editor_draft_v1";
+  const FS_SUPPORTED = typeof window.showOpenFilePicker === "function";
+  const SECURE = window.isSecureContext === true;
+  const canUseFS = FS_SUPPORTED && SECURE;
+
+  // Show FS API availability in status on load
+  if (canUseFS) {
+    statusEl.textContent = "Ready (file save supported)";
+  } else {
+    statusEl.textContent = SECURE ? "Ready (save downloads only)" : "Ready (not HTTPS \u2014 save downloads only)";
+  }
+
+  let openedFileHandle = null;
+  let lastSavedText = "";
+  let saveTimer = null;
+  let saveInFlight = false;
+  let editorActive = false;
+  let currentHeadings = [];
+
+  function setStatus(text) { statusEl.textContent = text; }
+
+  // --- Editor mode toggle ---
+  function setSidebarForEditor(on) {
+    // Hide/show reader-specific sidebar elements
+    [sidebarSearch, sidebarBookSelect, sidebarNavToolbar, sidebarBrand].forEach(el => {
+      if (el) el.style.display = on ? "none" : "";
+    });
+  }
+
+  function enterEditor() {
+    editorActive = true;
+    // Close the settings panel (if open) using the outer closeSettings
+    if (typeof closeSettings === "function") closeSettings();
+    docWrap.hidden = true;
+    editorWrap.hidden = false;
+    setSidebarForEditor(true);
+    modeBtn.textContent = "Back to Reader";
+    loadDraft();
+    autosizeEditor();
+    scheduleUiUpdate();
+  }
+
+  function exitEditor() {
+    editorActive = false;
+    editorWrap.hidden = true;
+    docWrap.hidden = false;
+    setSidebarForEditor(false);
+    // Rebuild the reader nav
+    if (typeof buildNav === "function") buildNav();
+    if (typeof setActive === "function" && CURRENT_POLICY) setActive(CURRENT_POLICY.id);
+    modeBtn.textContent = "Markdown Editor";
+  }
+
+  modeBtn.addEventListener("click", () => {
+    if (editorActive) exitEditor();
+    else enterEditor();
+  });
+
+  // --- Draft persistence ---
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, textarea.value || ""); } catch {}
+  }
+  function loadDraft() {
+    try {
+      const v = localStorage.getItem(DRAFT_KEY);
+      if (v !== null) textarea.value = v;
+    } catch {}
+  }
+
+  // --- Auto-resize textarea ---
+  function autosizeEditor() {
+    const y = mainEl.scrollTop;
+    textarea.style.height = "auto";
+    textarea.style.height = Math.max(textarea.scrollHeight, Math.floor(window.innerHeight * 0.7)) + "px";
+    mainEl.scrollTop = y;
+  }
+
+  // --- Headings / outline ---
+  function editorSlugify(text) {
+    return (text || "").toLowerCase().trim()
+      .replace(/[`~!@#$%^&*()+=\[\]{};:'",.<>/?\\|]/g, "")
+      .replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  function extractHeadings(text) {
+    const lines = (text || "").split(/\r?\n/);
+    const headings = [];
+    for (let i = 0; i < lines.length; i++) {
+      const m = lines[i].match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
+      if (m) headings.push({ level: m[1].length, title: m[2].trim(), lineNo: i });
+    }
+    return headings;
+  }
+
+  function assignIds(headings) {
+    const used = new Map();
+    return headings.map(h => {
+      const base = editorSlugify(h.title) || "section";
+      const count = (used.get(base) || 0) + 1;
+      used.set(base, count);
+      return { ...h, id: count === 1 ? base : `${base}-${count}` };
+    });
+  }
+
+  function renderOutline(headings) {
+    if (!navEl) return;
+    navEl.innerHTML = "";
+    if (!headings.length) {
+      navEl.innerHTML = `<div style="padding:10px;color:var(--muted);font-size:12px;">No headings yet.</div>`;
+      return;
+    }
+
+    // Group headings by H1, with H2+ nested underneath — mirrors the reader nav
+    let currentGroup = null;
+    for (const h of headings) {
+      if (h.level === 1) {
+        // H1 → section header (same style as reader nav)
+        const div = document.createElement("div");
+        div.className = "nav-h1";
+        div.textContent = h.title;
+        div.dataset.editorId = h.id;
+        navEl.appendChild(div);
+
+        currentGroup = document.createElement("div");
+        currentGroup.className = "nav-group";
+        navEl.appendChild(currentGroup);
+
+        // Toggle collapse on click
+        div.addEventListener("click", () => {
+          const collapsed = div.classList.toggle("collapsed");
+          currentGroup.classList.toggle("collapsed", collapsed);
+          currentGroup.style.maxHeight = collapsed ? "0" : currentGroup.scrollHeight + "px";
+        });
+      } else {
+        // H2–H6 → nav link (same style as reader nav)
+        const a = document.createElement("a");
+        a.className = "nav-h2";
+        a.href = "#";
+        a.dataset.editorId = h.id;
+        a.textContent = h.title;
+        if (h.level >= 3) a.style.paddingLeft = (10 + (h.level - 2) * 12) + "px";
+        if (h.level >= 3) a.style.fontSize = "12px";
+        if (h.level >= 4) a.style.color = "var(--muted)";
+
+        const target = currentGroup || navEl;
+        target.appendChild(a);
+      }
+    }
+  }
+
+  function renderPreviewAndOutline() {
+    const raw = textarea.value || "";
+    const headings = assignIds(extractHeadings(raw));
+    currentHeadings = headings;
+    // Render with heading IDs
+    const env = { headingIds: headings.map(h => ({ id: h.id })) };
+    previewEl.innerHTML = md.render(raw);
+    // Inject IDs into rendered headings
+    const rendered = previewEl.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    headings.forEach((h, i) => { if (rendered[i]) rendered[i].id = h.id; });
+    renderOutline(headings);
+  }
+
+  function renderOutlineOnly() {
+    currentHeadings = assignIds(extractHeadings(textarea.value || ""));
+    renderOutline(currentHeadings);
+  }
+
+  let uiTimer = null;
+  function scheduleUiUpdate() {
+    if (uiTimer) clearTimeout(uiTimer);
+    uiTimer = setTimeout(() => {
+      autosizeEditor();
+      if (previewEl.style.display !== "none") renderPreviewAndOutline();
+      else renderOutlineOnly();
+    }, 60);
+  }
+
+  // --- Mode toggle (raw / preview) ---
+  function setEditorMode(mode) {
+    const isPreview = mode === "preview";
+    textarea.style.display = isPreview ? "none" : "block";
+    previewEl.style.display = isPreview ? "block" : "none";
+    toggleBtn.textContent = isPreview ? "Raw" : "Preview";
+    if (!isPreview) autosizeEditor();
+    if (isPreview) renderPreviewAndOutline();
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const isPreview = previewEl.style.display !== "none";
+    setEditorMode(isPreview ? "raw" : "preview");
+  });
+
+  // --- File helpers ---
+  function sanitizeFilename(name) {
+    let safe = (name || "notes.md").trim();
+    safe = safe.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-");
+    if (!safe.toLowerCase().endsWith(".md")) safe += ".md";
+    return safe || "notes.md";
+  }
+
+  function exportMarkdown() {
+    const blob = new Blob([textarea.value || ""], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = sanitizeFilename(filenameInput.value);
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function loadFileContent(text, name, handle) {
+    textarea.value = text;
+    filenameInput.value = sanitizeFilename(name || "notes.md");
+    openedFileHandle = handle || null;
+    lastSavedText = handle ? text : "";
+    saveDraft();
+    scheduleUiUpdate();
+    setStatus(handle ? `Opened: ${name} (autosave on)` : `Loaded: ${name}`);
+  }
+
+  // --- Open ---
+  async function openFile() {
+    if (canUseFS) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{ description: "Markdown", accept: { "text/markdown": [".md", ".markdown"], "text/plain": [".txt"] } }]
+        });
+        if (!handle) return;
+        const file = await handle.getFile();
+        loadFileContent(await file.text(), file.name, handle);
+      } catch (e) {
+        if (e?.name === "AbortError") return;
+        setStatus(`Open failed: ${e.message}`);
+      }
+    } else {
+      fileInput.click();
+    }
+  }
+
+  // --- Save ---
+  async function writeToHandle(handle, text) {
+    const writable = await handle.createWritable();
+    await writable.write(text);
+    await writable.close();
+  }
+
+  async function saveToOpenedFile() {
+    if (!openedFileHandle) {
+      if (canUseFS) { saveAs(); return; }
+      exportMarkdown();
+      return;
+    }
+    if (saveInFlight) return;
+    saveInFlight = true;
+    try {
+      const text = textarea.value || "";
+      if (text === lastSavedText) { setStatus("Saved (no changes)"); return; }
+      setStatus("Saving...");
+      await writeToHandle(openedFileHandle, text);
+      lastSavedText = text;
+      setStatus("Saved \u2713");
+    } catch (e) {
+      setStatus(`Save failed: ${e.message}`);
+    } finally {
+      saveInFlight = false;
+    }
+  }
+
+  async function saveAs() {
+    if (canUseFS) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: sanitizeFilename(filenameInput.value),
+          types: [{ description: "Markdown", accept: { "text/markdown": [".md", ".markdown"], "text/plain": [".txt"] } }]
+        });
+        if (!handle) return;
+        openedFileHandle = handle;
+        lastSavedText = "";
+        await saveToOpenedFile();
+      } catch (e) {
+        if (e?.name === "AbortError") return;
+        setStatus(`Save As failed: ${e.message}`);
+      }
+    } else {
+      exportMarkdown();
+    }
+  }
+
+  function scheduleAutoSave() {
+    if (!openedFileHandle) return;
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveToOpenedFile(), 700);
+  }
+
+  // --- Drag & drop ---
+  let dragCounter = 0;
+  document.addEventListener("dragenter", (e) => {
+    if (!editorActive) return;
+    e.preventDefault();
+    dragCounter++;
+    document.body.classList.add("editor-drag-over");
+  });
+  document.addEventListener("dragleave", (e) => {
+    if (!editorActive) return;
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) { dragCounter = 0; document.body.classList.remove("editor-drag-over"); }
+  });
+  document.addEventListener("dragover", (e) => {
+    if (!editorActive) return;
+    e.preventDefault();
+  });
+  document.addEventListener("drop", async (e) => {
+    if (!editorActive) return;
+    e.preventDefault();
+    dragCounter = 0;
+    document.body.classList.remove("editor-drag-over");
+
+    if (canUseFS && e.dataTransfer.items && e.dataTransfer.items[0]) {
+      const item = e.dataTransfer.items[0];
+      if (typeof item.getAsFileSystemHandle === "function") {
+        try {
+          const handle = await item.getAsFileSystemHandle();
+          if (handle && handle.kind === "file") {
+            const file = await handle.getFile();
+            loadFileContent(await file.text(), file.name, handle);
+            return;
+          }
+        } catch {}
+      }
+    }
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (file) loadFileContent(await file.text(), file.name, null);
+  });
+
+  // --- Outline navigation (delegated on #nav, only active in editor mode) ---
+  navEl.addEventListener("click", (e) => {
+    if (!editorActive) return;
+
+    // Handle H1 clicks for heading navigation (not just collapse)
+    const h1 = e.target.closest(".nav-h1[data-editor-id]");
+    const a = e.target.closest("a[data-editor-id]");
+    const target = a || h1;
+    if (!target) return;
+    if (a) e.preventDefault();
+
+    const id = target.dataset.editorId;
+    if (!id) return;
+
+    const isPreview = previewEl.style.display !== "none";
+    if (isPreview) {
+      const el = previewEl.querySelector("#" + CSS.escape(id));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      const h = currentHeadings.find(x => x.id === id);
+      if (!h) return;
+      const cs = getComputedStyle(textarea);
+      const lh = cs.lineHeight.endsWith("px") ? parseFloat(cs.lineHeight) : parseFloat(cs.fontSize) * 1.5;
+      const editorTop = textarea.getBoundingClientRect().top + mainEl.scrollTop;
+      mainEl.scrollTo({ top: Math.max(0, editorTop + (h.lineNo * lh) - 60), behavior: "smooth" });
+    }
+  });
+
+  // --- Event wiring ---
+  openBtn.addEventListener("click", openFile);
+  saveBtn.addEventListener("click", saveToOpenedFile);
+  saveAsBtn.addEventListener("click", saveAs);
+
+  clearBtn.addEventListener("click", () => {
+    textarea.value = "";
+    openedFileHandle = null;
+    lastSavedText = "";
+    setStatus("Cleared");
+    saveDraft();
+    scheduleUiUpdate();
+  });
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files && fileInput.files[0];
+    if (file) loadFileContent(await file.text(), file.name, null);
+    fileInput.value = "";
+  });
+
+  textarea.addEventListener("input", () => {
+    saveDraft();
+    scheduleUiUpdate();
+    scheduleAutoSave();
+  });
+
+  window.addEventListener("beforeunload", (e) => {
+    if (editorActive && openedFileHandle && (textarea.value || "") !== (lastSavedText || "")) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+  });
+})();
