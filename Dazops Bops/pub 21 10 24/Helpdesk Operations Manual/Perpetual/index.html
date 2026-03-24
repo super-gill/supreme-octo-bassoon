@@ -20,7 +20,7 @@
   <link id="favicon" rel="icon">
 
   <!-- Stylesheet for the app layout, sidebar, document viewer, and PDF export -->
-  <link rel="stylesheet" type="text/css" href="styles.css?v=2.3.0">
+  <link rel="stylesheet" type="text/css" href="styles.css?v=2.6.0">
 </head>
 
 <body>
@@ -126,6 +126,28 @@
           <article class="doc" id="view"></article>
         </div>
       </div>
+
+      <!-- Editor mode: hidden by default, replaces doc view when active -->
+      <div id="editorWrap" class="editor-wrap" hidden>
+        <div class="editor-card">
+          <div class="editor-toolbar">
+            <button id="editorToggleBtn" class="editor-btn" type="button">Preview</button>
+            <input id="editorFilename" class="editor-filename" type="text" value="notes.md" aria-label="Filename" />
+            <button id="editorOpenBtn" class="editor-btn" type="button">Open</button>
+            <button id="editorSaveBtn" class="editor-btn" type="button">Save</button>
+            <button id="editorSaveAsBtn" class="editor-btn" type="button">Save As</button>
+            <input id="editorFileInput" type="file" accept=".md,.markdown,.txt" style="display:none" />
+            <button id="editorClearBtn" class="editor-btn" type="button">Clear</button>
+            <span class="editor-status" id="editorStatus">No file opened</span>
+          </div>
+          <div class="editor-body">
+            <div class="editor-pane">
+              <textarea id="editorTextarea" spellcheck="false" aria-label="Markdown editor"></textarea>
+              <div id="editorPreview" class="doc editor-preview" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -172,6 +194,12 @@
           <button class="settings-action" data-export="policy-md">This page &rarr; Markdown</button>
           <button class="settings-action" data-export="manual-pdf">Full manual &rarr; PDF</button>
           <button class="settings-action" data-export="manual-md">Full manual &rarr; Markdown</button>
+        </div>
+      </div>
+      <div class="settings-group">
+        <label class="settings-label">Tools</label>
+        <div class="settings-export-btns">
+          <button class="settings-action" id="editorModeBtn">Markdown Editor</button>
         </div>
       </div>
     </div>
@@ -262,12 +290,15 @@
                   <td><code>branding.favicon</code></td>
                   <td>Path to the browser tab icon (SVG, PNG, or ICO)</td>
                 </tr>
+                <tr>
+                  <td><code>branding.sidebarTitle</code></td>
+                  <td>Replaces the &ldquo;Tome&rdquo; wordmark at the top of the sidebar with your own text (e.g. your company name). Leave empty to keep the default.</td>
+                </tr>
               </tbody>
             </table>
 
             <h4>Splash screen</h4>
-            <p>On load, Tome shows a full-screen splash with the &ldquo;TOME&rdquo; wordmark. Control how long it stays
-              visible:</p>
+            <p>On load, Tome shows a full-screen splash with an animated letter-cycling wordmark. You can customise the text, tagline, and add a logo.</p>
             <table>
               <thead>
                 <tr>
@@ -276,6 +307,18 @@
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td><code>branding.splashText</code></td>
+                  <td>Replaces the &ldquo;TOME&rdquo; cycling letters with your own word or name (e.g. &ldquo;ACME&rdquo;). Each character gets its own animated letter box. Leave empty for the default.</td>
+                </tr>
+                <tr>
+                  <td><code>branding.splashTagline</code></td>
+                  <td>Replaces the &ldquo;Loading&hellip;&rdquo; text beneath the splash wordmark (e.g. &ldquo;Operations Manual&rdquo;). Leave empty for the default.</td>
+                </tr>
+                <tr>
+                  <td><code>branding.splashLogo</code></td>
+                  <td>Path to a logo image displayed above the splash wordmark (PNG, SVG, or JPG). Leave empty for no logo.</td>
+                </tr>
                 <tr>
                   <td><code>splash.minDurationMs</code></td>
                   <td>Minimum splash duration in milliseconds (default: 2000)</td>
@@ -298,12 +341,16 @@
   "branding": {
     "defaultTitle": "Company Handbook",
     "classification": "Internal Use Only",
-    "favicon": "brand-icon.svg"
+    "favicon": "brand-icon.svg",
+    "splashText": "ACME",
+    "splashTagline": "Operations Manual",
+    "splashLogo": "company-logo.png",
+    "sidebarTitle": "Acme Corp"
   },
   "pdf": {
     "logo": "company-logo.png",
     "footer": [
-      "example.com | hello@example.com | 01onal 123 456",
+      "example.com | hello@example.com | 0123 456 789",
       "Example Ltd, 1 High Street, London, EC1A 1BB",
       "Registered in England 12345678"
     ]
@@ -379,7 +426,11 @@
   "branding": {
     "defaultTitle": "My Documentation",
     "classification": "Internal Use Only",
-    "favicon": "my-icon.svg"
+    "favicon": "my-icon.svg",
+    "splashText": "ACME",
+    "splashTagline": "Operations Manual",
+    "splashLogo": "company-logo.png",
+    "sidebarTitle": "Acme Corp"
   },
   "pdf": {
     "logo": "logo.png",
@@ -408,6 +459,22 @@
                 <tr>
                   <td><code>branding.favicon</code></td>
                   <td>Path to the browser tab icon</td>
+                </tr>
+                <tr>
+                  <td><code>branding.splashText</code></td>
+                  <td>Custom splash wordmark (replaces &ldquo;TOME&rdquo;)</td>
+                </tr>
+                <tr>
+                  <td><code>branding.splashTagline</code></td>
+                  <td>Custom splash tagline (replaces &ldquo;Loading&hellip;&rdquo;)</td>
+                </tr>
+                <tr>
+                  <td><code>branding.splashLogo</code></td>
+                  <td>Logo image shown above the splash wordmark</td>
+                </tr>
+                <tr>
+                  <td><code>branding.sidebarTitle</code></td>
+                  <td>Custom sidebar wordmark (replaces &ldquo;Tome&rdquo;)</td>
                 </tr>
                 <tr>
                   <td><code>pdf.logo</code></td>
@@ -660,6 +727,18 @@
         <div class="changelog-content">
           <h3>Changelog</h3>
 
+          <h4>v2.6.0</h4>
+          <ul>
+            <li>Integrated Markdown Editor: open, edit, and save <code>.md</code> files directly within Tome &mdash; accessible from Settings &rarr; Tools</li>
+            <li>Editor supports File System Access API (Chrome/Edge) for read/write to local files with 700ms autosave, plus <code>&lt;input type="file"&gt;</code> fallback for other browsers</li>
+            <li>Editor includes live preview (reuses Tome&rsquo;s markdown renderer and document styles), drag-and-drop file loading, and a fixed outline sidebar for heading navigation</li>
+            <li>Editor toolbar is sticky &mdash; stays visible while scrolling through long documents</li>
+            <li>Custom platform branding via <code>tome.json</code>: <code>branding.splashText</code> replaces the &ldquo;TOME&rdquo; splash wordmark, <code>branding.splashTagline</code> replaces &ldquo;Loading&hellip;&rdquo;, <code>branding.splashLogo</code> adds a logo above the splash, and <code>branding.sidebarTitle</code> replaces the sidebar wordmark</li>
+            <li>All custom branding fields are optional &mdash; leave empty or omit to keep defaults. Platform identity (&ldquo;Tome v#.#.#&rdquo; in footer and About tab) is preserved regardless of branding</li>
+            <li>Guide tab updated with full documentation for all new branding keys and editor usage</li>
+            <li>Configuration guide updated with new <code>tome.json</code> example including all branding options</li>
+          </ul>
+
           <h4>v2.5.2</h4>
           <ul>
             <li>Improved PDF export page breaks: headings (H2&ndash;H5) now stay with their following content instead of being stranded at the bottom of a page</li>
@@ -851,6 +930,6 @@
 </body>
 
 <!-- Application logic: markdown parsing, navigation, search, PDF export -->
-<script src="index.js?v=2.3.0"></script>
+<script src="index.js?v=2.6.0"></script>
 
 </html>

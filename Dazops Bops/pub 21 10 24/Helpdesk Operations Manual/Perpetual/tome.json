@@ -2,14 +2,18 @@
   "branding": {
     "defaultTitle": "TOME Markdown",
     "classification": "",
-    "favicon": "digitalOranges.svg"
+    "favicon": "digitalOranges.svg",
+    "splashText": "",
+    "splashTagline": "",
+    "splashLogo": "",
+    "sidebarTitle": "Digital Origin Solutions"
   },
   "pdf": {
     "logo": "letterhead_logo.png",
     "footer": [
-      "Jason Mcdill",
-      "",
-      ""
+      "digital-origin.co.uk | discover@digital-origin.co.uk | 0333 006 7787",
+      "Digital Origin Solutions Limited, The Maltings, Pury Hill Business Park, Alderton Road, Towcester, NN12 7L",
+      "Registered in England 04121501"
     ]
   },
   "splash": {
