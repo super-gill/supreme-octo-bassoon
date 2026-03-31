@@ -111,6 +111,29 @@
     --mark: rgba(255, 217, 102, 0.45);
 }
 
+/* --- Terminal — green-on-black CRT console --- */
+:root[data-theme="terminal"] {
+    --bg: #0a0a0a;
+    --panel: #0e0e0e;
+    --text: #33ff33;
+    --muted: #1a9e1a;
+    --border: #1a3a1a;
+    --link: #33ff33;
+    --heading: #33ff33;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.50);
+    --h1bg: rgba(51, 255, 51, 0.06);
+    --mark: rgba(51, 255, 51, 0.25);
+}
+
+:root[data-theme="terminal"],
+:root[data-theme="terminal"] input,
+:root[data-theme="terminal"] select,
+:root[data-theme="terminal"] button,
+:root[data-theme="terminal"] code,
+:root[data-theme="terminal"] pre {
+    font-family: "Courier New", Courier, monospace !important;
+}
+
 /* ==========================================================================
    BASE / RESET
    ========================================================================== */
@@ -137,6 +160,11 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: var(--sidebar) 1fr;
+    transition: grid-template-columns 0.25s ease;
+}
+
+.app.sidebar-collapsed {
+    grid-template-columns: 0px 1fr;
 }
 
 /* Sidebar: scrollable, subtle background tint */
@@ -145,6 +173,15 @@ aside {
     background: rgba(255, 255, 255, 0.02);
     overflow: auto;
     padding: 14px 10px;
+    min-width: 0;
+    transition: opacity 0.2s ease, padding 0.25s ease;
+}
+
+.sidebar-collapsed aside {
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    border-right: none;
 }
 
 /* Main content pane: independently scrollable */
@@ -152,12 +189,52 @@ main {
     overflow: auto;
 }
 
+/* --- Width toggle bar --- */
+.width-toggle {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    padding: 8px 0 0;
+}
+
+.width-btn {
+    width: 28px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.width-btn:hover {
+    background: var(--h1bg);
+    color: var(--text);
+}
+
+.width-btn.active {
+    background: var(--h1bg);
+    color: var(--heading);
+}
+
 /* Centres content within main, with max-width constraint */
 .wrap {
     max-width: var(--maxw);
     margin: 18px auto;
-    padding: 0 18px 40px;
+    padding: 0 32px 40px;
 }
+
+/* Width presets toggled by JS */
+main[data-width="narrow"] .wrap { max-width: 60%; }
+main[data-width="medium"] .wrap { max-width: 80%; }
+main[data-width="wide"]   .wrap { max-width: 100%; }
 
 /* ==========================================================================
    CARD
@@ -673,6 +750,73 @@ main {
 .doc blockquote p:first-child { margin-top: 0; }
 .doc blockquote p:last-child  { margin-bottom: 0; }
 
+/* --- Callout variants --- */
+.doc blockquote.callout {
+    padding: 12px 16px 12px 52px !important;
+    position: relative;
+}
+
+.doc blockquote.callout::before {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    line-height: 1;
+    width: 20px;
+    text-align: center;
+}
+
+/* Warning: yellow accent */
+.doc .callout-warning {
+    border-left-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.doc .callout-warning::before {
+    content: "\26A0";
+}
+
+/* Info: blue accent */
+.doc .callout-info {
+    border-left-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.doc .callout-info::before {
+    content: "\2139";
+}
+
+/* Tip: green accent */
+.doc .callout-tip {
+    border-left-color: #22c55e;
+    background: rgba(34, 197, 94, 0.08);
+}
+
+.doc .callout-tip::before {
+    content: "\270E";
+}
+
+/* Danger: red accent */
+.doc .callout-danger {
+    border-left-color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.doc .callout-danger::before {
+    content: "\2715";
+}
+
+/* Note: purple accent */
+.doc .callout-note {
+    border-left-color: #a855f7;
+    background: rgba(168, 85, 247, 0.08);
+}
+
+.doc .callout-note::before {
+    content: "\2731";
+}
+
 /* Code blocks (fenced / pre) */
 .doc pre {
     background: var(--bg);
@@ -776,6 +920,9 @@ main {
 /* --- Images --- */
 
 .doc img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     max-width: 100%;
     height: auto;
     border-radius: 12px;
@@ -874,6 +1021,59 @@ main {
 
 .back-to-top:active {
     transform: translateY(1px);
+}
+
+/* --- Cross-book return button --- */
+.cross-book-return {
+    position: sticky;
+    bottom: 24px;
+    z-index: 7000;
+    display: block;
+    margin: 16px auto;
+    appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--link);
+    font-size: 13px;
+    padding: 8px 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.cross-book-return:hover {
+    border-color: var(--heading);
+    background: color-mix(in srgb, var(--heading) 10%, transparent);
+}
+
+.cross-book-return .cross-book-dismiss {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 2px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.cross-book-return .cross-book-dismiss:hover {
+    color: var(--text);
+}
+
+@keyframes crossBookPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); border-color: var(--border); }
+    25% { transform: scale(1.06); box-shadow: 0 0 20px color-mix(in srgb, var(--heading) 50%, transparent); border-color: var(--heading); }
+    50% { transform: scale(1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); border-color: var(--border); }
+    75% { transform: scale(1.06); box-shadow: 0 0 20px color-mix(in srgb, var(--heading) 50%, transparent); border-color: var(--heading); }
+}
+
+.cross-book-return.pulse {
+    animation: crossBookPulse 1.5s ease;
 }
 
 /* ==========================================================================
@@ -1146,21 +1346,54 @@ main {
    Hidden on desktop, shown on mobile in the meta bar.
    ========================================================================== */
 
+/* Sidebar collapse toggle: visible on desktop, top of sidebar */
+.sidebar-collapse-btn {
+    appearance: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    width: 28px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-collapse-btn:hover {
+    background: var(--h1bg);
+    color: var(--text);
+}
+
 .nav-hamburger {
     display: none;
     appearance: none;
-    background: none;
-    border: none;
+    background: var(--h1bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
     color: var(--muted);
     font-size: 20px;
     cursor: pointer;
     padding: 4px;
     line-height: 1;
-    flex-shrink: 0;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9000;
+    width: 28px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
     opacity: 0.6;
+    transition: background 0.15s, color 0.15s;
 }
 
 .nav-hamburger:hover {
+    background: var(--h1bg);
     color: var(--text);
     opacity: 1;
 }
@@ -1212,8 +1445,18 @@ main {
 
     /* Show hamburger on mobile */
     .nav-hamburger {
-        display: block;
+        display: flex;
     }
+
+    /* Hide sidebar collapse button on mobile (uses drawer instead) */
+    .sidebar-collapse-btn {
+        display: none;
+    }
+}
+
+/* Show hamburger on desktop when sidebar is collapsed */
+.sidebar-collapsed .nav-hamburger {
+    display: flex;
 }
 
 /* ==========================================================================
@@ -1754,7 +1997,9 @@ main {
     .settings-panel,
     .settings-backdrop,
     .nav-backdrop,
-    .nav-hamburger {
+    .nav-hamburger,
+    .sidebar-collapse-btn,
+    .cross-book-return {
         display: none !important;
     }
 

@@ -121,12 +121,14 @@ function resolveBookPaths(container) {
   if (!bookDir) return; // Book is in root, nothing to resolve
 
   const isRelative = (url) => url && !url.startsWith("http") && !url.startsWith("//")
-    && !url.startsWith("data:") && !url.startsWith("#") && !url.startsWith("/");
+    && !url.startsWith("data:") && !url.startsWith("#") && !url.startsWith("/")
+    && !url.startsWith("tome://");
 
   container.querySelectorAll("img[src]").forEach((img) => {
     if (isRelative(img.getAttribute("src"))) {
       img.setAttribute("src", bookDir + img.getAttribute("src"));
     }
+    img.setAttribute("loading", "lazy");
   });
 
   container.querySelectorAll("a[href]").forEach((a) => {
@@ -134,6 +136,145 @@ function resolveBookPaths(container) {
     // Only resolve file links, not hash links or external URLs
     if (isRelative(href) && !href.startsWith("#")) {
       a.setAttribute("href", bookDir + href);
+    }
+  });
+}
+
+// ==========================================================================
+// CROSS-BOOK LINKS
+// Intercepts tome:// links to navigate between books with a return button.
+// Syntax: <a href="tome://book-folder#policy-slug">Link text</a>
+// ==========================================================================
+
+/** Saved return point when following a cross-book link */
+let CROSS_BOOK_RETURN = null;
+
+/**
+ * Scans rendered HTML for tome:// links and wires them up for cross-book
+ * navigation. On click, saves the current book + policy as a return point,
+ * switches to the target book, and navigates to the target policy.
+ */
+function processCrossBookLinks(container) {
+  container.querySelectorAll('a[href^="tome://"]').forEach((a) => {
+    a.style.cursor = "pointer";
+    a.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const href = a.getAttribute("href");
+      const stripped = href.replace("tome://", "");
+      const [bookFolder, policyHash] = stripped.split("#");
+
+      // Find matching book by folder name
+      const targetBook = BOOKS.find((b) => b.file.includes(bookFolder));
+      if (!targetBook) {
+        alert(`Book not found: ${bookFolder}`);
+        return;
+      }
+
+      // Save return point
+      const returnTitle = document.getElementById("docTitle")?.textContent || "previous book";
+      CROSS_BOOK_RETURN = {
+        book: CURRENT_BOOK,
+        policy: CURRENT_POLICY?.id || "",
+        title: returnTitle
+      };
+
+      // Switch book and navigate
+      CURRENT_BOOK = targetBook.file;
+      localStorage.setItem("tome-book", CURRENT_BOOK);
+      if (bookPicker) bookPicker.value = CURRENT_BOOK;
+      await loadBook(CURRENT_BOOK);
+      if (policyHash) location.hash = policyHash;
+
+      showReturnButton();
+    });
+  });
+}
+
+/** Pulse interval ID for the cross-book return button */
+let crossBookPulseInterval = null;
+
+/** Shows a floating "Back to ..." button after a cross-book navigation */
+function showReturnButton() {
+  // Remove existing button and interval if present
+  const existing = document.getElementById("crossBookReturn");
+  if (existing) existing.remove();
+  if (crossBookPulseInterval) { clearInterval(crossBookPulseInterval); crossBookPulseInterval = null; }
+
+  if (!CROSS_BOOK_RETURN) return;
+
+  const btn = document.createElement("button");
+  btn.id = "crossBookReturn";
+  btn.className = "cross-book-return";
+
+  // Return link text
+  const label = document.createElement("span");
+  label.innerHTML = `&#8592; Back to ${CROSS_BOOK_RETURN.title}`;
+  btn.appendChild(label);
+
+  // Dismiss button
+  const dismiss = document.createElement("span");
+  dismiss.className = "cross-book-dismiss";
+  dismiss.innerHTML = "&times;";
+  dismiss.title = "Dismiss";
+  dismiss.addEventListener("click", (e) => {
+    e.stopPropagation();
+    CROSS_BOOK_RETURN = null;
+    if (crossBookPulseInterval) { clearInterval(crossBookPulseInterval); crossBookPulseInterval = null; }
+    btn.remove();
+  });
+  btn.appendChild(dismiss);
+
+  // Return click
+  label.style.cursor = "pointer";
+  label.addEventListener("click", async () => {
+    const ret = CROSS_BOOK_RETURN;
+    CROSS_BOOK_RETURN = null;
+    if (crossBookPulseInterval) { clearInterval(crossBookPulseInterval); crossBookPulseInterval = null; }
+    btn.remove();
+
+    CURRENT_BOOK = ret.book;
+    localStorage.setItem("tome-book", CURRENT_BOOK);
+    if (bookPicker) bookPicker.value = CURRENT_BOOK;
+    await loadBook(CURRENT_BOOK);
+    if (ret.policy) location.hash = ret.policy;
+  });
+
+  mainEl.appendChild(btn);
+
+  // Pulse every 20 seconds to draw attention
+  crossBookPulseInterval = setInterval(() => {
+    btn.classList.remove("pulse");
+    void btn.offsetWidth; // force reflow to restart animation
+    btn.classList.add("pulse");
+  }, 20000);
+}
+
+/**
+ * Converts blockquotes with special prefixes into styled callouts.
+ *   >! text  →  warning callout (yellow, warning icon)
+ *   >? text  →  info callout (blue, info icon)
+ *   >  text  →  normal blockquote (unchanged)
+ */
+function processCallouts(container) {
+  container.querySelectorAll("blockquote").forEach((bq) => {
+    const firstP = bq.querySelector("p");
+    if (!firstP) return;
+
+    const text = firstP.innerHTML;
+    const tags = {
+      "[!WARNING]":  "callout-warning",
+      "[!INFO]":     "callout-info",
+      "[!TIP]":      "callout-tip",
+      "[!DANGER]":   "callout-danger",
+      "[!NOTE]":     "callout-note"
+    };
+
+    for (const [tag, cls] of Object.entries(tags)) {
+      if (text.startsWith(tag)) {
+        bq.classList.add("callout", cls);
+        firstP.innerHTML = text.slice(tag.length).replace(/^\s*/, "");
+        break;
+      }
     }
   });
 }
@@ -303,7 +444,7 @@ function buildIndexFromGroups() {
 async function loadConfig() {
   try {
     const url = new URL("tome.json", document.baseURI);
-    const res = await fetch(url.href, { cache: "no-store" });
+    const res = await fetch(url.href, { cache: "default" });
     if (!res.ok) throw new Error(`${res.status}`);
     TOME_CONFIG = await res.json();
   } catch (e) {
@@ -321,7 +462,7 @@ async function loadManualMd(filename) {
   const url = new URL(file, document.baseURI);
   console.log("Loading book from:", url.href, "page:", location.href);
 
-  const res = await fetch(url.href, { cache: "no-store" });
+  const res = await fetch(url.href, { cache: "default" });
   if (!res.ok) throw new Error(`Failed to load ${url.href} (${res.status} ${res.statusText})`);
   return await res.text();
 }
@@ -343,7 +484,7 @@ async function loadManualMd(filename) {
 async function loadBrands() {
   try {
     const manifestUrl = new URL("export-branding/brands.json", document.baseURI);
-    const res = await fetch(manifestUrl.href, { cache: "no-store" });
+    const res = await fetch(manifestUrl.href, { cache: "default" });
     if (!res.ok) throw new Error(`${res.status}`);
     const brandIds = await res.json();
 
@@ -351,7 +492,7 @@ async function loadBrands() {
     for (const id of brandIds) {
       try {
         const brandUrl = new URL(`export-branding/${id}/brand.json`, document.baseURI);
-        const bRes = await fetch(brandUrl.href, { cache: "no-store" });
+        const bRes = await fetch(brandUrl.href, { cache: "default" });
         if (!bRes.ok) continue;
         const config = await bRes.json();
         brands.push({
@@ -431,7 +572,7 @@ function resolveBrandPath(relativePath, basePath) {
 async function loadBooks() {
   try {
     const url = new URL("Books/books.json", document.baseURI);
-    const res = await fetch(url.href, { cache: "no-store" });
+    const res = await fetch(url.href, { cache: "default" });
     if (!res.ok) throw new Error(`Failed to load Books/books.json (${res.status})`);
     BOOKS = await res.json();
   } catch (e) {
@@ -439,8 +580,11 @@ async function loadBooks() {
     BOOKS = [];
   }
 
-  // Default to the first book if none is set yet
-  if (!CURRENT_BOOK && BOOKS.length > 0) CURRENT_BOOK = BOOKS[0].file;
+  // Restore last-viewed book, or default to the first book
+  if (!CURRENT_BOOK && BOOKS.length > 0) {
+    const saved = localStorage.getItem("tome-book");
+    CURRENT_BOOK = (saved && BOOKS.some((b) => b.file === saved)) ? saved : BOOKS[0].file;
+  }
 
   // Populate the dropdown with available books
   if (bookPicker) {
@@ -456,6 +600,7 @@ async function loadBooks() {
     // Switch books when the user selects a different option
     bookPicker.addEventListener("change", async () => {
       CURRENT_BOOK = bookPicker.value;
+      localStorage.setItem("tome-book", CURRENT_BOOK);
       location.hash = "";        // Clear any existing policy hash
       await loadBook(CURRENT_BOOK);
     });
@@ -540,7 +685,7 @@ async function init() {
 
   // Load platform version from version.json (single source of truth)
   try {
-    const vRes = await fetch(new URL("version.json", document.baseURI).href, { cache: "no-store" });
+    const vRes = await fetch(new URL("version.json", document.baseURI).href, { cache: "default" });
     if (vRes.ok) {
       const vData = await vRes.json();
       PLATFORM_VERSION = vData.version || "";
@@ -549,16 +694,18 @@ async function init() {
     console.warn("Could not load version.json:", e);
   }
   if (platformVersionEl) platformVersionEl.textContent = `Tome ${PLATFORM_VERSION}`;
+  populateAbout();
 
   // Load configuration and book manifest while the splash is visible
   await loadConfig();
 
-  // Apply config: favicon
+  // Apply config: favicon and branding
   const faviconPath = TOME_CONFIG.branding?.favicon;
   if (faviconPath) {
     const faviconEl = document.getElementById("favicon");
     if (faviconEl) faviconEl.href = faviconPath;
   }
+  applyBranding();
 
   await loadBooks();
   await loadBrands();
@@ -615,7 +762,7 @@ function isNewerVersion(local, remote) {
  */
 async function checkForUpdate() {
   try {
-    const res = await fetch(VERSION_CHECK_URL, { cache: "no-store" });
+    const res = await fetch(VERSION_CHECK_URL, { cache: "default" });
     if (!res.ok) return;
     const data = await res.json();
     const latest = data.version;
@@ -874,6 +1021,8 @@ function renderPolicy(id) {
   if (viewEl) {
     viewEl.innerHTML = md.render(target.mdText);
     resolveBookPaths(viewEl);
+    processCallouts(viewEl);
+    processCrossBookLinks(viewEl);
     applyIndent(viewEl);
 
     // --- Copy/share link icon on the H2 heading ---
@@ -1011,7 +1160,7 @@ async function exportCurrentPolicyPdf() {
    * Used to embed the letterhead logo into the PDF.
    */
   async function loadAsDataUrl(url) {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "default" });
     if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
     const blob = await res.blob();
     return await new Promise((resolve, reject) => {
@@ -1029,6 +1178,7 @@ async function exportCurrentPolicyPdf() {
     const body = document.createElement("div");
     body.innerHTML = md.render(CURRENT_POLICY.mdText);
     resolveBookPaths(body);
+    processCallouts(body);
     applyIndent(body);
 
     // Wrap in pdf-export class for print-friendly styling
@@ -1176,7 +1326,7 @@ async function exportFullManualPdf() {
    * Used to embed the letterhead logo into the PDF.
    */
   async function loadAsDataUrl(url) {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, { cache: "default" });
     if (!res.ok) throw new Error(`Failed to load ${url}: ${res.status}`);
     const blob = await res.blob();
     return await new Promise((resolve, reject) => {
@@ -1375,6 +1525,7 @@ async function exportFullManualPdf() {
       block.innerHTML = html;
 
       resolveBookPaths(block);
+      processCallouts(block);
       applyIndent(block);
       await addElementToPdf(block);
     }
@@ -1654,7 +1805,16 @@ function closeDrawer() {
   }, { once: true });
 }
 
-if (navHamburger) navHamburger.addEventListener("click", openDrawer);
+if (navHamburger) navHamburger.addEventListener("click", () => {
+  const appEl = document.querySelector(".app");
+  // Desktop: toggle sidebar collapse; Mobile: open drawer
+  if (appEl?.classList.contains("sidebar-collapsed")) {
+    appEl.classList.remove("sidebar-collapsed");
+    localStorage.setItem("tome-sidebar", "open");
+  } else {
+    openDrawer();
+  }
+});
 if (navBackdrop) navBackdrop.addEventListener("click", closeDrawer);
 
 // Close drawer when a nav link is tapped (mobile navigation)
@@ -1664,6 +1824,27 @@ if (navEl) {
       closeDrawer();
     }
   });
+}
+
+// ==========================================================================
+// SIDEBAR COLLAPSE (DESKTOP)
+// Collapses sidebar to give full width to the reading pane.
+// Persists state to localStorage.
+// ==========================================================================
+
+const sidebarCollapseBtn = document.getElementById("sidebarCollapse");
+const appEl = document.querySelector(".app");
+
+if (sidebarCollapseBtn && appEl) {
+  sidebarCollapseBtn.addEventListener("click", () => {
+    appEl.classList.add("sidebar-collapsed");
+    localStorage.setItem("tome-sidebar", "collapsed");
+  });
+
+  // Restore saved state
+  if (localStorage.getItem("tome-sidebar") === "collapsed") {
+    appEl.classList.add("sidebar-collapsed");
+  }
 }
 
 // ==========================================================================
@@ -1718,6 +1899,7 @@ const THEMES = [
   { value: "ember", tone: "dark", label: "\u2622  Ember" },
   { value: "forest", tone: "dark", label: "\u2618  Forest" },
   { value: "sand", tone: "light", label: "\u2600  Sand" },
+  { value: "terminal", tone: "dark", label: "\u25B6  Terminal" },
 ];
 
 /**
@@ -1880,8 +2062,28 @@ function populateAbout() {
   set("aboutMarkdownItAnchor", window.markdownItAnchor ? "9.1.0" : "not loaded");
   set("aboutHtml2pdf", window.html2pdf ? "0.10.1" : "not loaded");
   set("aboutHtml2canvas", window.html2canvas ? "1.4.1" : "not loaded");
+
+  // Retry once for deferred scripts that may not have loaded yet
+  if (!window.html2pdf || !window.html2canvas) {
+    setTimeout(() => {
+      set("aboutHtml2pdf", window.html2pdf ? "0.10.1" : "not loaded");
+      set("aboutHtml2canvas", window.html2canvas ? "1.4.1" : "not loaded");
+    }, 2000);
+  }
 }
-populateAbout();
+
+// Apply platform branding from tome.json
+function applyBranding() {
+  const b = TOME_CONFIG.branding || {};
+
+  // Sidebar top wordmark
+  const wordmarkEl = document.querySelector(".tome-wordmark.tome-nav");
+  if (wordmarkEl && b.sidebarTitle) wordmarkEl.textContent = b.sidebarTitle;
+
+  // Settings > About title
+  const aboutTitle = document.querySelector("#tab-about .tome-wordmark");
+  if (aboutTitle && b.defaultTitle) aboutTitle.textContent = b.defaultTitle;
+}
 
 // Guide accordion toggles
 document.querySelectorAll(".guide-toggle").forEach((btn) => {
@@ -1912,3 +2114,23 @@ if (changelogBack && changelogView && aboutMain) {
     aboutMain.hidden = false;
   });
 }
+
+// ==========================================================================
+// WIDTH TOGGLE
+// Three-preset content width switcher (narrow / medium / wide).
+// Persists choice to localStorage.
+// ==========================================================================
+
+(function () {
+  const btns = document.querySelectorAll(".width-btn");
+  const saved = localStorage.getItem("tome-width") || "medium";
+
+  function apply(mode) {
+    mainEl.dataset.width = mode;
+    btns.forEach((b) => b.classList.toggle("active", b.dataset.width === mode));
+    localStorage.setItem("tome-width", mode);
+  }
+
+  btns.forEach((b) => b.addEventListener("click", () => apply(b.dataset.width)));
+  apply(saved);
+})();

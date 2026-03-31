@@ -1,12 +1,12 @@
-Document Title: Helpdesk Operations Manual
-Document Version: VE.13
+Document Title: HD Ops Manual Vol.1 Governance
+Document Version: VE.17
 Document Date: 2026
 
 # Overview
 
 ## Introduction
 
-This Helpdesk Operations Manual is a collection of self-contained policies, procedures, and working standards that define how Digital Origin’s Helpdesk operates day-to-day. It is designed to create consistent service delivery, protect SLA performance, and ensure customers receive a predictable, high-quality experience regardless of which agent handles a ticket.
+This Helpdesk Operations Manual Volume 1: Governance is a collection of self-contained policies, and working standards that define how Digital Origin’s Helpdesk operates day-to-day. It is designed to create consistent service delivery, protect SLA performance, and ensure customers receive a predictable, high-quality experience regardless of which agent handles a ticket.
 
 The manual is intentionally structured so that individual sections can be read and applied independently. Where dependencies exist (for example, where one policy references escalation handling, ticket statuses, or communications), the relevant policy will be referenced directly.
 
@@ -26,8 +26,6 @@ This manual applies to all Helpdesk activity performed under Digital Origin, inc
 - Incidents and service requests handled through the helpdesk ticketing system
 - Critical incident response processes and associated roles
 - Operational standards that affect the customer experience (communications, hygiene, QA practices, and related governance)
-
-Where a section is marked as [Placeholder] or (NF / Not in Force), it is either incomplete, pending approval, or not currently enforced as policy.
 
 ### Audience and responsibilities
 
@@ -53,22 +51,27 @@ Unless a policy explicitly states otherwise, the default position is:
 
 ### Continuous improvement and document governance
 
-This manual will evolve. Where a policy is unclear, unworkable, or conflicts with real operational constraints, that is a signal that the policy should be improved -not informally ignored. Issues should be raised through leadership so the document can be updated, and expectations remain defensible, consistent, and achievable.
+This manual will evolve. Where a policy is unclear, unworkable, or conflicts with real operational constraints, that is a signal that the policy should be improved not informally ignored. Issues should be raised through leadership so the document can be updated, and expectations remain defensible, consistent, and achievable.
 
-Following written process, even if it fails, will never result in disciplinary action.
+Adherence to written process, even where that process does not produce the desired outcome, will not result in disciplinary action.
+
+### Change Control
+
+There are two levels of change control throuout this document, the entire publication is change controled, and re-published when a new version is created. In addition, each policy is change controled by the business and individually reviewed periodically.
 
 ### Use of AI in this document
 
 AI has been used throughout this document to assist with wording, conciseness, and formatting; however, the content itself is human-generated and remains owned and approved internally.
 
 ## Changes
+
 ### Document Control
 
 #### Document Properties
 
-| Property     | Details    |
+| Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 19/03/2026  |
+| Last Updated | 26/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
@@ -79,43 +82,57 @@ AI has been used throughout this document to assist with wording, conciseness, a
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 13/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.3     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
-| Name | Title | Business Unit | Date |
-| ---- | ----- | ------------- | ---- |
-| Jason Mcdill | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
 | Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Neels Steyn | Technical Manager | Customer Helpdesk | 19/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
 
 ### Change Log
 
+| Version | Date       | Changed By   | Summary of Changes                                           |
+| ------- | ---------- | ------------ | ------------------------------------------------------------ |
+| VE.3    | -          | Jason Mcdill | Baseline version; all sections either re-written or converted to markdown |
+| VE.4    | -          | Jason Mcdill | Formalised daily ticket status checks with machine-readable failure codes; added per-status check definitions (With User, With Vendor, With Testbench, Scheduled, Field Visit Scheduled, With Internal Team); replaced On Hold and Awaiting Delivery statuses with Field Visit Scheduled and With Internal Team; shifted failure recording from per-ticket agent-linked metadata to aggregate whole-number counting; added Appendix - Daily Ticket Checks with reference table; updated policy format template with heading-level indicators |
+| VE.5    | -          | Jason Mcdill | Created Ticket Closure, Reopen and Recurrence policy (restructured from Confirmation of Resolution); added Ticket Ownership and Handover placeholder; added Ticket Type and Ticket Status overview tables; removed Confirmation of Resolution grace period; fixed heading typos (Child Tickets, stray `>` markers); cleaned stray `</s>` characters from Dispatch Responsibility Policy |
+| VE.6    | 26/02/2026 | Jason Mcdill | Removed Incident Management and Service Request Management placeholders (covered by Non-Critical Ticket Handling Process); corrected With User SLA hold from 24 hours to 5 hours (Halo limitation); filled Ticket Communication record keeping, Ticket Closure purpose, and Disciplinary Typical Flow step 1; corrected typos in Priority Classification and Ticket Closure headings |
+| VE.7    | 11/03/2026 | Jason Mcdill | Replaced Account Managers with Service Delivery in child ticket workflows; added automatic approval for quoting and shipping child tickets; renamed child ticket subsections to Service Delivery (Quoting) and CLS (shipping instructions); filled child ticket record keeping; removed empty Remote Access & Remote Support Policy; promoted Continuous Improvement to its own heading; corrected typos (technical, Serves); pluralised Development Plans; marked Disciplinary Typical Flow as TBD |
+| VE.8    | -          | Jason Mcdill | Formatting-only release: standardised all 41 policy metadata tables with explicit Field/Value header row |
+| VE.9    | 11/03/2026 | Jason Mcdill | Fully drafted Development Plan Policy from placeholder; removed Markdown Guide; marked Ticket Quality Sampling as Not Enforced |
+| VE.10   | 13/03/2026 | Jason Mcdill | **This version is not published.** Extracted Post Incident Review (PIR) into standalone top-level policy with expanded scope, 6 trigger conditions, core principles, and Continual Improvement linkage - all other policies now cross-reference it; removed Dispatch Responsibility Policy (Abandoned), duplicate Password & Credential Handling and Tooling & Asset Management placeholders; 15 typo and grammar corrections throughout; populated Changes log; completed Contact via email guidance |
+| VE.11   | 16/03/2026 | Jason Mcdill | Fully populated Documentation Standards, Ticket Ownership and Handover, Queue Management, Customer Escalation, Handling Complaints and Difficult Customers, and New Starter & Onboarding from placeholders; added new policies: Problem Management, Change Management (Placeholder), Service Level Breach Remediation (with breach classification categories), Disaster Recovery and Business Continuity (Placeholder), Information Security and Data Handling (Placeholder), Vendor and Third-Party Access (Placeholder), Communication Templates and Standards, Agent Wellbeing and Workload Management, Remote and Hybrid Working (Placeholder), Out-of-Hours and On-Call (Placeholder); integrated Appendix – Dispatch Limitations into the Dispatch Policy as formal Dispatch Limits (queue cap, end-of-shift restrictions, Critical Care and Critical Incident override rules); removed Appendix – Daily Ticket Checks and Appendix – Policy Format; removed Scheduled Ticket Review placeholder; removed stale Awaiting Delivery status block; demoted Post Incident Review from top-level heading to section within Critical Incident Handling; added Contact via email compliance measurement to Ticket Communication Policy; added metadata tables to Categorization, Known Issues, and Ticket Closure sections; ~25 typo, grammar, and cross-reference corrections throughout; expanded Changes log with full version history from VE.3 onwards |
+|  VE.14 | 24/03/2026 | Jason Mcdill | Added Executive Sponsors fore each policy based on each policies current version |
+| VE.15 | 26/03/2026 | Jason Mcdill | Included "New client" explicitly in the Projects to Helpdesk handover policy, created the actual interview form |
+| VE. |  | Jason Mcdill | Updated and aligned all supporting documents; added a downloads section for supported documents; aligned blameless/human factor language across Critical, Major Operational, and Major Security Incident shortfall sections; updated PIR Discussion Points to anchor at process level; added PIR/AIR evidence and retention notes to Disciplinary Process; updated AIR Involved Parties to exclude individual agent naming; added human factor escalation principle to AIR Principles; consolidated duplicate PIR sections, first instance replaced with a pointer stub, canonical PIR enriched with Supporting Documents, Nonconformity/Management Review references, and QMS retention language from the removed copy; populated Password & Credential Handling Policy, covers receiving credentials, prohibited actions, PassPortal as approved credential store, password resets, and suspicious request handling; populated Information Security and Data Handling Policy, covers minimum necessary access, personal data handling, screen sharing, data in tickets, external data sharing, device security, and breach reporting with ICO obligations; filled Ticket Closure Handling Reopened Tickets and Classifying and Actioning Recurrence from TBD; populated Known Issues & Mass Communication Policy, covers known issue declaration, inbound ticket handling, mass communication approval and standards, update schedule, and resolution process; populated Out-of-Hours and On-Call Policy, covers voluntary WhatsApp-based OOH and escalation model, Saturday morning shift, deferral guidance, and out-of-hours standards; populated Change Management (Customer-side), covers change identification, written authorisation requirement, scoping, scheduling, and post-change confirmation; filled Complaint Handling Account Management Involvement and Formal Complaint Logging from TBD; filled Problem Management Proactive Problem Identification from TBD, covers daily queue review, recurrence monitoring, PIR-triggered identification, and vendor advisory handling |
+| VE.17 | 29/03/2026 | Jason Mcdill | Added Major Incident Escalation Policy and integrated it (as triggers) to the Escalation policy - further integration is required; re-named Critical Incident Handling to Major Incident Handling |
 
-| Version | Date | Changed By | Summary of Changes |
-| ------- | ---- | ---------- | ------------------ |
-| VE.3 | - | Jason Mcdill | Baseline version; all sections either re-written or converted to markdown |
-| VE.4 | - | Jason Mcdill | Formalised daily ticket status checks with machine-readable failure codes; added per-status check definitions (With User, With Vendor, With Testbench, Scheduled, Field Visit Scheduled, With Internal Team); replaced On Hold and Awaiting Delivery statuses with Field Visit Scheduled and With Internal Team; shifted failure recording from per-ticket agent-linked metadata to aggregate whole-number counting; added Appendix - Daily Ticket Checks with reference table; updated policy format template with heading-level indicators |
-| VE.5 | - | Jason Mcdill | Created Ticket Closure, Reopen and Recurrence policy (restructured from Confirmation of Resolution); added Ticket Ownership and Handover placeholder; added Ticket Type and Ticket Status overview tables; removed Confirmation of Resolution grace period; fixed heading typos (Child Tickets, stray `>` markers); cleaned stray `</s>` characters from Dispatch Responsibility Policy |
-| VE.6 | 26/02/2026 | Jason Mcdill | Removed Incident Management and Service Request Management placeholders (covered by Non-Critical Ticket Handling Process); corrected With User SLA hold from 24 hours to 5 hours (Halo limitation); filled Ticket Communication record keeping, Ticket Closure purpose, and Disciplinary Typical Flow step 1; corrected typos in Priority Classification and Ticket Closure headings |
-| VE.7 | 11/03/2026 | Jason Mcdill | Replaced Account Managers with Service Delivery in child ticket workflows; added automatic approval for quoting and shipping child tickets; renamed child ticket subsections to Service Delivery (Quoting) and CLS (shipping instructions); filled child ticket record keeping; removed empty Remote Access & Remote Support Policy; promoted Continuous Improvement to its own heading; corrected typos (technical, Serves); pluralised Development Plans; marked Disciplinary Typical Flow as TBD |
-| VE.8 | - | Jason Mcdill | Formatting-only release: standardised all 41 policy metadata tables with explicit Field/Value header row |
-| VE.9 | 11/03/2026 | Jason Mcdill | Major release: added complete Quality Management System section aligned to ISO 9001:2015 (~30 new policies); systematically filled Purpose, Scope, How we measure compliance, Record keeping, and How we address shortfall across nearly every existing policy; removed (NF) markers from Triage, SLA Milestones, Priority Classification, Ticket Status Usage, Ticket Communication, Ticket Closure, Escalation, and Quality Assurance; substantially expanded Disciplinary Process (Conduct vs Performance, 8-step Typical Flow, Corrective Training, Oversight, detailed Warning Types); fully drafted Development Plan Policy from placeholder; removed Markdown Guide; marked Ticket Quality Sampling as Not Enforced |
-| VE.10 | 13/03/2026 | Jason Mcdill | **This version is not published.** Extracted Post Incident Review (PIR) into standalone top-level policy with expanded scope, 6 trigger conditions, core principles, and Continual Improvement linkage - all other policies now cross-reference it; removed Dispatch Responsibility Policy (Abandoned), duplicate Password & Credential Handling and Tooling & Asset Management placeholders; 15 typo and grammar corrections throughout; populated Changes log; completed Contact via email guidance |
-| VE.11 | 16/03/2026 | Jason Mcdill | Extracted the entire Quality Management System (~30 policies) into its own standalone manual (qms.md) and added a book selection menu to the site navigation; fully populated Documentation Standards, Ticket Ownership and Handover, Queue Management, Customer Escalation, Handling Complaints and Difficult Customers, and New Starter & Onboarding from placeholders; added new policies: Problem Management, Change Management (Placeholder), Service Level Breach Remediation (with breach classification categories), Disaster Recovery and Business Continuity (Placeholder), Information Security and Data Handling (Placeholder), Vendor and Third-Party Access (Placeholder), Communication Templates and Standards, Agent Wellbeing and Workload Management, Remote and Hybrid Working (Placeholder), Out-of-Hours and On-Call (Placeholder); integrated Appendix – Dispatch Limitations into the Dispatch Policy as formal Dispatch Limits (queue cap, end-of-shift restrictions, Critical Care and Critical Incident override rules); removed Appendix – Daily Ticket Checks and Appendix – Policy Format; removed Scheduled Ticket Review placeholder; removed stale Awaiting Delivery status block; demoted Post Incident Review from top-level heading to section within Critical Incident Handling; added Contact via email compliance measurement to Ticket Communication Policy; added metadata tables to Categorization, Known Issues, and Ticket Closure sections; ~25 typo, grammar, and cross-reference corrections throughout; expanded Changes log with full version history from VE.3 onwards |
+## Related Documents
+
+These documents are internal only and available in Nexus
+
+| Document Name | Document Version | Document Date |
+| ---------------------- | ---------------------- | ---------------------- | 
+| <a href="Service Transition Review (STR) Form.docx">Service Transition Review (STR) Form.docx</a> | 1.0 | 26/03/2026 |
+| <a href="Post Incident Response (PIR) Form.docx">Post Incident Response (PIR) Form.docx</a>  | 1.0 | 26/03/2026 |
+| <a href="After Incident Report (AIR) Form.docx">After Incident Report (AIR) Form.docx</a>  | 1.0 | 26/03/2026 |
+| <a href="Development Plan (DP) Form.docx">Development Plan (DP) Form.docx</a>  | 1.0 | 26/03/2026 |
 
 # Ticket Lifecycle & Classification
 
 ## Lifecycle Flowchart
 
-<img src="lifecycle_flowchart.png" style="width:6.92745in;height:9.15952in" alt="Ticket lifecycle image" />
+<img src="lifecycle_flowchart.png" alt="Ticket lifecycle image"/>
 
 ## Triage Policy
 
@@ -140,10 +157,10 @@ AI has been used throughout this document to assist with wording, conciseness, a
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -228,14 +245,13 @@ Triage quality is assessed as part of daily ticket checks and ticket sampling. T
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 16/03/2026 |             |
 | 1.9     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.9     | Stephen Richardson | 19/03/2026 |
+| 1.9     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -298,7 +314,7 @@ Tickets classified as Critical Care are dispatched using the same limits and exp
 
 #### Critical Incident override
 
-Any conflict with the Critical Incident Handling process overrides the limits in this section. Where an agent is assigned as Incident Owner during a Critical Operational or Critical Security Incident, their existing queue must be redistributed — the dispatch limits do not apply when redistributing that agent’s workload.
+Any conflict with the Critical Incident Handling process overrides the limits in this section. Where an agent is assigned as Incident Owner during a Critical Operational or Critical Security Incident, their existing queue must be redistributed, the dispatch limits do not apply when redistributing that agent’s workload.
 
 ### After-Dispatch CLS Interaction
 
@@ -320,7 +336,7 @@ The skills matrix incorporates a simplified view that shows the base competence 
 
 #### How we measure compliance
 
-Dispatch quality is reviewed through SLA breach classification, daily queue oversight, and Team Leader monitoring of dispatch activity. Compliance with dispatch limits is monitored through queue reviews — breaches are addressed informally and fed back immediately. The average time a ticket spends without dispatch is reported as a performance indicator; slow dispatch attributable to the queue cap is expected and is not treated as a shortfall.
+Dispatch quality is reviewed through SLA breach classification, daily queue oversight, and Team Leader monitoring of dispatch activity. Compliance with dispatch limits is monitored through queue reviews, breaches are addressed informally and fed back immediately. The average time a ticket spends without dispatch is reported as a performance indicator; slow dispatch attributable to the queue cap is expected and is not treated as a shortfall.
 
 #### Record keeping and documentation
 
@@ -328,7 +344,7 @@ Dispatch activity is captured through ticket assignment records and SLA breach c
 
 #### How we address shortfall
 
-Dispatch failures are addressed through informal feedback and coaching in the first instance. Where dispatch shortfall is persistent or results in repeated SLA breaches, it is handled through the disciplinary process. Dispatch limit compliance shortfalls that involve an external team (CLS) are addressed cooperatively — queue owners are not directly responsible for controlling their own inbound volume, so shortfalls are handled through feedback, training, and additional resources rather than through the disciplinary process.
+Dispatch failures are addressed through informal feedback and coaching in the first instance. Where dispatch shortfall is persistent or results in repeated SLA breaches, it is handled through the disciplinary process. Dispatch limit compliance shortfalls that involve an external team (CLS) are addressed cooperatively, queue owners are not directly responsible for controlling their own inbound volume, so shortfalls are handled through feedback, training, and additional resources rather than through the disciplinary process.
 
 ## SLA Milestones
 
@@ -353,10 +369,10 @@ Dispatch failures are addressed through informal feedback and coaching in the fi
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -436,14 +452,13 @@ Shortfall is handled directly through the disciplinary process.
 | 1.8     | Jason Mcdill | 26/02/2026 |             |
 | 1.9     | Jason Mcdill | 11/03/2026 |             |
 | 1.10    | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.10    | Stephen Richardson | 19/03/2026 |
+| 1.10    | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -556,14 +571,13 @@ Shortfall is handled informally through corrective training and guidance, repeat
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -631,14 +645,13 @@ Shortfall is addressed through informal coaching and feedback at the point of id
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -674,14 +687,13 @@ This policy applies to all Helpdesk agents, CLS staff, and Team Leaders involved
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -829,14 +841,13 @@ Misclassification of ticket type is addressed through corrective feedback and tr
 | 1.1     | Jason Mcdill | 13/02/2026 |             |
 | 1.2     | Jason Mcdill | 11/03/2026 |             |
 | 1.3     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.3     | Stephen Richardson | 19/03/2026 |
+| 1.3     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -982,14 +993,13 @@ Missed or invalid appointments are addressed with the agent at the time of ident
 | 1.2     | Jason Mcdill | 11/03/2026 |             |
 | 1.3     | Jason Mcdill | 16/03/2026 |             |
 | 1.4     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.4     | Stephen Richardson | 19/03/2026 |
+| 1.4     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1094,14 +1104,14 @@ Shortfall in update frequency or quality is addressed through Breadboard feedbac
 | 1.2     | Jason Mcdill | 11/03/2026 |             |
 | 1.3     | Jason Mcdill | 16/03/2026 |             |
 | 1.4     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.5     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.4     | Stephen Richardson | 19/03/2026 |
+| 1.4     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1146,11 +1156,72 @@ Tickets closed without appropriate confirmation of resolution are flagged during
 
 ### Handling reopened tickets
 
-[TBD]
+### Handling reopened tickets
+
+When a ticket is reopened after closure, it must be treated as a continuation of the original issue, not a new ticket. The original agent retains ownership where practical. Where that agent is unavailable, the Team Leader assigns ownership at the point of reopening.
+
+A ticket should be reopened rather than a new one raised where:
+
+- The same fault or issue has recurred within 5 business days of closure
+- The customer reports that the resolution did not hold or was not effective
+- A fault is identified that is clearly related to the recently closed ticket
+
+Where a new ticket has already been raised for what is in fact a reopen, the Team Leader determines whether to merge or link them, based on which record better serves continuity.
+
+On reopening, the agent must:
+
+- Review the original ticket history in full before taking action
+- Add an internal note recording why the ticket was reopened and what the current state of the issue is
+- Not close the ticket again without either a confirmed resolution or Team Leader sign-off where confirmation from the user is not obtainable
+
+#### How we measure compliance
+
+Reopened tickets are flagged through ticket sampling and daily hygiene checks. The rate of reopens per agent is tracked as part of weekly statistics and reviewed by Team Leaders as an indicator of closure quality.
+
+#### Record keeping and documentation
+
+Reopened tickets retain the full history of the original ticket. The reason for reopening is documented in an internal note at the point of reopening. Reopen rates are recorded in weekly statistics and retained indefinitely.
+
+#### How we address shortfall
+
+A pattern of premature closures resulting in reopens is addressed through corrective feedback and coaching in the first instance. Where the pattern is persistent or results in customer complaints or SLA impact, it is handled through the disciplinary process.
 
 ### Classifying and actioning recurrence
 
-[TBD]
+Recurrence is distinct from a reopen. A reopen is the same issue returning shortly after closure. Recurrence is the same issue returning after a confirmed resolution has held for a meaningful period, or the same issue type appearing repeatedly across separate tickets.
+
+Agents must not silently absorb recurring issues by repeatedly resolving and closing without flagging the pattern. Recurrence is a signal that the root cause has not been addressed.
+
+#### Identifying recurrence
+
+An issue should be treated as recurring where:
+
+- The same fault has appeared on two or more separate tickets for the same user or device within 30 days of a confirmed resolution
+- The same fault type is appearing across multiple users or devices in the same customer environment
+- A Team Leader or agent identifies a pattern during daily hygiene, dredging, or queue review
+
+#### Actioning recurrence
+
+Where recurrence is identified:
+
+- The agent flags it to their Team Leader at the point of identification, not at point of closure
+- The Team Leader determines whether a Problem ticket is appropriate (see Problem Management policy)
+- Where a Problem ticket is raised, all related tickets are linked to it as children
+- Where a Problem ticket already exists for the pattern, the new ticket is linked to it immediately
+
+Agents must not close a recurring ticket without noting the recurrence in the ticket and confirming with the Team Leader that it has been acknowledged.
+
+#### How we measure compliance
+
+Recurrence patterns are identified through daily ticket checks, dredging, and ticket sampling. Team Leaders monitor for unlinked recurring tickets during queue reviews. The Helpdesk Manager reviews Problem ticket creation rates periodically to confirm that recurring issues are being escalated appropriately rather than silently resolved.
+
+#### Record keeping and documentation
+
+Recurrence flags and the Team Leader's decision on whether to raise a Problem ticket are documented in the relevant ticket as an internal note. Where a Problem ticket is raised, the link between tickets is maintained in the ticketing system. Records are retained as part of the ticket history.
+
+#### How we address shortfall
+
+Failure to flag recurrence to a Team Leader is addressed through corrective feedback. Where an agent is found to have repeatedly closed recurring tickets without flagging, this is treated as a quality failure and ha
 
 ## Ticket Ownership and Handover Policy
 
@@ -1171,14 +1242,13 @@ Tickets closed without appropriate confirmation of resolution are flagged during
 | 1.0     | Jason Mcdill | 19/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1268,14 +1338,13 @@ Failure to maintain ownership or to meet handover standards is addressed through
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1339,7 +1408,7 @@ Where an individual agent fails to manage their queue appropriately (e.g. stale 
 
 | Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 19/03/2026   |
+| Last Updated | 30/03/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
@@ -1356,15 +1425,16 @@ Where an individual agent fails to manage their queue appropriately (e.g. stale 
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 11/03/2026 |             |
-| 1.9     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.9     | Jason Mcdill | 19/03/2026 |             |
+| 2.0     | Jason Mcdill | 30/03/2026 | 01/07/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.9     | Stephen Richardson | 19/03/2026 |
+| 1.9     | Rupert Evans       | 19/03/2026 |
+| 2.0     | [TBD]              |            |
 
 #### Stakeholder / Distribution List
 
@@ -1376,30 +1446,35 @@ Where an individual agent fails to manage their queue appropriately (e.g. stale 
 
 ### Purpose
 
-This policy provides governance around the handling, coordination, and expectations of non-critical incident and service request escalations. The intent is to ensure consistent, effective, and timely escalation of incidents that exceed the capabilities of the current handler but do not meet the criteria for critical or security incident handling.
+This policy provides governance around the handling, coordination, and expectations of incident and service request escalations. The intent is to ensure consistent, effective, and timely escalation of incidents that exceed the capabilities of the current handler.
+
+This policy also governs the Major Incident Escalation process, which applies when Helpdesk-level escalation cannot be resolved without cross-functional coordination through a swarm team.
+
+This policy does not apply to Critical Incident or Critical Security Incident declarations, which are governed by the Critical Incident Handling Policy.
 
 ### Scope
 
-This policy applies to all helpdesk personnel, including Level 1, Level 2, Level 3, Escalation Engineers, and Team Leaders involved in the resolution of non-critical incidents and service requests.
+This policy applies to all helpdesk personnel, including Level 1, Level 2, Level 3, Escalation Engineers, and Team Leaders involved in the resolution of incidents and service requests.
 
-- “Escalation Team” or “Escalations” used in the context of agents, consists of:
+- "Escalation Team" or "Escalations" used in the context of agents, consists of:
   - Team Leaders
   - Third Line Engineers
   - Senior Second Line Engineers undergoing escalations exposure training
 
 ### Escalation Triggers
 
-- Escalations can generally be initiated for any reason but should follow these triggers:
-  - Technician skillset exceeded
-  - Resolution SLA about to be breached AND escalation may prevent the SLA breach
-  - Priority elevation to “high” or “critical”
-  - Escalation is requested by a Team Leader or management
-  - The ticket requires Account Management intervention such as scoping or sales
-    - The ticket itself is not escalated, a child ticket must be raised
-  - The agent is unable to progress the incident following best effort for any other reason
-    - This is meant as a deliberate catch-all, consider if the escalation was reasonable or breached this policy on a case-by-case basis
-    - If this is the trigger used, a PIR is required
-  - The customer has requested escalation (see Customer Escalation)
+Escalations can generally be initiated for any reason but should follow these triggers:
+
+- Technician skillset exceeded
+- Resolution SLA about to be breached AND escalation may prevent the SLA breach
+- Priority elevation to "high" or "critical"
+- Escalation is requested by a Team Leader or management
+- The ticket requires Account Management intervention such as scoping or sales
+  - The ticket itself is not escalated; a child ticket must be raised
+- The agent is unable to progress the incident following best effort for any other reason
+  - This is meant as a deliberate catch-all; consider if the escalation was reasonable or breached this policy on a case-by-case basis
+  - If this is the trigger used, a PIR is required
+- The customer has requested escalation (see Customer Escalation)
 
 #### How we measure compliance
 
@@ -1413,43 +1488,61 @@ Escalation events and their trigger reasons are recorded in the ticket at the ti
 
 Failure to escalate when appropriate, or escalation without a documented trigger, is addressed through corrective training and feedback. Repeat failures are handled through the disciplinary process.
 
-### Service Request Escalation
+### Types of Escalation
 
-While rare, Service Requests may need to be escalated for various reasons like management, lack of access or permissions assigned to the agent, difficulty or specialist knowledge requirements.
+#### Incident Escalation
 
-Service request escalation is handled in the same way as incidents, but the reason for escalation must be identified clearly.
+Incident technical escalation is the most common form of escalation. It applies when the assigned agent cannot progress or resolve an incident and requires specialist support from the Escalation Team.
 
-#### How we measure compliance
+##### How we measure compliance
 
-Service request escalation compliance is assessed through ticket sampling. The reason for escalation and any subsequent handling are reviewed for appropriateness.
+Incident escalation compliance is assessed through ticket sampling and PIR outcomes. Reviewers confirm that the escalation trigger was documented and that escalation was raised at the appropriate point.
 
-#### Record keeping and documentation
+##### Record keeping and documentation
 
-Escalation events for service requests are recorded in the ticket and captured through QA sampling outcomes.
+Escalation events are recorded in the ticket at the time of escalation and captured through QA sampling outcomes.
 
-#### How we address shortfall
+##### How we address shortfall
 
 Shortfall is addressed through informal feedback and corrective training in the first instance. Repeated or serious failures are handled through the disciplinary process.
 
-### Customer Escalation
+#### Service Request Escalation
+
+While rare, service requests may need to be escalated for reasons including management approval requirements, insufficient access or permissions assigned to the agent, or specialist knowledge requirements.
+
+Service request escalation is handled in the same way as incident escalation, but the reason for escalation must be clearly identified.
+
+##### How we measure compliance
+
+Service request escalation compliance is assessed through ticket sampling. The reason for escalation and any subsequent handling are reviewed for appropriateness.
+
+##### Record keeping and documentation
+
+Escalation events for service requests are recorded in the ticket and captured through QA sampling outcomes.
+
+##### How we address shortfall
+
+Shortfall is addressed through informal feedback and corrective training in the first instance. Repeated or serious failures are handled through the disciplinary process.
+
+#### Customer Escalation
 
 A customer escalation occurs when a customer explicitly requests that their issue be escalated beyond the current handler, or expresses dissatisfaction with the progress or handling of their ticket to the extent that leadership intervention is appropriate.
 
-#### When customer escalation applies
+##### When customer escalation applies
 
 - The customer explicitly requests to speak to a manager or senior person
 - The customer expresses significant dissatisfaction with the handling, progress, or outcome of their ticket
 - The agent identifies that the customer's expectations cannot be met within normal handling and leadership input is needed
 - The customer contacts Digital Origin through a channel outside the normal ticket flow (e.g. direct email to management, complaint via account manager) about an active ticket
 
-#### Agent responsibilities
+##### Agent responsibilities
 
 - Inform the Helpdesk leadership team (Team Leader or Helpdesk Manager) at the earliest opportunity when a customer is requesting escalation
 - Do not attempt to dissuade the customer from escalating or promise outcomes that require leadership authority
 - Continue to manage the ticket and maintain communication with the customer unless a Team Leader explicitly takes over communication ownership
 - Record the escalation request and the customer's stated concern in the ticket
 
-#### Team Leader responsibilities
+##### Team Leader responsibilities
 
 - Assess the situation promptly and determine the appropriate response
 - Where resources allow and the customer's expectations warrant it, take over communication with the customer directly
@@ -1457,28 +1550,51 @@ A customer escalation occurs when a customer explicitly requests that their issu
 - Ensure the underlying ticket continues to progress - customer escalation does not pause technical resolution
 - Where the escalation indicates a broader service issue (e.g. repeated failures for the same customer, systemic handling problems), raise this for review at the weekly statistics meeting or Management Review as appropriate
 
-#### Relationship to Handling Complaints and Difficult Customers
+##### Relationship to Handling Complaints and Difficult Customers
 
 Where a customer escalation involves a formal complaint or abusive behaviour, refer to the Handling Complaints and Difficult Customers policy.
 
-#### How we measure compliance
+##### How we measure compliance
 
 Customer escalation handling is reviewed informally by Team Leaders on a case-by-case basis. Notable outcomes may be reviewed in the monthly one-to-one. Patterns of repeated customer escalation for the same customer or agent are tracked through weekly statistics.
 
-#### Record keeping and documentation
+##### Record keeping and documentation
 
 Customer escalation events are recorded in the ticket, including the customer's stated concern and the leadership response. Where a Team Leader takes over communication, this is noted in the ticket and tracked to resolution.
 
-#### How we address shortfall
+##### How we address shortfall
 
 Failure to notify leadership of a customer escalation request at the earliest opportunity is addressed through informal feedback. Repeat failures are handled through the disciplinary process. Where customer escalations reveal systemic handling issues, these are raised through the continual improvement process.
 
-### Escalation Procedure
+#### Major Incident Escalation
+
+Major Incident Escalation applies when a ticket has been formally escalated and the Helpdesk cannot resolve the incident independently. At this point the ticket is handed off to the Major Incident Swarm process, which is governed entirely by the Major Incident Escalation Policy.
+
+Before handing off, the assigned agent and Team Leader must confirm two things:
+
+- **P1 check** - if the ticket is or may be a P1, the Major Incident Policy must be invoked before proceeding
+- **Helpdesk resolution assessment** - confirm that the Helpdesk genuinely cannot resolve the incident without external support; if it can, the ticket does not enter the swarm pipeline
+
+Once both are confirmed, the ticket is handed to the swarm team and all further handling is governed by the Major Incident Escalation Policy. The original ticket owner retains ownership of the ticket and remains responsible for keeping it updated throughout.
+
+##### How we measure compliance
+
+The P1 check and Helpdesk resolution assessment are recorded in the ticket at the point of handoff. Ticket sampling confirms both steps are completed and documented before the swarm is activated.
+
+##### Record keeping and documentation
+
+The outcome of both pre-handoff assessments, including whether the Major Incident Policy was invoked and when, is recorded in the ticket at the point of handoff.
+
+##### How we address shortfall
+
+Failure to complete either assessment before handing off to the swarm, or failure to invoke the Major Incident Policy where required, is addressed through corrective training and feedback. Repeat failures are handled through the disciplinary process.
+
+### Escalation Process
 
 #### General expectations
 
 - The ticket owner retains responsibility for the ticket even after escalation has taken place.
-- Escalation should not be used to “hand off” ownership.
+- Escalation should not be used to "hand off" ownership.
 - The reason for escalation must be clear and documented within the ticket.
 - Escalation must be raised as early as possible once a blocker is identified.
 
@@ -1489,7 +1605,7 @@ Escalation events must be recorded in the ticket, including:
 - Time of escalation
 - Who it was escalated to
 - Reason for escalation
-- Any actions already taken, and the current status
+- Any actions already taken and the current status
 - Any immediate next steps or expected outcomes
 
 #### Escalation communication
@@ -1511,7 +1627,7 @@ If the escalated party is unavailable or the escalation cannot be handled prompt
 
 Escalation concludes when:
 
-- The escalated requirement has been met, and the ticket owner can proceed
+- The escalated requirement has been met and the ticket owner can proceed
 - The escalated party has taken over and confirmed responsibility for further progress (where appropriate)
 - The ticket is closed under normal resolution conditions
 
@@ -1529,7 +1645,9 @@ Shortfall is addressed through informal feedback and corrective training in the 
 
 ### Post Incident Review
 
-Where a PIR is required following an escalation, it is conducted in accordance with the Post Incident Review (PIR) Policy. That policy is the single authoritative reference for PIR process, expectations, and governance.
+A PIR is required where the escalation trigger used was the catch-all (agent unable to progress for any other reason), or where Leadership determines a PIR is warranted for any other reason. PIR triggers arising from the Major Incident Swarm process are governed by the Major Incident Escalation Policy.
+
+Where a PIR is required, it is conducted in accordance with the Post Incident Review (PIR) Policy, which is the single authoritative reference for PIR process, expectations, and governance.
 
 ## Problem Management
 
@@ -1549,14 +1667,14 @@ Where a PIR is required following an escalation, it is conducted in accordance w
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1603,7 +1721,18 @@ As defined in the Ticket Type Usage Policy:
 
 #### Proactive problem identification
 
-[TBD]
+Reactive problem identification, raising a Problem ticket once multiple incidents have already been reported, is the minimum standard. The Helpdesk also has a responsibility to identify emerging patterns before they generate significant customer impact.
+
+Proactive problem identification is the responsibility of Team Leaders and Third Line Engineers. It is conducted through:
+
+- **Daily queue review**, during daily hygiene and dredging activity, Team Leaders should note tickets that share system, symptom, or customer characteristics even where they have not been formally linked
+- **Recurrence monitoring**, reopen and recurrence rates are tracked as part of weekly statistics; a pattern of recurrence in a particular area is a trigger for problem identification review
+- **PIR findings**, where a PIR identifies a systemic weakness, the Team Leader assesses whether a Problem ticket is warranted even in the absence of multiple open incidents
+- **Vendor and third-party communications**, where a vendor issues an advisory, known issue notification, or patch release that indicates a likely fault, a Problem ticket may be raised pre-emptively to capture related inbound tickets as they arrive
+
+Where a Team Leader or Third Line Engineer identifies a potential pattern, they must not wait for confirmation of a second incident before raising it with the Helpdesk Manager. Early identification, even where it does not result in a Problem ticket, should be documented as an internal note on the most relevant active ticket.
+
+The decision to raise a Problem ticket proactively rests with the Team Leader in consultation with the Helpdesk Manager.
 
 #### How we measure compliance
 
@@ -1617,9 +1746,7 @@ Problem tickets and their linked incidents are retained in the ticketing system 
 
 Failure to raise a Problem ticket where one is warranted (e.g. where a PIR recommends it, or where a clear pattern of recurring incidents exists) is raised with the responsible Team Leader. Systemic gaps in problem identification are escalated to the Helpdesk Manager for review at Management Review.
 
-## Change Management (Customer-side) [Placeholder]
-
-[Placeholder]
+## Change Management (Customer-side) 
 
 ### Document Control
 
@@ -1637,14 +1764,14 @@ Failure to raise a Problem ticket where one is warranted (e.g. where a PIR recom
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1656,29 +1783,93 @@ Failure to raise a Problem ticket where one is warranted (e.g. where a PIR recom
 
 ### Purpose
 
-[TBD]
+To define how the Helpdesk handles requests from customers to make changes to their IT environment, configuration, or services. This policy ensures that change requests are correctly identified, scoped, and authorised before work begins, and that agents do not undertake change activity without appropriate approval. It exists to protect both the customer and Digital Origin from uncontrolled, undocumented, or out-of-scope work.
 
 ### Scope
 
-[TBD]
+This policy applies to all Helpdesk agents, escalations engineers, and Team Leaders. It covers any request where the outcome is a deliberate, planned modification to a customer's environment, as distinct from incident resolution, where the aim is restoring something to its previous working state.
+
+### What is a change
+
+A change is any action that deliberately modifies a customer's environment, configuration, or service in a way that goes beyond restoring normal operation. Examples include:
+
+- Adding, removing, or reconfiguring user accounts beyond the scope of a reported fault
+- Installing or removing software or services across a customer environment
+- Modifying network configuration, firewall rules, or security settings
+- Migrating data, services, or systems
+- Making configuration changes to a customer's line-of-business application at their request
+
+The distinction between a change and an incident resolution is intent. Restoring a broken thing to its previous working state is incident resolution. Modifying how something works, even at the customer's request, is a change.
+
+Where there is ambiguity, the agent must raise it with the Team Leader before proceeding.
 
 ### Expectation
 
-[TBD]
+#### Identifying a change request
+
+Where a customer requests work that meets the definition of a change, the agent must:
+
+- Not begin the work without going through the steps below
+- Raise it with the Team Leader to confirm classification and authorisation requirements
+- Ensure the request is documented in the ticket before any work begins
+
+Agents must not begin change activity on the basis of a verbal request alone, regardless of the customer's seniority or urgency.
+
+#### Authorisation
+
+All changes require written authorisation from an appropriate contact on the customer side before work begins. The appropriate contact is a person with the authority to approve changes to their own environment, this is a named VIP in HaloPSA.
+
+Where the customer contact requesting the change does not have that authority, the agent must confirm approval has been obtained before proceeding.
+
+The authorisation must be recorded in the ticket. An email reply from the approving contact is sufficient. Verbal confirmation is not.
+
+#### Scoping
+
+Before a change is undertaken, the scope must be clearly defined in the ticket:
+
+- What will be changed
+- What will not be changed
+- What the expected outcome is
+- Any known risks or dependencies
+- Whether a rollback is possible and what it would involve
+
+Where a change is sufficiently complex that it cannot be clearly scoped by the agent, it must be escalated to the Team Leader or a Third Line Engineer before work begins.
+
+#### Scheduling
+
+Where possible, changes should be scheduled during a window agreed with the customer, outside of their peak operating hours. This is particularly important for changes that carry a risk of service disruption.
+
+The scheduled change must be recorded in the ticket with the agreed time and the name of the authorising contact.
+
+#### During the change
+
+Agents must:
+
+- Work only within the agreed scope, if the scope needs to expand, the change must be paused and re-authorised
+- Document progress in the ticket as the change proceeds
+- Stop and escalate if an unexpected risk or dependency is encountered that was not identified during scoping
+
+#### After the change
+
+Once the change is complete:
+
+- The outcome is documented in the ticket, including any deviations from the original scope
+- The customer is notified and confirmation that the change has been accepted is obtained before the ticket is closed
+- Where a change has not achieved the intended outcome or has caused a secondary issue, the Team Leader is notified immediately
 
 #### How we measure compliance
 
-[TBD]
+Change tickets are reviewed during ticket sampling for the presence of written authorisation, scope documentation, and customer confirmation of outcome. Team Leaders spot-check change activity during daily hygiene. The Helpdesk Manager reviews change ticket quality periodically.
 
 #### Record keeping and documentation
 
-[TBD]
+All change requests are documented in the ticketing system from the point of identification. Written authorisation, scope, outcomes, and customer confirmation are retained as part of the ticket record indefinitely.
 
 #### How we address shortfall
 
-[TBD]
+Agents who undertake change activity without written authorisation, outside agreed scope, or without proper documentation are addressed through corrective training and documented coaching. Where unauthorised change activity results in customer impact, it is escalated to the Helpdesk Manager and handled through the disciplinary process.
 
-# Critical Incident Handling
+# Critical & Major Incident Handling
 
 ### Document Control
 
@@ -1703,14 +1894,13 @@ Failure to raise a Problem ticket where one is warranted (e.g. where a PIR recom
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1743,14 +1933,13 @@ Critical incidents are high-priority issues that have a significant impact on se
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1797,14 +1986,13 @@ Each category follows a distinct escalation and communication path. Major incide
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 11/03/2026 |             |
 | 1.9     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.9     | Stephen Richardson | 19/03/2026 |
+| 1.9     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -1859,7 +2047,260 @@ Critical incident handling is recorded in the incident ticket throughout the lif
 
 #### How we address shortfall
 
-Shortfall identified through PIR is addressed through process improvement and corrective training. Where individual conduct fell below the expected standard, this is handled separately through the disciplinary process.
+Shortfall identified through PIR is addressed through process improvement and corrective training. Where the PIR identifies a human factor as a root cause, that finding is passed to the Disciplinary Process separately. The PIR itself takes no further action with respect to that individual.
+
+## Major Incident Escalation Policy (Swarm Team)
+
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
+| ------------ | ------------ |
+| Last Updated | 29/03/2026   |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 29/03/2026 | 01/07/2026  |
+
+#### Executive Sponsors
+
+| Version | Author | Date |
+| ------- | ------ | ---- |
+| 1.0     | [TBD]  |      |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 29/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk |            |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk |            |
+
+### Purpose
+
+This policy defines the process for handling escalated incidents that exceed the capability of the assigned Helpdesk agent and require coordinated resolution through a Major Incident Swarm Team. It establishes the conditions under which a swarm is formed, the roles involved, the decision framework applied during the escalation lifecycle, and the conditions under which an escalation is concluded.
+
+This policy governs major incidents only. It does not replace the Critical Incident Handling policy, which applies to incidents that meet the threshold for a Critical Operational or Critical Security Incident declaration.
+
+### Scope
+
+This policy applies to all Helpdesk personnel involved in the handling of escalated incidents, including Helpdesk agents, Team Leaders, the Helpdesk Manager, Escalation Engineers, and representatives from Projects, DevOps, and any other branch teams drawn into a swarm.
+
+It covers all incidents that have been formally escalated and where the Helpdesk cannot resolve the issue independently.
+
+### Relationship to the Escalation Policy
+
+This policy operates downstream of the Escalation Policy. The Escalation Policy governs the conditions under which a ticket is escalated and the general expectations around escalation events. This policy governs what happens once an escalation has been raised and the Major Incident Swarm process is activated.
+
+Where both policies apply, this policy takes precedence for major incident handling.
+
+### Escalation Entry and Priority Assessment
+
+When a ticket is formally escalated, the following initial assessment is made before the swarm is activated.
+
+**P1 Incident check**
+
+If the escalated ticket is, or may be, a Priority 1 incident, the Major Incident Policy must be invoked before proceeding. If the Major Incident Policy has already been invoked at the point of escalation, this step is confirmed and no further action is required.
+
+> [!INFO] Invoking the Major Incident Policy does not replace this process. Both run in parallel. The Major Incident Policy governs the incident declaration and stakeholder communication; this policy governs the technical resolution pathway.
+
+**Helpdesk resolution assessment**
+
+Before forming a swarm, the assigned agent and Team Leader must confirm whether the Helpdesk can resolve the incident without external support. If the Helpdesk can resolve it, the ticket proceeds to customer outcome confirmation without forming a swarm.
+
+If the Helpdesk cannot resolve the incident, a Major Incident Swarm Team is formed.
+
+#### How we measure compliance
+
+The P1 assessment and Helpdesk resolution assessment are recorded in the ticket at the point of escalation. Ticket sampling confirms that both steps are completed and documented before a swarm is formed.
+
+#### Record keeping and documentation
+
+The outcome of the P1 assessment, including whether the Major Incident Policy was invoked and when, is recorded in the ticket. The Helpdesk resolution assessment outcome is also recorded, with a brief note of why independent resolution was not possible.
+
+#### How we address shortfall
+
+Failure to complete the entry assessment before forming a swarm, or failure to invoke the Major Incident Policy where required, is addressed through corrective training and feedback. Repeat failures are handled through the disciplinary process.
+
+### Major Incident Swarm Team
+
+When the Helpdesk cannot resolve the incident independently, a Major Incident Swarm Team is formed. The swarm is a temporary cross-functional group assembled to resolve a single escalated incident. It does not have a standing membership and is disbanded once the escalation is concluded.
+
+**Composition**
+
+The swarm draws from the following branches as required. Not all branches are required in every swarm - composition is determined by the nature of the incident.
+
+- Leadership (HDTL / HDM) - coordinates the swarm and retains overall accountability
+- HD Branch (Escalations) - provides Helpdesk escalation engineering resource
+- Projects Branch - engaged where the incident has a projects or delivery dimension
+- DevOps Branch - engaged where the incident involves infrastructure, systems, or automation
+
+Leadership must be notified and confirm involvement before the swarm is considered active.
+
+**Responsibilities**
+
+- Leadership coordinates the swarm, maintains communication with the customer, and is responsible for escalating further where required
+- Each branch representative is responsible for applying their specialist capability to the incident within the swarm session
+- The original ticket owner retains ownership of the ticket throughout and is responsible for ensuring all swarm activity is documented
+
+#### How we measure compliance
+
+Swarm formation is assessed through ticket sampling and PIR outcomes. Reviewers confirm that Leadership was notified, that composition was appropriate to the incident, and that the swarm was not formed unnecessarily.
+
+#### Record keeping and documentation
+
+Swarm formation is recorded in the ticket, including the time the swarm was activated, the branches involved, and the names of representatives. Where Leadership is unavailable and a deputy acts in their place, this is noted.
+
+#### How we address shortfall
+
+Forming a swarm without Leadership involvement, or failing to document swarm composition, is addressed through corrective training and feedback. Where a swarm is formed unnecessarily or bypasses the entry assessment, this is raised through the PIR process.
+
+### Swarm Resolution Pathway
+
+Once the swarm is active, the following decision pathway applies. Each stage must be assessed in order and documented in the ticket.
+
+**Stage 1 - Direct resolution**
+
+The swarm attempts to resolve the incident directly. If the swarm resolves the incident, the outcome is recorded as "Issue resolved" and the ticket proceeds to customer outcome confirmation.
+
+If the swarm cannot resolve the incident, the pathway continues.
+
+**Stage 2 - Quote required**
+
+If resolution requires a commercial decision, procurement, or solution scoping, a quote is required. The ticket outcome is recorded as "Scoping for replacement solution" and the ticket proceeds to customer outcome confirmation via the relevant commercial route.
+
+If no quote is required, the pathway continues.
+
+**Stage 3 - Vendor support required**
+
+If the incident requires vendor involvement to resolve, vendor support is engaged. The swarm monitors progress while the vendor works.
+
+- If the vendor resolves the incident, the outcome is recorded as "Vendor resolved" and the ticket proceeds to customer outcome confirmation.
+- If the vendor cannot resolve the incident, the pathway continues to Stage 4.
+
+If vendor support is not required, the pathway also continues to Stage 4.
+
+**Stage 4 - Workaround**
+
+If a workaround is available that allows the customer to operate while a permanent resolution is pursued, the workaround is applied. The outcome is recorded as "Workaround applied" and the ticket proceeds to customer outcome confirmation.
+
+If no workaround is available, the pathway continues.
+
+**Stage 5 - Not possible / not fit for purpose**
+
+If no resolution, quote route, vendor fix, or workaround is available, the outcome is recorded as "Not possible / not fit for purpose." An assessment is made of whether an alternative solution exists.
+
+- If an alternative solution exists, the ticket outcome is updated to "Scoping for replacement solution" and the ticket proceeds to customer outcome confirmation.
+- If no alternative solution exists, the incident is passed to Business / Relationship Management for handling. The swarm is disbanded. The escalation proceeds to conclusion without customer outcome confirmation through the normal route - see the Business and Relationship Management section below.
+
+> [!WARNING] "Not possible / not fit for purpose" is a significant outcome. It must not be recorded without Leadership sign-off. Where this outcome is reached, a PIR is required.
+
+**Technical resource exhausted**
+
+Where all technical avenues have been fully exhausted and no further progress is possible through the swarm pathway, the ticket is recorded as "Technical resource exhausted" and the escalation is concluded. This outcome bypasses customer outcome confirmation and proceeds directly to Escalation Concluded.
+
+> [!WARNING] "Technical resource exhausted" must not be used as a shortcut through the swarm pathway. It is a last-resort outcome and requires Leadership sign-off and a PIR.
+
+#### How we measure compliance
+
+Swarm resolution pathway adherence is assessed through ticket sampling and PIR outcomes. Reviewers confirm that each stage was completed in order, that outcomes were recorded correctly, and that Leadership sign-off was obtained where required.
+
+#### Record keeping and documentation
+
+Each stage of the swarm resolution pathway is recorded in the ticket as it is completed, including the outcome determined at each stage and any actions taken. Where a stage results in a handoff (vendor engagement, commercial scoping, business management referral), the handoff details are recorded.
+
+#### How we address shortfall
+
+Failure to follow the pathway in order, or recording an outcome without the required sign-off, is addressed through corrective training and feedback. Repeated failures, or misuse of "Technical resource exhausted" to avoid further resolution effort, are handled through the disciplinary process and PIR process.
+
+### Customer Outcome Confirmation
+
+Before the escalation is concluded, the customer must accept the outcome. This applies to all resolution pathways except Business / Relationship Management and Technical resource exhausted, which conclude independently.
+
+**Accepted outcome**
+
+If the customer accepts the outcome, the escalation is concluded and the ticket re-enters the standard ticket lifecycle for closure. The ticket status and resolution details must be updated to reflect the confirmed outcome before the escalation is marked as concluded.
+
+**Rejected outcome**
+
+If the customer does not accept the outcome, the case is referred to Leadership (HDTL / HDM). Leadership assesses the situation and determines whether any further technical or commercial pathway exists. Where further action is possible, the ticket re-enters the swarm process at the appropriate stage. Where no further action is possible, the escalation is concluded with the outcome documented and the ticket proceeds to closure.
+
+> [!INFO] Customer rejection of an outcome does not automatically reactivate the full swarm. Leadership determines the appropriate response, which may be a targeted technical review, a commercial discussion, or confirmation that the original outcome stands.
+
+#### How we measure compliance
+
+Customer outcome confirmation is assessed through ticket sampling. Reviewers confirm that confirmation was sought, that the customer's response was recorded, and that the ticket was correctly progressed following the outcome.
+
+#### Record keeping and documentation
+
+The customer's acceptance or rejection of the outcome is recorded in the ticket, including a brief summary of the customer's position where rejection occurs. Where Leadership is involved following rejection, the outcome of that assessment is also recorded.
+
+#### How we address shortfall
+
+Failure to seek customer outcome confirmation, or proceeding to Escalation Concluded without confirmation where it is required, is addressed through corrective training and feedback. Repeated failures are handled through the disciplinary process.
+
+### Business and Relationship Management
+
+Where all technical and commercial pathways have been exhausted and no alternative solution exists, the escalation is referred to Business / Relationship Management. This is handled at account management level and is outside the technical resolution pathway.
+
+The purpose of this referral is to manage the customer relationship and agree on an outcome that is acceptable at a commercial or contractual level, where a technical outcome is not achievable.
+
+The swarm is disbanded at the point of referral. The original ticket owner remains responsible for ensuring the ticket is updated and that the referral is clearly documented.
+
+Business / Relationship Management concludes by feeding the agreed outcome back into the ticket lifecycle, and the escalation is concluded at that point.
+
+#### How we measure compliance
+
+Referrals to Business / Relationship Management are reviewed through ticket sampling and PIR outcomes. Reviewers confirm that the referral was appropriate, that the swarm pathway was fully exhausted before referral, and that the ticket reflects the referral clearly.
+
+#### Record keeping and documentation
+
+The referral to Business / Relationship Management is recorded in the ticket, including the reason for referral, the point at which the swarm was disbanded, and the agreed outcome once it is reached.
+
+#### How we address shortfall
+
+Premature referral to Business / Relationship Management, bypassing available resolution stages, is addressed through corrective training and a PIR. Repeated failures are handled through the disciplinary process.
+
+### Escalation Concluded
+
+The escalation is concluded when one of the following conditions is met:
+
+- The customer has accepted the outcome and the ticket has been returned to the standard ticket lifecycle
+- The escalation has been referred to Business / Relationship Management and an agreed outcome has been reached
+- The outcome is "Technical resource exhausted" and Leadership has confirmed no further action is possible
+
+At the point of escalation conclusion, the ticket must be updated to reflect the final outcome and re-enter the ticket lifecycle for closure in accordance with the Ticket Closure Policy.
+
+The swarm is formally disbanded at this point. Leadership must confirm disbandment and ensure all participants are notified.
+
+#### How we measure compliance
+
+Escalation conclusion is assessed through ticket sampling. Reviewers confirm that the conclusion condition was met, that the ticket was correctly updated, and that the ticket re-entered the lifecycle appropriately.
+
+#### Record keeping and documentation
+
+The conclusion of the escalation is recorded in the ticket, including the conclusion condition that was met, the time of conclusion, and confirmation that the swarm was disbanded. Where a PIR is required, the PIR reference is noted in the ticket.
+
+#### How we address shortfall
+
+Failure to formally conclude the escalation, or to return the ticket to the ticket lifecycle correctly, is addressed through corrective training and feedback. Repeated failures are handled through the disciplinary process.
+
+### Post Incident Review
+
+A PIR is required following a major incident escalation in any of the following circumstances:
+
+- The outcome is "Not possible / not fit for purpose"
+- The outcome is "Technical resource exhausted"
+- The customer rejected the initial outcome
+- The swarm pathway took longer than expected or produced a significantly worse outcome than anticipated
+- Leadership determines a PIR is warranted for any other reason
+
+Where a PIR is required, it is conducted in accordance with the Post Incident Review (PIR) Policy, which is the single authoritative reference for PIR process, expectations, and governance.
 
 ## Major Operational Incident Policy
 
@@ -1886,14 +2327,13 @@ Shortfall identified through PIR is addressed through process improvement and co
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2066,7 +2506,7 @@ All events are recorded in the incident ticket throughout its lifecycle. PIR out
 
 #### How we address shortfall
 
-Shortfall identified through PIR is addressed through process improvement and corrective training. Where individual conduct fell below the expected standard, this is handled separately through the disciplinary process.
+Shortfall identified through PIR is addressed through process improvement and corrective training. Where the PIR identifies a human factor as a root cause, that finding is passed to the Disciplinary Process separately. The PIR itself takes no further action with respect to that individual.
 
 ## Major Security Incident Policy
 
@@ -2093,14 +2533,13 @@ Shortfall identified through PIR is addressed through process improvement and co
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2244,9 +2683,9 @@ All events are recorded in the incident ticket throughout its lifecycle. PIR out
 
 #### How we address shortfall
 
-Shortfall identified through PIR is addressed through process improvement and corrective training. Where individual conduct fell below the expected standard, this is handled separately through the disciplinary process.
+Shortfall identified through PIR is addressed through process improvement and corrective training. Where the PIR identifies a human factor as a root cause, that finding is passed to the Disciplinary Process separately. The PIR itself takes no further action with respect to that individual.
 
-## Known Issues & Mass Communication Policy [Placeholder]
+## Known Issues & Mass Communication Policy
 
 ### Document Control
 
@@ -2264,14 +2703,14 @@ Shortfall identified through PIR is addressed through process improvement and co
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2281,145 +2720,90 @@ Shortfall identified through PIR is addressed through process improvement and co
 | Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
 | Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
 
-[Placeholder]
-
 ### Purpose
 
-[TBD]
+To define how the Helpdesk identifies, communicates, and manages known issues, faults or outages that are confirmed to affect multiple users or customers simultaneously, and to set the standard for mass communication during those events. The goal is to ensure customers receive timely, consistent, and accurate information, agents are not duplicating effort across related tickets, and the Helpdesk presents a controlled and professional response under pressure.
 
 ### Scope
 
-[TBD]
+This policy applies to all Helpdesk agents, CLS staff, Team Leaders, and the Helpdesk Manager. It covers any situation where a single fault, outage, or issue is confirmed or suspected to be affecting more than one user or customer, and where outbound communication to affected parties is required or appropriate.
 
 ### Expectation
 
-[TBD]
+#### Identifying a known issue
+
+A known issue exists where:
+
+- The same fault is reported by two or more users or customers within a short timeframe and the reports are consistent enough to suggest a common cause
+- A Team Leader or agent identifies a pattern during queue review, dredging, or inbound ticket monitoring
+- A vendor, third party, or internal team confirms a fault that is likely to generate inbound contact
+
+An agent who suspects a known issue must not wait until it is confirmed before notifying their Team Leader. Early flagging gives the Helpdesk time to prepare a response before the inbound volume builds.
+
+#### Declaring a known issue
+
+Only a Team Leader or the Helpdesk Manager can declare a known issue. Once declared:
+
+- A Problem ticket is raised to act as the central record (see Problem Management policy)
+- All related inbound tickets are linked to the Problem ticket as children
+- A holding response is prepared for use with any further inbound contact on the same issue (see below)
+- Agents are briefed so they can handle further inbound consistently
+
+Agents must not independently declare a known issue or begin communicating to customers about a suspected issue without Team Leader confirmation.
+
+#### Handling inbound tickets during a known issue
+
+Once a known issue has been declared:
+
+- New tickets relating to the issue are raised, triaged, and linked to the Problem ticket
+- The holding response is applied, agents do not investigate individually, as the resolution is being managed centrally
+- Tickets are updated at least once every 24 hours in line with the standard update requirement, even if there is no new information, the update confirms the issue is still being actively managed
+- Agents must not close tickets linked to a known issue without Team Leader approval
+
+#### Mass communication
+
+Where the scale or nature of a known issue means proactive outbound communication is appropriate, rather than waiting for customers to contact the Helpdesk, the Team Leader or Helpdesk Manager initiates a mass communication.
+
+Mass communications must:
+
+- Be approved by the Team Leader or Helpdesk Manager before they are sent
+- Be factually accurate at the time of sending, do not speculate about cause or resolution timescales unless they are confirmed
+- Be sent from the appropriate channel as determined by the Team Leader
+- Be consistent, all affected customers receive the same core message, adjusted only where a customer's specific situation requires it
+- Clearly state what is known, what is being done, and when the next update will be provided
+
+Agents must not send individual communications that contradict or conflict with an approved mass communication.
+
+#### Updates during a known issue
+
+Once a mass communication has gone out, a follow-up update must be sent when:
+
+- The issue is resolved
+- There is a material change in status, for example, a cause has been identified, a workaround is available, or the resolution timescale has changed significantly
+- The committed update time has been reached, even if there is nothing new to report
+
+The Team Leader owns the update schedule during a known issue. Agents send updates only at the direction of the Team Leader.
+
+#### Resolution and closure
+
+A known issue is resolved when the underlying fault is fixed and confirmed. The Team Leader or Helpdesk Manager:
+
+- Sends a resolution communication to all affected customers
+- Confirms with agents that linked tickets can be updated and closed in line with the normal closure policy
+- Closes or resolves the Problem ticket once all child tickets are closed
+- Determines whether a PIR is appropriate based on the scale and nature of the issue
 
 #### How we measure compliance
 
-[TBD]
+Team Leaders monitor inbound ticket patterns during known issues to confirm that tickets are being linked correctly and holding responses are being applied consistently. The Helpdesk Manager reviews mass communication records periodically to confirm that outbound messaging was accurate, timely, and approved.
 
 #### Record keeping and documentation
 
-[TBD]
+The Problem ticket serves as the central record of the known issue, including the timeline, scope, communications sent, and resolution. Mass communications are retained alongside the Problem ticket. Records are retained indefinitely.
 
 #### How we address shortfall
 
-[TBD]
-
-## Post Incident Review (PIR)
-
-### Document Control
-
-#### Document Properties
-
-| Property     | Details      |
-| ------------ | ------------ |
-| Last Updated | 19/03/2026   |
-| Updated By   | Jason Mcdill |
-| Owner        | Jason Mcdill |
-
-#### Revision History
-
-| Version | Author       | Date       | Next Review |
-| ------- | ------------ | ---------- | ----------- |
-| 1.0     | Jason Mcdill | 10/02/2026 |             |
-| 1.1     | Jason Mcdill | 13/03/2026 |             |
-| 1.2     | Jason Mcdill | 16/03/2026 |             |
-| 1.3     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
-
-#### Executive Sponsors
-
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
-
-#### Stakeholder / Distribution List
-
-| Name          | Title                | Business Unit     | Date       |
-| ------------- | -------------------- | ----------------- | ---------- |
-| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
-
-### Purpose
-
-To provide a structured, blameless review process following the handling of incidents, with the aim of identifying process improvements and preventing recurrence. PIRs are developmental in nature and are explicitly separate from any disciplinary assessment.
-
-### Scope
-
-This policy applies to all team members involved in the handling of a major operational or major security incident, and to any incident where a PIR is required by another policy in this manual, including the Escalation Policy, Critical Incident Policy, Major Operational Incident Policy, and Major Security Incident Policy. PIRs are facilitated by the Team Leader or Helpdesk Manager.
-
-### Core Principles
-
-Post-incident reviews exist to learn and improve rather than punish. PIR activities must never include disciplinary assessment or recommendations. Any disciplinary action, if required, will be handled separately through the Disciplinary Process.
-
-If a PIR determines that an agent's actions were a root cause or significantly contributing factor, the PIR records that fact and stops there with respect to that agent, proceeding only on system/process improvements.
-
-> Raising concerns or self-reporting failures during a PIR will never result in disciplinary action.
-
-### When a PIR is Required
-
-A PIR must be conducted following:
-
-- Any major operational incident where the Major Operational Incident Policy was invoked
-- Any major security incident where the Major Security Incident Policy was invoked
-- Any critical incident where the response fell below the expected standard
-- Any escalation where a PIR was required by the Escalation Policy (e.g. where the catch-all escalation trigger was used)
-- Any incident where a non-technical coordinator fulfilled the Workload Coordinator role
-- Any other incident where the Team Leader or Helpdesk Manager determines a PIR would be beneficial
-
-A PIR is not required for every critical incident or escalation. The decision to conduct one should be proportionate to the incident's impact and any identified process concerns.
-
-### Timing
-
-A debrief should occur within 1 to 3 business days of the resolution. The meeting should not exceed 15 minutes.
-
-### Attendees
-
-- Incident Owner
-- Communicating Agent (where applicable)
-- Workload Coordinator (where applicable)
-- Team Leader (if not already involved in one of the above roles)
-- Helpdesk Manager
-
-### Discussion Points
-
-- Timeline summary
-- What went well and what didn't
-- Opportunities to improve:
-  - Tooling
-  - Detection
-  - Communication
-  - Escalation
-- Identify training or process gaps
-- Follow-up actions must be assigned and tracked appropriately
-
-### Document and Procedure Review
-
-Following each PIR, the following must be reviewed and updated where findings indicate a gap:
-
-- Affected documentation or guidelines based on findings
-- Any customer-facing documentation where relevant
-- The policy or procedure that triggered the PIR should be reviewed each time it is triggered
-
-### Relationship to Continual Improvement
-
-All follow-up actions arising from a PIR are recorded in the continual improvement log and tracked to completion. Where a PIR identifies a systemic process failure, a corrective action is raised in accordance with the Nonconformity and Corrective Action policy.
-
-#### How we measure compliance
-
-PIR completion rates and the quality of documented findings and action items are reviewed periodically by the Helpdesk Manager. Outstanding follow-up actions are tracked to completion. PIR compliance is reviewed at Management Review.
-
-#### Record keeping and documentation
-
-PIR findings, action items, and outcomes are documented in the incident ticket and retained. Document updates resulting from PIR findings are recorded with the relevant policy or procedure. PIR records are retained indefinitely as part of QMS documentation.
-
-#### How we address shortfall
-
-Failure to complete a required PIR is escalated to the Helpdesk Manager. Where follow-up actions are not completed within an agreed timeframe, this is escalated to senior management.
+Agents who communicate independently about a known issue without Team Leader approval, or who fail to link related tickets to the Problem ticket, are addressed through corrective feedback. Where independent communication creates inconsistency or customer confusion, this is escalated to the Helpdesk Manager and handled through the disciplinary process where appropriate.
 
 ## Service Level Breach Remediation
 
@@ -2439,14 +2823,13 @@ Failure to complete a required PIR is escalated to the Helpdesk Manager. Where f
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2548,14 +2931,13 @@ Failure to classify a breach is addressed by the Team Leader. Agent-attributable
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2616,14 +2998,13 @@ Failure to classify a breach is addressed by the Team Leader. Agent-attributable
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2668,9 +3049,7 @@ Issuance of local administrator accounts is recorded in the relevant ticket and 
 
 Non-compliant configurations are remediated at the earliest opportunity. Accounts issued without written approval or outside the configuration standards are subject to corrective training and, where serious, the disciplinary process.
 
-## Password & Credential Handling Policy [Placeholder]
-
-[Placeholder]
+## Password & Credential Handling Policy
 
 ### Document Control
 
@@ -2688,14 +3067,14 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2707,31 +3086,73 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 
 ### Purpose
 
-[TBD]
+To define how Helpdesk agents handle passwords and credentials encountered during support activity. Credentials are high-value targets and their mishandling, even unintentionally, can result in security incidents, data breaches, and loss of customer trust. This policy establishes the minimum standard for receiving, using, and disposing of credentials, and makes clear what agents must never do.
 
 ### Scope
 
-[TBD]
+This policy applies to all Helpdesk agents, CLS staff, and escalations engineers. It covers any password, credential, API key, token, PIN, or other authentication material encountered or received during the course of support activity, whether belonging to a customer, a customer's user, a vendor system, or an internal Digital Origin system.
 
 ### Expectation
 
-[TBD]
+#### General principles
+
+- Credentials exist to authenticate a specific person or system. Agents handle them only to the minimum extent necessary to complete the task at hand.
+- Where access to a customer system can be obtained without receiving the customer's personal credentials, for example, through an admin account, a break-glass account, or a remote access tool, that method must be used in preference.
+- Agents must never encourage a customer to share a personal password unless there is no alternative and the Team Leader has confirmed it is appropriate.
+
+#### Receiving credentials
+
+Where a customer provides a password or credential during a support interaction:
+
+- It is used solely for the immediate task and discarded once complete
+- It is never written into a ticket update, internal note, email, or any other record, the ticket should note that credentials were provided, not what they were
+- It is never shared with another agent, team, or third party beyond what is needed to complete the task
+- Where a credential has been shared verbally or in writing, the agent should advise the customer to change it once the task is complete
+
+#### Prohibited actions
+
+Agents must never:
+
+- Store a customer or user password in any system, document, or personal record
+- Send a password or credential via email, Teams message, ticket update, or any unencrypted channel
+- Reuse a credential provided for one task in a different context without the customer's explicit instruction
+- Share credentials received from a customer with another party without the customer's knowledge and consent
+- Log in to a customer user's personal account using their credentials for any purpose beyond the specific task the customer has requested support for
+
+#### Admin and service credentials
+
+Where agents have access to admin, service, or shared accounts for customer environments:
+
+- These credentials are managed and stored in N-Able PassPortal only
+- Credentials must not be stored in personal notes, spreadsheets, browser password managers, or any system outside PassPortal
+- Where a credential must be shared with another agent or team for a handover, this is done through the approved tooling, not by direct message or ticket note
+- Admin credentials should be rotated in line with the customer's security requirements or Digital Origin's standard practice where no customer requirement exists
+
+#### Password resets
+
+Where an agent performs a password reset for a customer user:
+
+- The temporary credential is communicated directly to the user through an appropriate channel agreed with the customer
+- It is not left in a ticket note visible to other agents unless it has already been changed
+- The agent confirms with the user that they have received and changed the temporary credential before closing the ticket
+
+#### Suspicious or unexpected credential requests
+
+Where a customer, user, or third party makes an unusual request involving credentials, for example, asking an agent to retrieve, forward, or confirm a stored password, the agent must stop, not fulfil the request, and notify their Team Leader immediately. Legitimate support requests do not typically require credential retrieval.
 
 #### How we measure compliance
 
-[TBD]
+Compliance is assessed through ticket sampling, with specific attention to whether credentials appear in ticket notes, emails, or updates. Spot checks are conducted by Team Leaders. Agents are expected to raise concerns about credential handling as they arise rather than waiting for formal review.
 
 #### Record keeping and documentation
 
-[TBD]
+Tickets where credentials were received or used must note that fact without recording the credential itself. Records of credential-related activity are retained as part of the ticket record. Where a credential management tool is used, access logs are retained in line with that tool's audit capability.
 
 #### How we address shortfall
 
-[TBD]
+Credential handling failures, including recording passwords in tickets, sending credentials via unencrypted channels, or storing credentials outside approved tooling, are treated as serious regardless of intent. Initial failures are addressed through corrective training and documented coaching. Where the failure creates or could create a security risk, it is escalated to the Helpdesk Manager immediately and handled through the disciplinary process. Where a failure may constitute a data breach, the Information Security and Data Handling Policy applies alongside this one.
 
-## Information Security and Data Handling Policy [Placeholder]
-
-[Placeholder]
+## Information Security and Data Handling Policy
 
 ### Document Control
 
@@ -2749,14 +3170,14 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2768,27 +3189,85 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 
 ### Purpose
 
-[TBD]
+To define how Helpdesk agents handle information and data encountered during support activity, and to set minimum standards for protecting that data in line with Digital Origin's obligations under UK GDPR and its contractual duties to customers. Agents routinely access sensitive customer data as part of normal support work. This policy ensures that access is purposeful, handling is appropriate, and that failures are identified and reported promptly.
 
 ### Scope
 
-[TBD]
+This policy applies to all Helpdesk agents, CLS staff, and escalations engineers. It covers all data encountered or handled during support activity, including personal data belonging to customer users, customer business data, Digital Origin internal data, and any other information accessed through the course of a ticket. It applies regardless of whether data is viewed, copied, transmitted, or stored.
 
 ### Expectation
 
-[TBD]
+#### General principles
+
+- Data accessed during support activity is accessed for that purpose only. Agents do not browse, retrieve, or retain data beyond what is necessary to complete the task.
+- Customer data belongs to the customer. It is not shared, discussed, or referenced outside the context of the support task without the customer's knowledge.
+- Where an agent encounters data that appears sensitive, personal records, financial information, confidential business data, health information, they handle it with additional care and do not retain it beyond the immediate need.
+
+#### Minimum necessary access
+
+Agents must access only the data, systems, and files needed to resolve the ticket in hand. Where a support task could be completed with access to a subset of data, the agent uses the narrowest access available. Accessing customer data out of curiosity, convenience, or for purposes unrelated to the active ticket is prohibited.
+
+#### Handling personal data
+
+Where support activity involves personal data, names, contact details, identity documents, payroll records, health information, or any other information relating to an identifiable individual:
+
+- It is processed only to the extent necessary for the support task
+- It is not copied to personal devices, personal cloud storage, or any system not approved for that purpose
+- It is not discussed with colleagues beyond what is necessary for the task
+- Where personal data must be shared, for example, with an escalations engineer or vendor, only the minimum required is shared, and only through approved channels
+
+#### Screen sharing and remote access
+
+During remote access or screen sharing sessions:
+
+- Agents must be aware of what is visible on the customer's screen and avoid viewing or capturing data that is not relevant to the task
+- Screenshots and screen recordings taken during support sessions must not be retained beyond the immediate need unless they are directly relevant to the ticket record
+- Where a screenshot is added to a ticket, it must not contain passwords, personal data, or sensitive business information unless this is unavoidable and the Team Leader has approved it
+
+#### Data in tickets
+
+Ticket notes, updates, and attachments form part of the ticket record and are retained indefinitely. Agents must not include in any ticket:
+
+- Passwords or credentials (see Password & Credential Handling Policy)
+- Full payment card numbers, bank account details, or similar financial data
+- National insurance numbers, passport numbers, or other identity documents
+- Medical or health information beyond what is directly required to explain the support context
+- Any data that the agent would not be comfortable being visible to all Helpdesk staff and potentially subject to a subject access request
+
+#### Sending data externally
+
+Data must only be sent to external parties, including customers, vendors, and third parties, through approved channels and where there is a legitimate reason to do so. Agents must not:
+
+- Email customer data to personal email addresses
+- Upload customer data to file sharing services not approved for that purpose
+- Share customer data with a third party without the customer's knowledge unless required by law or Digital Origin policy
+
+Where a customer requests a copy of their own data, this is handled by the Team Leader and not fulfilled directly by agents without approval.
+
+#### Device and workspace security
+
+- Agents must lock their screen when leaving their workstation, even briefly
+- Work must not be conducted on personal devices unless this has been explicitly approved under the Remote and Hybrid Working Policy
+- Physical documents containing customer or personal data must not be left unattended
+- Where printed materials containing sensitive data are no longer needed, they must be disposed of securely
+
+#### Reporting security concerns and data breaches
+
+Any situation where customer data or personal data may have been accessed, shared, lost, or exposed inappropriately must be reported to the Team Leader immediately, this includes accidental disclosures, suspected unauthorised access, lost devices, and misdirected emails. Speed of reporting matters. Agents must report first and investigate second.
+
+The Team Leader escalates all potential data breaches to the Helpdesk Manager immediately. Where the breach is self-induced, that is, it results from Digital Origin's own actions or failures rather than from a security incident on behalf of a customer, the Helpdesk Manager is responsible for assessing whether it is reportable to the ICO and for making that report where required. Where the breach arises in the context of a security incident being handled on a customer's behalf, reporting obligations rest with the customer and Digital Origin's role is to support them with accurate information. The Helpdesk Manager escalates to senior management in either case.
 
 #### How we measure compliance
 
-[TBD]
+Compliance is assessed through ticket sampling, spot checks during remote access sessions, and periodic review of data handling practices by the Helpdesk Manager. Agents are expected to raise concerns about data handling as they arise. Data breach reports and near-misses are reviewed by the Helpdesk Manager and used to identify training needs.
 
 #### Record keeping and documentation
 
-[TBD]
+Potential and confirmed data breaches are recorded by the Helpdesk Manager, including the nature of the incident, the data involved, the steps taken, and the outcome. These records are retained indefinitely. Where a breach is reportable to the ICO or to affected individuals, that reporting is handled at senior management level and documented separately.
 
 #### How we address shortfall
 
-[TBD]
+Data handling failures are treated seriously regardless of intent. Minor or accidental failures are addressed through corrective training and documented coaching. Failures involving deliberate misuse of data, repeated disregard for this policy, or incidents that result in a reportable data breach are handled through the disciplinary process. Where a failure may constitute a criminal offence, Digital Origin will take appropriate legal advice.
 
 ## Vendor and Third-Party Access Policy [Placeholder]
 
@@ -2810,14 +3289,13 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2871,14 +3349,13 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -2939,14 +3416,13 @@ Non-compliant configurations are remediated at the earliest opportunity. Account
 | 1.6     | Jason Mcdill | 09/01/2026 |             |
 | 1.7     | Jason Mcdill | 10/02/2026 |             |
 | 1.8     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.8     | Stephen Richardson | 19/03/2026 |
+| 1.8     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3039,14 +3515,13 @@ Shortfall is addressed through informal coaching and feedback in the first insta
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3109,11 +3584,36 @@ On receiving a complaint notification:
 
 #### Account Management Involvement
 
-[TBD]
+Where a complaint cannot be resolved at the Team Leader level, or where the nature of the complaint relates to the customer's broader relationship with Digital Origin rather than a specific handling failure, Account Management must be involved.
+
+The Team Leader escalates to Account Management where:
+
+- The customer is requesting a formal response or compensation that is outside the Helpdesk's authority to offer
+- The complaint relates to the commercial relationship, contract, or service agreement rather than day-to-day support handling
+- The customer has indicated they are considering leaving or escalating to a senior contact at Digital Origin
+- The Team Leader or Helpdesk Manager determines the complaint carries reputational risk
+
+Where Account Management is involved, the Helpdesk Manager is notified at the same time. The Helpdesk does not hand off the complaint and disengage, the relevant ticket record and complaint history is made available to Account Management, and the Team Leader remains the point of contact for any operational questions that arise during the resolution process.
+
+Account Management leads the customer relationship element of the resolution. The Helpdesk leads the factual and operational element. Both must agree on any commitments made to the customer before they are communicated.
 
 #### Formal Complaint Logging
 
-[TBD]
+All complaints, regardless of how they are resolved, must be formally logged by the Team Leader at the point they are identified. Logging a complaint does not imply fault, it creates a record that supports service improvement and protects Digital Origin in the event of a dispute.
+
+A complaint log entry must capture:
+
+- The date the complaint was raised and the channel through which it was received
+- A factual summary of the customer's concern
+- The customer name and account
+- The ticket or tickets involved
+- The Team Leader responsible for handling it
+- The current status and any actions taken
+- The outcome and date of resolution
+
+The complaint log is maintained by the Helpdesk Manager and reviewed at Management Review. Where complaint volume or patterns indicate a systemic issue, the Helpdesk Manager raises a corrective action through the Continual Improvement process.
+
+Where a complaint has been escalated to Account Management or resulted in any form of compensation or commitment to the customer, this is recorded alongside the complaint log entry.
 
 #### How we measure compliance
 
@@ -3126,6 +3626,125 @@ All complaints are recorded in the relevant ticket with a clear internal note. T
 #### How we address shortfall
 
 Failure to notify the Team Leader of a complaint is addressed through corrective feedback. Where an agent's handling has contributed to or escalated a complaint, this is addressed through coaching, and where appropriate, the disciplinary process. Systemic complaint trends are escalated to the Helpdesk Manager for process review.
+
+## After Incident Report (AIR)
+
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
+| ------------ | ------------ |
+| Last Updated | 26/03/2026   |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
+|         |              |            |             |
+
+#### Executive Sponsors
+
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.0     | Stephen Richardson | 26/03/2026 |
+| 1.0     | Rupert Evans       | 26/03/2026 |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 26/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 26/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 26/03/2026 |
+
+### Purpose
+
+To define the process by which Digital Origin produces a formal, factual record of events relating to a ticket or incident, and the conditions under which that record may be issued to a customer. The After Incident Report (AIR) is a transparent, evidence-grade account of what occurred, drawn from the ticket record and, where necessary, from interviews with relevant parties. It is not an investigative or disciplinary tool, it exists to provide an accurate, accountable account of events.
+
+### Scope
+
+This policy applies to all Helpdesk personnel and management involved in the preparation or approval of an AIR. An AIR may be raised against any ticket type, there is no restriction on the nature or priority of the ticket. The only requirement is that a ticket record exists.
+
+### Relationship to the Post Incident Review (PIR)
+
+The AIR and the PIR are separate processes with different purposes and should not be confused.
+
+The AIR is a factual account of events, designed to be evidence-grade and suitable for issue to a customer. It describes what happened, in what order, and attributable to which component (e.g. the Helpdesk, the customer, a third party, a vendor). It does not audit process or make process recommendations.
+
+The PIR is an internal quality control process that reviews whether Digital Origin's process and policy functioned correctly. It is never shared with the customer.
+
+Where both are conducted on the same incident they run independently. Neither feeds into nor replaces the other.
+
+### When an AIR is Raised
+
+An AIR may be raised against any ticket at the discretion of the Helpdesk Manager. Common triggers include:
+
+- A customer requests a detailed explanation of an event or series of events
+- An incident has had a significant impact on the customer and management determines a formal record is appropriate
+- The Helpdesk Manager is instructed by senior management to produce one
+
+An AIR always requires the approval of the Helpdesk Manager before it is opened. It is not raised by agents and cannot be requested directly by a customer in the sense that the customer specifies the form, if a customer requests a detailed account of events, the AIR is how Digital Origin fulfils that request.
+
+### Principles
+
+The AIR is a factual, neutral document. It does not set out to apportion blame to individuals. Where the actions of a specific component contributed to an outcome, whether that is the Helpdesk, the customer, the Projects team, a vendor, or any other party, this is recorded factually as part of the account.
+
+The AIR does not make disciplinary recommendations. It records what happened. If the facts recorded in an AIR are subsequently used in formal proceedings, that is a consequence of the facts, not the purpose of the document.
+
+Where the preparation of an AIR surfaces a human factor as the primary cause of an incident, that finding does not belong in the customer-facing document. The AIR records what the Helpdesk did, in what order, and with what outcome, attribution stays at the team and component level. A human factor finding routes internally through the PIR and, where appropriate, the Disciplinary Process. An AIR that would conclude with individual blame as its primary finding is the wrong document for that situation. Where this arises, the Helpdesk Manager must pause preparation, escalate to senior management, and determine the appropriate course before the AIR proceeds.
+
+### What an AIR Contains
+
+An AIR must include the following:
+
+- **Incident reference**, ticket number, client, date, severity, and the name of the person responsible for producing the AIR
+- **Incident description**, a plain factual description of what occurred
+- **Timeline of major events**, a chronological record of events drawn from the ticket history, updated notes, and any supplementary information gathered during preparation
+- **Component attribution**, where the actions or inactions of a specific component (the Helpdesk, the customer, a third party, etc.) are relevant to the outcome, this is recorded factually and without editorial comment
+- **RCA summary**, where a root cause analysis has been conducted on the incident (e.g. as part of a separate process), a summary of its findings is included. Where no RCA has been conducted, this is stated
+- **Business impact**, the impact on the customer's operations, including the duration and nature of the effect
+- **Corrective actions**, any actions taken or planned in response to the incident
+- **Recommendations**, any recommendations arising from the findings, where applicable
+- **Involved parties**, the key contacts on the customer side, and the responsible leadership and management contacts on the Digital Origin side. Handling agents are referenced as part of team attribution only and are not named individually
+
+### Information Gathering
+
+The AIR is primarily constructed from the ticket record. Where the ticket record is incomplete, unclear, or insufficient to produce an accurate account, the Helpdesk Manager may conduct interviews with relevant parties to supplement it.
+
+Interviews are not a standard part of the AIR process and are only used where the ticket record alone cannot support an accurate account. Interviews may include:
+
+- Internal personnel involved in the handling of the ticket
+- Client-side contacts, where their input is relevant and appropriate
+
+All information gathered during an AIR must be recorded accurately and without editorialisation.
+
+### Issuing the AIR to a Customer
+
+The AIR is designed to be fully visible to the customer. Before issue, the Helpdesk Manager must confirm:
+
+- The content is factually accurate and reflects the ticket record and any supplementary information gathered
+- The document has been reviewed by the approving authority
+- Issue is appropriate given the circumstances
+
+The AIR is saved as a PDF once complete and stored in the relevant customer record under the format: `AIR – [Client Name] – [DD/MM/YY]`.
+
+The decision to issue the AIR to a customer rests with the Helpdesk Manager. The Helpdesk Manager will typically be acting on instruction from senior management when issuing a completed AIR.
+
+#### How we measure compliance
+
+AIR completion and approval compliance is reviewed by the Helpdesk Manager. All AIRs must be approved before issue. The Helpdesk Manager maintains a record of all AIRs raised and their current status.
+
+#### Record keeping and documentation
+
+All completed AIRs are stored in the relevant customer record in Nexus. Records are retained indefinitely. Where an AIR has been issued to a customer, the date and recipient are recorded alongside the document. Where an AIR is used as evidence in formal proceedings, the Helpdesk Manager ensures the relevant parties are aware of its existence and location.
+
+#### How we address shortfall
+
+An AIR raised or issued without Helpdesk Manager approval is escalated to senior management immediately. Where the factual accuracy of a completed AIR is disputed, internally or by the customer, the Helpdesk Manager reviews the record against the source material and corrects it where necessary, documenting any amendments made and the reason for them.
 
 ## Communication Templates and Standards
 
@@ -3145,14 +3764,13 @@ Failure to notify the Team Leader of a complaint is addressed through corrective
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3237,14 +3855,13 @@ Shortfall is addressed through informal coaching and feedback at the point of id
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3520,6 +4137,143 @@ Team Leaders support dredging by:
 
 Outcome: tickets do not stagnate, customers receive regular high-quality communication, and potential SLA risk is identified early and managed proactively.
 
+## Post Incident Review (PIR)
+
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
+| ------------ | ------------ |
+| Last Updated | 26/03/2026   |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 10/02/2026 |             |
+| 1.1     | Jason Mcdill | 13/03/2026 |             |
+| 1.2     | Jason Mcdill | 16/03/2026 |             |
+| 1.3     | Jason Mcdill | 19/03/2026 |             |
+| 1.4     | Jason Mcdill | 26/03/2026 |             |
+| 1.5     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
+
+#### Executive Sponsors
+
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.5     | Stephen Richardson | 26/03/2026 |
+| 1.5     | Rupert Evans       | 26/03/2026 |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
+
+### Purpose
+
+To provide a structured, blameless quality control review following the handling of incidents, with the aim of identifying whether process or policy failed, and feeding improvements back into the system. The PIR is a quality control instrument, its purpose is to audit whether the Helpdesk's own procedures held up under real conditions, not to assess the conduct of individuals.
+
+PIRs are developmental in nature and are explicitly separate from any disciplinary assessment.
+
+### Scope
+
+This policy applies to all team members involved in the handling of a major operational or major security incident, and to any incident where a PIR is required by another policy in this manual, including the Escalation Policy, Critical Incident Policy, Major Operational Incident Policy, and Major Security Incident Policy. PIRs are facilitated by the Team Leader or Helpdesk Manager.
+
+### Supporting Documents
+
+All supporting documents can be found in Nexus.
+
+The PIR and the After Incident Report (AIR) are separate processes with different purposes and should not be confused.
+
+The PIR is an internal quality control process. It reviews whether Digital Origin's process and policy functioned correctly during an incident. It is never shared with the customer and its findings are not intended for use outside the Helpdesk.
+
+The AIR is a factual record of events relating to a specific ticket or incident. It may be shared with the customer and is designed to be evidence-grade. Where both a PIR and an AIR are conducted on the same incident, they run independently and neither feeds into nor replaces the other.
+
+### Core Principles
+
+The PIR exists to find and fix process failures, not to find and blame people. If a person's actions are identified as the root cause of an incident, rather than a gap in process or policy, the PIR has nothing further to conclude with respect to that individual. It records the finding and closes. Any conduct matter is handled separately through the Disciplinary Process.
+
+> Raising concerns or self-reporting failures during a PIR will never result in disciplinary action.
+
+### When a PIR is Required
+
+A PIR must be conducted following:
+
+- Any major operational incident where the Major Operational Incident Policy was invoked
+- Any major security incident where the Major Security Incident Policy was invoked
+- Any critical incident where the response fell below the expected standard
+- Any escalation where a PIR was required by the Escalation Policy (e.g. where the catch-all escalation trigger was used)
+- Any incident where a non-technical coordinator fulfilled the Workload Coordinator role
+- Any other incident where the Team Leader or Helpdesk Manager determines a PIR would be beneficial
+
+A PIR is not required for every critical incident or escalation. The decision to conduct one should be proportionate to the incident's impact and any identified process concerns.
+
+### Timing
+
+A PIR debrief should occur within 1 to 3 business days of resolution. The meeting should not exceed 15 minutes.
+
+### Attendees
+
+- Incident Owner
+- Communicating Agent (where applicable)
+- Workload Coordinator (where applicable)
+- Team Leader (if not already involved in one of the above roles)
+- Helpdesk Manager
+
+### Discussion Points
+
+- Timeline summary
+- What worked well at a process and tooling level, and where process, tooling, or detection fell short
+- Opportunities to improve:
+  - Tooling
+  - Detection
+  - Communication
+  - Escalation
+- Identification of training or process gaps
+- Follow-up actions, which must be assigned and tracked to completion
+
+### Conclusion Criteria
+
+The PIR concludes when one of the following is reached:
+
+- A process or policy failure has been identified and a corrective action has been raised
+- No process or policy failure is identified, the process held, and the outcome was the result of factors outside the scope of the PIR (including individual conduct)
+- Both of the above apply to different elements of the incident
+
+Where an individual's actions are identified as the root cause and no process gap exists, the PIR concludes at that point. It does not make disciplinary recommendations.
+
+### Document and Procedure Review
+
+Following each PIR, the following must be reviewed and updated where findings indicate a gap:
+
+- Affected documentation or guidelines based on findings
+- Any customer-facing documentation where relevant
+- The policy or procedure that triggered the PIR should be reviewed each time it is triggered
+
+### Relationship to Continual Improvement
+
+All follow-up actions arising from a PIR are recorded in the continual improvement log and tracked to completion. Where a PIR identifies a systemic process failure, a corrective action is raised in accordance with the Nonconformity and Corrective Action policy.
+
+Where a PIR identifies possible misconduct, it records only the minimum factual note necessary to explain the referral. Questions of intent, culpability, mitigation, and sanction are outside the PIR and are determined only through the disciplinary process.
+
+#### How we measure compliance
+
+PIR completion rates and the quality of documented findings and action items are reviewed periodically by the Helpdesk Manager. Outstanding follow-up actions are tracked to completion. PIR compliance is reviewed at Management Review.
+
+#### Record keeping and documentation
+
+PIR findings, action items, and outcomes are documented in the incident ticket and retained. Document updates resulting from PIR findings are recorded with the relevant policy or procedure. PIR records are retained indefinitely as part of QMS documentation.
+
+#### How we address shortfall
+
+Failure to complete a required PIR is escalated to the Helpdesk Manager. Where follow-up actions are not completed within an agreed timeframe, this is escalated to senior management.
+
 ## Projects to Helpdesk Handover
 
 ### Document Control
@@ -3538,14 +4292,14 @@ Outcome: tickets do not stagnate, customers receive regular high-quality communi
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 26/03/2026 |
+| 1.2     | Rupert Evans       | 26/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3565,23 +4319,28 @@ This policy applies to all projects delivered by Digital Origin that result in c
 
 ### When a handover interview is required
 
+A Service Transition Review (STR) interview must be completed before the Helpdesk assumes ongoing support responsibility. The interview must take place prior to go-live, or at the point of handover where go-live has already occurred, and must be signed off before the Helpdesk accepts the service.
+
 Triggers for a handover interview are:
 
-- Any change to a client’s core infrastructure:
-  - Servers’ hardware (e.g. cloud migration to Azure)
+- Onboard of a new client
+  - New client onboards will typically be accepted as-is provided the Helpdesk is reasonably capable of providing support
+  - New client onboards will not automatically have a hypercare period, unless it is deemed necessary during the STR interview
+- Any change to a client's core infrastructure:
+  - Servers / hardware (e.g. cloud migration to Azure)
   - File storage and sharing (e.g. cloud migration to SharePoint)
   - Backup and recovery systems (e.g. migration to Cove or introduction of local solutions)
   - Business critical or line of business systems (including printing) (e.g. migration of LOB apps to a new service, change to print management)
-  - Networking hardware refresh (e.g. replacing a large amount of a networks hardware infrastructure or reconfiguring / tidying a network cabinet)
-- Any change to a security feature that directly affects, or is directly interacted with by users (e.g. introduction of MFA)
+  - Networking hardware refresh (e.g. replacing a significant portion of a network's hardware infrastructure or reconfiguring a network cabinet)
+- Any change to a security feature that directly affects, or is directly interacted with by, users (e.g. introduction of MFA)
 - Any change to the core daily functions or nature of work carried out by users (e.g. change of workstation hardware or introduction of cloud work environments)
-- Any project that contains changes to more than one core business system (e.g. a project that combine multiple migrations or changes across different, unrelated systems)
+- Any project that contains changes to more than one core business system (e.g. a project combining multiple migrations or changes across different, unrelated systems)
 
 ### What is covered by the interview
 
 #### Service Readiness
 
-- Why does the service exist and or what purpose did the project serve?
+- Why does the service exist and/or what purpose did the project serve?
 - Is there a defined endpoint that includes supportability?
 - What is the hypercare period and who retains responsibility during it?
 
@@ -3596,7 +4355,7 @@ Triggers for a handover interview are:
 
 - Is the service monitored and do alerts go to the right place
 - Do helpdesk agents have the right access to diagnose and resolve common issues
-- Tooling integration – Has the project been integrated into existing monitoring systems
+- Tooling integration – has the project been integrated into existing monitoring systems
 - Known issues – are any known issues and workarounds documented
 
 #### Risk & Continuity
@@ -3617,7 +4376,7 @@ The helpdesk accepts a handover when:
 
 - The above conditions are met
 - Continuation procedures are in place to support the service beyond normal helpdesk operations
-- The service has been proven stable following a short period of hypercare owned by the project team
+- The service has been proven stable following the hypercare period, the duration of which is agreed during the STR interview and owned by the project team
 - The client confirms the service is functional in regard to the initial expectations
 
 #### How we measure compliance
@@ -3626,11 +4385,13 @@ Handover compliance is reviewed by the Team Leader following each applicable pro
 
 #### Record keeping and documentation
 
-Handover interview outcomes and acceptance decisions are documented and stored in the relevant customer record. Where a handover is declined, the reason is recorded and shared with the Projects Manager.
+Handover interview outcomes and acceptance decisions are documented in the Service Transition Review (STR) document (see appendix) and stored in the relevant customer record. Where a handover is declined, the reason is recorded and shared with the Projects Manager.
+
+All supporting documentation can be found in Nexus.
 
 #### How we address shortfall
 
-Where a handover is accepted without the required conditions being met, this is escalated to the Helpdesk Manager and Projects Manager for resolution.
+Where a handover is accepted without the required conditions being met, this is escalated to the Helpdesk Manager and Projects Manager for resolution. Misrepresentation or significant misalignment with the actual state of the client's estate is reported to the Helpdesk Manager.
 
 ## Ticket Quality Sampling (Not enforced)
 
@@ -3651,14 +4412,13 @@ Where a handover is accepted without the required conditions being met, this is 
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 11/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3729,14 +4489,13 @@ Persistent quality issues identified through sampling are addressed through targ
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3836,14 +4595,13 @@ Where a new starter is found to be handling tickets independently before complet
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3901,10 +4659,10 @@ Where a new starter is found to be handling tickets independently before complet
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -3958,14 +4716,13 @@ Where a new starter is found to be handling tickets independently before complet
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4019,14 +4776,13 @@ Where a new starter is found to be handling tickets independently before complet
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4078,14 +4834,13 @@ Where a new starter is found to be handling tickets independently before complet
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4113,7 +4868,7 @@ This policy applies to all Helpdesk agents, CLS staff, and Team Leaders. It cove
 
 #### Break Compliance
 
-- Break entitlements, lunch windows, and comfort break rules are defined in the Helpdesk Rota and Breaks policy — agents and Team Leaders must follow those requirements
+- Break entitlements, lunch windows, and comfort break rules are defined in the Helpdesk Rota and Breaks policy, agents and Team Leaders must follow those requirements
 - Team Leaders should monitor for patterns of agents consistently skipping or shortening breaks, as this may indicate workload pressure
 
 #### Workload Distribution
@@ -4173,14 +4928,13 @@ Where a Team Leader fails to act on a raised workload or wellbeing concern, this
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4256,14 +5010,13 @@ Non-compliance with break and lunch policies is addressed through informal feedb
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4402,7 +5155,7 @@ If the interviewee fails to meet the required standard it can be re-taken after 
 
 Advancement decisions, matrix scores, exam completions, and technical interview outcomes are recorded and retained in the agent's HR documentation. Advancement history is kept indefinitely.
 
-#### How we address shortfall 
+#### How we address shortfall
 
 Where an agent fails to meet advancement prerequisites, they remain at their current tier until the requirements are satisfied.
 
@@ -4430,10 +5183,10 @@ Where an agent fails to meet advancement prerequisites, they remain at their cur
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4467,9 +5220,7 @@ Where an agent fails to meet advancement prerequisites, they remain at their cur
 
 [TBD]
 
-## Out-of-Hours and On-Call Policy [Placeholder]
-
-[Placeholder]
+## Out-of-Hours and On-Call Policy
 
 ### Document Control
 
@@ -4487,14 +5238,14 @@ Where an agent fails to meet advancement prerequisites, they remain at their cur
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 16/03/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
-|         |              |            |             |
+| 1.2     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4506,27 +5257,78 @@ Where an agent fails to meet advancement prerequisites, they remain at their cur
 
 ### Purpose
 
-[TBD]
+To define how Digital Origin's Helpdesk operates outside of core business hours, including the voluntary out-of-hours service and the Saturday morning provision. This policy ensures agents understand what is expected of them during out-of-hours work, how tickets are handled, and how escalation is managed when standard management cover is unavailable.
 
 ### Scope
 
-[TBD]
+Out-of-hours cover operates through a WhatsApp group that includes all Helpdesk agents. Inbound out-of-hours contact is notified to the group and picked up voluntarily by whichever agent is available and willing to take it. No agent is required to monitor the group or respond outside their contracted hours.
+
+Compensation is awarded for each ticket pitcked up this way (ragardless of outcome).
 
 ### Expectation
 
-[TBD]
+#### Core hours and out-of-hours definition
+
+Core business hours are Monday to Friday during the standard working day. Out-of-hours is defined as any period outside of this, including evenings, overnight, weekends, and bank holidays.
+
+Digital Origin operates a 24-hour helpdesk service. Out-of-hours cover is provided on a voluntary basis. No agent is required to undertake out-of-hours work as a condition of their standard role.
+
+Saturday morning cover operates as a scheduled shift from 08:00 to 13:00, fulfilled by a designated agent.
+
+#### Volunteering for out-of-hours work
+
+Agents who wish to undertake out-of-hours work must confirm their availability with the Team Leader in advance. Out-of-hours work is not assigned without the agent's agreement.
+
+Compensation for out-of-hours work is [TBD, confirm arrangement, e.g. TOIL, enhanced rate, or flat payment].
+
+#### Expectations during out-of-hours
+
+Agents working out-of-hours are expected to:
+
+- Handle inbound tickets to the same standard as during core hours, the same documentation, communication, and quality standards apply
+- Prioritise critical and high priority tickets where multiple tickets are waiting
+- Use their judgement on whether a ticket warrants immediate action or can be documented and queued for the next business day
+- Not take on work that is clearly beyond their technical capability without an escalation path, where a ticket cannot be progressed safely out-of-hours, it must be documented clearly and flagged for the next available Team Leader
+
+#### What can be deferred
+
+Not every ticket received out-of-hours requires immediate action. Agents should apply the following principle: if the customer's business is not materially impacted right now, the ticket can be acknowledged, documented, and actioned at the start of the next business day.
+
+Tickets that must be acted on immediately regardless of time:
+
+- Critical priority incidents
+- Any incident where a customer's production environment, core systems, or significant number of users are affected
+- Security incidents
+
+#### Escalation out-of-hours
+
+Where an agent working out-of-hours encounters a situation that requires management input, for example, a major incident, a decision beyond their authority, or a situation they cannot safely handle alone, this is raised in the WhatsApp group. As with inbound tickets, escalation support is provided voluntarily by whichever Team Leader or senior agent is available.
+
+Where no support is available through the group, the agent must document the situation clearly in the ticket, take whatever safe and reversible actions are within their capability, and ensure the Team Leader is informed at the earliest opportunity at the start of the next business day.
+
+#### Saturday morning shift
+
+The Saturday shift operates from 08:00 to 13:00. The covering agent is expected to:
+
+- Handle inbound tickets received during the shift
+- Review any tickets that have arrived overnight and prioritise accordingly
+- Hand over clearly to the next available agent or Team Leader at 13:00, documenting any open or in-progress work
+
+The Saturday shift is a scheduled commitment. Where the covering agent is unable to attend, they must notify the Team Leader as early as possible so cover can be arranged.
+
+Compensation is awarded for each shift conducted.
 
 #### How we measure compliance
 
-[TBD]
+Out-of-hours ticket handling is reviewed as part of normal ticket sampling and daily hygiene. The Helpdesk Manager reviews out-of-hours activity periodically to confirm that standards are being maintained and that critical tickets are being actioned appropriately.
 
 #### Record keeping and documentation
 
-[TBD]
+All out-of-hours ticket activity is recorded in the ticketing system in the normal way. Where an agent makes a decision to defer a ticket to the next business day, this is noted in the ticket. Out-of-hours activity is visible in weekly statistics and reviewed by the Helpdesk Manager.
 
 #### How we address shortfall
 
-[TBD]
+Out-of-hours work is generally feemed "best effort", where out-of-hours ticket handling falls below the expected standard in an avoidable way, for example, poor documentation or decisions made outside the agent's authority without escalation, this is addressed through corrective feedback and coaching. Serious or repeated failures are handled through the disciplinary process.
 
 # Discipline
 
@@ -4554,10 +5356,10 @@ Where an agent fails to meet advancement prerequisites, they remain at their cur
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.3     | Stephen Richardson | 19/03/2026 |
+| 1.3     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4595,7 +5397,7 @@ Escalating to formal disciplinary steps only when:
 - Informal correction has been attempted and has not resulted in sustained improvement, or
 - The nature of the issue means informal handling would be inappropriate (e.g. gross misconduct, major negligence, or serious breach of trust)
 
-### Conduct vs Performance 
+### Conduct vs Performance
 
 Concerns raised through this process typically fall into one of two categories. Understanding which applies helps determine the appropriate starting point and response.
 
@@ -4607,7 +5409,7 @@ In practice, the two often overlap. Persistent performance shortfall can indicat
 
 > Where there is uncertainty about whether a concern is performance or conduct in nature, the Helpdesk Manager should be consulted before any formal action is taken.
 
-### Typical Flow 
+### Typical Flow
 
 Most performance concerns follow a consistent path. The steps below describe the normal journey from identification to resolution. Not every concern will pass through every stage - the appropriate starting point depends on the severity and nature of the issue.
 
@@ -4645,7 +5447,7 @@ Most performance concerns follow a consistent path. The steps below describe the
    - Initiated where informal action has failed, or where the severity of the issue makes informal handling inappropriate
    - See Formal Steps below
 
-### Formal Steps 
+### Formal Steps
 
 Formal steps are initiated when informal action has not resolved the concern, or where the severity of the issue makes informal handling inappropriate. Formal steps follow the gov.uk disciplinary procedures guidance.
 
@@ -4660,6 +5462,7 @@ Attempt to resolve issues informally through feedback or a quiet word where appr
 - Investigate promptly to establish facts
 - Separate personnel should conduct the investigation and hearing where possible
 - Investigatory meetings should not result in disciplinary action
+- Where a PIR or AIR has been conducted in connection with the incident, these records are available to the investigation. The PIR record in its pre-storage form is held by the Helpdesk Manager and may be made available to the investigator. Redaction of that record occurs after the disciplinary process has concluded, not before
 
 #### Notification
 
@@ -4702,7 +5505,7 @@ Notify the employee in writing, include:
 - Appeal heard impartially and ideally by someone uninvolved
 - Decision communicated in writing
 
-### Corrective Training 
+### Corrective Training
 
 Corrective training is a targeted, supportive intervention used when a shortfall is identified as skill- or knowledge-based. It is not punitive and does not sit within the formal disciplinary process, though the fact that it was offered and completed is documented.
 
@@ -4736,7 +5539,7 @@ The format is determined by the Team Leader based on the nature of the shortfall
 
 Following corrective training, the Team Leader monitors for improvement. If the shortfall is resolved and sustained, no further action is taken. If the shortfall recurs or was not resolved, the Team Leader considers whether a Development Plan is appropriate, or whether to escalate to formal steps.
 
-### Oversight and Authorisation 
+### Oversight and Authorisation
 
 The Helpdesk Manager holds overall responsibility for the consistent and fair application of this process across the team.
 
@@ -4760,7 +5563,7 @@ Formal disciplinary proceedings - Investigation, Notification, and Disciplinary 
 
 Where the Team Leader is the subject of a concern, the Helpdesk Manager takes on the Team Leader's role in the process for its duration.
 
-### Warning Types and Durations 
+### Warning Types and Durations
 
 All disciplinary action, including all warnings, is recorded and retained. Warnings are issued based on the severity of the concern and the history of prior action. Each warning type has an active period - during which it is live for the purposes of future proceedings - and a minimum retention period, after which it remains on file but is considered spent.
 
@@ -4809,7 +5612,7 @@ The disciplinary process is managed and monitored by the Helpdesk Manager. All f
 
 #### Record keeping and documentation
 
-All disciplinary actions, including informal warnings, are recorded and retained for a minimum of 6 months. Final written warnings are retained for 12 months. Records are handled in line with data protection obligations.
+All disciplinary actions, including informal warnings, are recorded and retained for a minimum of 6 months. Final written warnings are retained for 12 months. Records are handled in line with data protection obligations. Where PIR or AIR records are drawn into proceedings, those records are retained indefinitely under their own policies, this is separate from and does not affect the retention periods of the disciplinary record itself.
 
 #### How we address shortfall
 
@@ -4837,10 +5640,10 @@ Where the disciplinary process is not followed correctly - for example, where a 
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4897,7 +5700,7 @@ All formal grievances, hearings, decisions, and appeals are documented and retai
 
 Where the grievance process is not followed correctly, this is escalated to the Helpdesk Manager or HR. All parties have the right to raise a concern about how their grievance was handled.
 
-## Development Plan Policy 
+## Development Plan Policy
 
 ### Document Control
 
@@ -4920,10 +5723,10 @@ Where the grievance process is not followed correctly, this is escalated to the 
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.2     | Stephen Richardson | 19/03/2026 |
+| 1.2     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -4933,17 +5736,17 @@ Where the grievance process is not followed correctly, this is escalated to the 
 | Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
 | Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
 
-### Purpose 
+### Purpose
 
 To provide a structured, time-bound framework for supporting agents who are not meeting the expected standard in one or more areas of their role. A Development Plan (DP) is a formal support mechanism, not a disciplinary sanction, and is designed to give the agent the best possible opportunity to improve with clear expectations, defined support, and agreed review points.
 
 A DP is the Helpdesk’s equivalent of a performance improvement plan and sits between informal action and formal disciplinary proceedings. It is used when informal coaching and corrective training have not produced sustained improvement, or when the scale of the shortfall makes a structured plan the most appropriate and fair response.
 
-### Scope 
+### Scope
 
 This policy applies to all Helpdesk agents at any level or tier. It covers all performance and conduct concerns that may be addressed through a Development Plan. Development Plans are initiated and managed by Team Leaders in conjunction with the Helpdesk Manager.
 
-### When a Development Plan is raised 
+### When a Development Plan is raised
 
 A Development Plan should be considered when:
 
@@ -4956,7 +5759,7 @@ A DP is not appropriate as a first response to an isolated mistake or a minor, o
 
 > A Development Plan is not a disciplinary action. It must not be framed or communicated as a punishment. If formal disciplinary action is required, follow the Disciplinary Process.
 
-### What a Development Plan contains 
+### What a Development Plan contains
 
 Every Development Plan must include the following:
 
@@ -4969,7 +5772,7 @@ Every Development Plan must include the following:
 - **Plan duration** - typically 4 to 8 weeks, agreed between the Team Leader and Helpdesk Manager based on the nature and scale of the shortfall
 - **Outcomes** - what happens at the end of the plan (see Outcomes below)
 
-### Conducting a Development Plan 
+### Conducting a Development Plan
 
 #### Initiating the plan
 
@@ -4991,7 +5794,7 @@ Every Development Plan must include the following:
 - Raise any concerns about the plan, the targets, or the support with the Team Leader or Helpdesk Manager promptly
 - Attend all scheduled review meetings
 
-### Outcomes 
+### Outcomes
 
 At the end of the plan period, the Team Leader and Helpdesk Manager review the evidence and agree one of the following outcomes:
 
@@ -4999,15 +5802,15 @@ At the end of the plan period, the Team Leader and Helpdesk Manager review the e
 - **Plan partially met** - improvement is evident but inconsistent or incomplete. The Team Leader and Helpdesk Manager may agree to extend the plan, adjust the support offered, or proceed to formal steps depending on the circumstances.
 - **Plan not met** - the agent has not demonstrated the required improvement despite the support provided. The Helpdesk Manager initiates formal disciplinary proceedings in line with the Disciplinary Process policy.
 
-### How we measure compliance 
+### How we measure compliance
 
 Development Plans are tracked by the Helpdesk Manager. Compliance with the plan (both the agent’s obligations and the support commitments) is reviewed at each check-in point. The Helpdesk Manager reviews active DPs weekly to ensure they are being conducted appropriately.
 
-### Record keeping and documentation 
+### Record keeping and documentation
 
 The DP document, all review notes, and the final outcome are retained in the agent’s HR file. Records are kept indefinitely. Where a DP leads to formal action, all DP documentation is provided as part of the evidence for that process.
 
-### How we address shortfall 
+### How we address shortfall
 
 If a Development Plan is not being conducted in line with this policy - for example, if support commitments are not being delivered, or review meetings are not taking place - this is escalated to the Helpdesk Manager immediately. A DP that is not being run correctly may not be used as the basis for formal disciplinary action until the shortfall in its conduct has been remedied.
 
@@ -5033,10 +5836,10 @@ If a Development Plan is not being conducted in line with this policy - for exam
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -5120,10 +5923,10 @@ Breaches are managed as coaching > documented coaching > formal action, in line 
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -5179,10 +5982,10 @@ Breaches are managed as coaching > documented coaching > formal action, in line 
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -5240,10 +6043,10 @@ Non-compliant use of AI tools is addressed through corrective training and guida
 
 #### Executive Sponsors
 
-| Version | Author | Date |
-| ------- | ------ | ---- |
-|         |        |      |
-|         |        |      |
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
 
 #### Stakeholder / Distribution List
 
@@ -5274,6 +6077,71 @@ The process:
 ### Expectation
 
 [TBD]
+
+#### How we measure compliance
+
+[TBD]
+
+#### Record keeping and documentation
+
+[TBD]
+
+#### How we address shortfall
+
+[TBD]
+
+## Appendix – Quoting
+
+### Document Control
+
+#### Document Properties
+
+| Property     | Details      |
+| ------------ | ------------ |
+| Last Updated | 24/03/2026   |
+| Updated By   | Jason Mcdill |
+| Owner        | Jason Mcdill |
+
+#### Revision History
+
+| Version | Author       | Date       | Next Review |
+| ------- | ------------ | ---------- | ----------- |
+| 1.0     | Jason Mcdill | 24/03/2026 | 01/04/2026  |
+
+#### Executive Sponsors
+
+| Version | Author             | Date       |
+| ------- | ------------------ | ---------- |
+| 1.1     | Stephen Richardson | 19/03/2026 |
+| 1.1     | Rupert Evans       | 19/03/2026 |
+
+#### Stakeholder / Distribution List
+
+| Name          | Title                | Business Unit     | Date       |
+| ------------- | -------------------- | ----------------- | ---------- |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
+
+Draft
+
+### Purpose
+
+Define how, when and to whoim a quote should go
+
+### Scope
+
+All Helpdesk, Sales and Service Delivery technicians involved in handling incident and service request dervied quotes
+
+### Quoting Process
+
+The ticket type (original vs child) sent to the quoting party is dependant 
+
+Priority:
+- High and critical tickets are always kept by the helpdesk, with quotes raised as children
+- Low and medium tickets are always passed entirely to the authrotity handling the quote
+
+
 
 #### How we measure compliance
 

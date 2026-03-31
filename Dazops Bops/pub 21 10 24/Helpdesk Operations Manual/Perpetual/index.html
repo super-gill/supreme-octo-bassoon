@@ -12,15 +12,15 @@
   <!-- Anchor plugin for markdown-it: auto-generates heading IDs for deep linking -->
   <script src="libs/markdownItAnchor.umd.js"></script>
 
-  <!-- PDF generation libraries: html2pdf wraps html2canvas + jsPDF -->
-  <script src="libs/html2pdf.bundle.min.js"></script>
-  <script src="libs/html2canvas.min.js"></script>
+  <!-- PDF generation libraries: html2pdf wraps html2canvas + jsPDF (defer to avoid blocking render) -->
+  <script src="libs/html2pdf.bundle.min.js" defer></script>
+  <script src="libs/html2canvas.min.js" defer></script>
 
   <!-- Favicon: set from tome.json branding.favicon on load -->
   <link id="favicon" rel="icon">
 
   <!-- Stylesheet for the app layout, sidebar, document viewer, and PDF export -->
-  <link rel="stylesheet" type="text/css" href="styles.css?v=2.6.1">
+  <link rel="stylesheet" type="text/css" href="styles.css?v=2.7.0">
 </head>
 
 <body>
@@ -79,6 +79,11 @@
     <!-- ===== SIDEBAR ===== -->
     <aside>
 
+      <!-- Collapse sidebar button (desktop only) -->
+      <button id="sidebarCollapse" class="sidebar-collapse-btn" type="button" title="Collapse sidebar">
+        <svg width="14" height="14" viewBox="0 0 14 14"><path d="M9 3L5 7l4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
       <!-- Tome wordmark: subtle platform branding at the top of the sidebar -->
       <div class="tome-wordmark tome-nav">Tome</div>
 
@@ -113,6 +118,19 @@
 
     <!-- ===== MAIN CONTENT AREA ===== -->
     <main>
+      <!-- Width toggle: sticky bar with three layout-width presets -->
+      <div class="width-toggle">
+        <button class="width-btn" data-width="narrow" title="Narrow">
+          <svg width="16" height="14" viewBox="0 0 16 14"><rect x="4" y="1" width="8" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+        <button class="width-btn active" data-width="medium" title="Medium">
+          <svg width="16" height="14" viewBox="0 0 16 14"><rect x="2" y="1" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+        <button class="width-btn" data-width="wide" title="Wide">
+          <svg width="16" height="14" viewBox="0 0 16 14"><rect x="0.75" y="1" width="14.5" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+      </div>
+
       <div class="wrap">
         <div class="card">
 
@@ -225,6 +243,95 @@
               <li>HTML passthrough is enabled &mdash; you can embed raw HTML if needed</li>
               <li>Deep links use the URL hash: <code>#section-heading-page-title</code></li>
             </ul>
+
+            <h4>Callouts</h4>
+            <p>Blockquotes with a special tag on the first line are rendered as styled callout boxes. The tag is stripped from the output.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Syntax</th>
+                  <th>Type</th>
+                  <th>Appearance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>&gt; [!WARNING] text</code></td>
+                  <td>Warning</td>
+                  <td>Yellow accent, &#9888; icon</td>
+                </tr>
+                <tr>
+                  <td><code>&gt; [!INFO] text</code></td>
+                  <td>Info</td>
+                  <td>Blue accent, &#8505; icon</td>
+                </tr>
+                <tr>
+                  <td><code>&gt; [!TIP] text</code></td>
+                  <td>Tip</td>
+                  <td>Green accent, &#9998; icon</td>
+                </tr>
+                <tr>
+                  <td><code>&gt; [!DANGER] text</code></td>
+                  <td>Danger</td>
+                  <td>Red accent, &#10005; icon</td>
+                </tr>
+                <tr>
+                  <td><code>&gt; [!NOTE] text</code></td>
+                  <td>Note</td>
+                  <td>Purple accent, &#10033; icon</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Multi-line callouts work normally &mdash; just keep the <code>&gt;</code> prefix on each line. The tag only needs to appear on the first line.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cross-book links -->
+      <div class="guide-accordion">
+        <button class="guide-toggle" type="button">
+          <span class="guide-toggle-title">Cross-Book Links</span>
+          <span class="guide-toggle-desc">Link between books with a return button for easy navigation</span>
+        </button>
+        <div class="guide-body" hidden>
+          <div class="settings-guide">
+            <p>You can link from any page in one book to a specific page in another book. When clicked, Tome switches to the target book and shows a floating &ldquo;Back to &hellip;&rdquo; button so the reader can return to where they were.</p>
+
+            <h4>Syntax</h4>
+            <p>Use an HTML anchor with the <code>tome://</code> protocol:</p>
+            <pre><code>&lt;a href="tome://book-folder#policy-slug"&gt;Link text&lt;/a&gt;</code></pre>
+
+            <h4>How to find the values</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Part</th>
+                  <th>Where to find it</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>book-folder</code></td>
+                  <td>The folder name inside <code>Books/</code> that contains the target book&rsquo;s <code>.md</code> file (e.g. <code>operationsmanual-governance-ve16</code>)</td>
+                </tr>
+                <tr>
+                  <td><code>policy-slug</code></td>
+                  <td>Navigate to the target page in Tome and copy the text after <code>#</code> in the browser URL bar</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h4>Behaviour</h4>
+            <ul>
+              <li>Works between any two books listed in <code>Books/books.json</code>, in any direction</li>
+              <li>On click, Tome saves your current position, switches to the target book, and navigates to the target page</li>
+              <li>A floating &ldquo;&larr; Back to &hellip;&rdquo; button appears at the bottom of the screen</li>
+              <li>Clicking the back button returns you to the exact book and page you came from</li>
+              <li>If the target book or page is not found, an alert is shown and no navigation occurs</li>
+            </ul>
+
+            <h4>Example</h4>
+            <pre><code>&lt;a href="tome://operationsmanual-governance-ve16#non-critical-ticket-handling-escalation-policy"&gt;Escalation Policy&lt;/a&gt;</code></pre>
           </div>
         </div>
       </div>
@@ -660,6 +767,21 @@
         <div class="changelog-content">
           <h3>Changelog</h3>
 
+          <h4>v2.7.0</h4>
+          <ul>
+            <li>Deferred PDF export libraries (html2pdf, html2canvas) so they no longer block initial page render</li>
+            <li>Switched all fetch calls from <code>cache: "no-store"</code> to <code>cache: "default"</code> for faster navigation</li>
+            <li>Images in rendered markdown now use lazy loading and are centred in the content area</li>
+            <li>Added content width toggle &mdash; three responsive presets (narrow 60%, medium 80%, wide 100%) pinned above the document area, persisted to localStorage</li>
+            <li>Collapsible sidebar &mdash; chevron button at the top of the sidebar collapses it entirely; hamburger button fixed top-left to reopen; state persisted to localStorage</li>
+            <li>Callout blocks &mdash; blockquotes with <code>[!WARNING]</code>, <code>[!INFO]</code>, <code>[!TIP]</code>, <code>[!DANGER]</code>, or <code>[!NOTE]</code> tags render as styled callout boxes with coloured accents and icons (compatible with GitHub alert syntax)</li>
+            <li>Cross-book links &mdash; <code>tome://</code> protocol allows linking between books with automatic &ldquo;Back to&hellip;&rdquo; return button; return button pulses every 20s and has a dismiss option</li>
+            <li>Selected book now persisted to localStorage &mdash; refreshing the page returns to the same book and policy instead of defaulting to the first book</li>
+            <li>New colour theme: Terminal (green-on-black with monospace font)</li>
+            <li>Cross-book return button and pulse animation now respect the active colour theme</li>
+            <li>Added guide sections for Callouts and Cross-Book Links in the Settings &gt; Guide tab</li>
+          </ul>
+
           <h4>v2.5.2</h4>
           <ul>
             <li>Improved PDF export page breaks: headings (H2&ndash;H5) now stay with their following content instead of being stranded at the bottom of a page</li>
@@ -851,6 +973,6 @@
 </body>
 
 <!-- Application logic: markdown parsing, navigation, search, PDF export -->
-<script src="index.js?v=2.6.1"></script>
+<script src="index.js?v=2.7.0"></script>
 
 </html>

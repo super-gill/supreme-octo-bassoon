@@ -1,14 +1,10 @@
 [
   {
-    "file": "Books/manualVE14/manualVE14.md",
-    "title": "Helpdesk Operations Manual (VE.14)"
+    "file": "Books/operationsmanual-governance/operationsmanual-governance.md",
+    "title": "Helpdesk Operations Manual - Governance"
   },
   {
-    "file": "Books/manualVE13/manualVE13.md",
-    "title": "Helpdesk Operations Manual (VE.13)"
-  },
-  {
-    "file": "Books/qms/qms.md",
-    "title": "Quality Management System"
+    "file": "Books/operationsmanual-procedures/operationsmanual-procedures.md",
+    "title": "Helpdesk Operations Manual - Procedures"
   }
 ]
