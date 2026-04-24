@@ -1,0 +1,2133 @@
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   Default dark theme; additional themes applied via data-theme attribute.
+   System preference (light/dark) honoured when no explicit theme is set.
+   ========================================================================== */
+
+/* --- Layout tokens (shared across all themes) --- */
+:root {
+    --radius: 14px;
+    --sidebar: 340px;
+    --maxw: 980px;
+}
+
+/* --- Dark (default) --- */
+:root {
+    --bg: #0b0f14;
+    --panel: #0f1621;
+    --text: #e6edf3;
+    --muted: #9fb0c0;
+    --border: #223043;
+    --link: #7dd3fc;
+    --heading: #7dd3fc;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    --h1bg: rgba(125, 211, 252, 0.08);
+    --mark: rgba(255, 217, 102, 0.35);
+}
+
+/* --- Light — via system preference (when no explicit theme is set) --- */
+@media (prefers-color-scheme: light) {
+    :root:not([data-tone]) {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --text: #0b1220;
+        --muted: #475569;
+        --border: #e2e8f0;
+        --link: #0369a1;
+        --heading: #0369a1;
+        --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
+        --h1bg: rgba(2, 132, 199, 0.07);
+        --mark: rgba(255, 217, 102, 0.55);
+    }
+}
+
+/* --- Light — explicit selection via theme picker --- */
+:root[data-theme="light"] {
+    --bg: #f5f7fb;
+    --panel: #ffffff;
+    --text: #0b1220;
+    --muted: #475569;
+    --border: #e2e8f0;
+    --link: #0369a1;
+    --heading: #0369a1;
+    --shadow: 0 10px 25px rgba(2, 6, 23, 0.10);
+    --h1bg: rgba(2, 132, 199, 0.07);
+    --mark: rgba(255, 217, 102, 0.55);
+}
+
+/* --- Midnight — deep navy with teal accents --- */
+:root[data-theme="midnight"] {
+    --bg: #0a0e1a;
+    --panel: #111827;
+    --text: #e0e7ef;
+    --muted: #8b9ec2;
+    --border: #1e2d4a;
+    --link: #67e8f9;
+    --heading: #67e8f9;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    --h1bg: rgba(103, 232, 249, 0.08);
+    --mark: rgba(103, 232, 249, 0.25);
+}
+
+/* --- Ember — warm dark with amber accents --- */
+:root[data-theme="ember"] {
+    --bg: #141010;
+    --panel: #1c1614;
+    --text: #f0e6df;
+    --muted: #b8a08a;
+    --border: #3a2a20;
+    --link: #f59e0b;
+    --heading: #f59e0b;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.40);
+    --h1bg: rgba(245, 158, 11, 0.08);
+    --mark: rgba(245, 158, 11, 0.25);
+}
+
+/* --- Forest — dark green with green accents --- */
+:root[data-theme="forest"] {
+    --bg: #0b120e;
+    --panel: #111c15;
+    --text: #dce8e0;
+    --muted: #88a894;
+    --border: #1e3327;
+    --link: #4ade80;
+    --heading: #4ade80;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.40);
+    --h1bg: rgba(74, 222, 128, 0.08);
+    --mark: rgba(74, 222, 128, 0.25);
+}
+
+/* --- Sand — warm light with earthy tones --- */
+:root[data-theme="sand"] {
+    --bg: #f7f3ee;
+    --panel: #fffdf9;
+    --text: #2c2418;
+    --muted: #7a6e5d;
+    --border: #e0d5c5;
+    --link: #a16207;
+    --heading: #a16207;
+    --shadow: 0 10px 25px rgba(44, 36, 24, 0.10);
+    --h1bg: rgba(161, 98, 7, 0.07);
+    --mark: rgba(255, 217, 102, 0.45);
+}
+
+/* --- Terminal — green-on-black CRT console --- */
+:root[data-theme="terminal"] {
+    --bg: #0a0a0a;
+    --panel: #0e0e0e;
+    --text: #33ff33;
+    --muted: #1a9e1a;
+    --border: #1a3a1a;
+    --link: #33ff33;
+    --heading: #33ff33;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.50);
+    --h1bg: rgba(51, 255, 51, 0.06);
+    --mark: rgba(51, 255, 51, 0.25);
+}
+
+:root[data-theme="terminal"],
+:root[data-theme="terminal"] input,
+:root[data-theme="terminal"] select,
+:root[data-theme="terminal"] button,
+:root[data-theme="terminal"] code,
+:root[data-theme="terminal"] pre {
+    font-family: "Courier New", Courier, monospace !important;
+}
+
+/* ==========================================================================
+   BASE / RESET
+   ========================================================================== */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14.5px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+}
+
+/* ==========================================================================
+   APP LAYOUT
+   Two-column grid: fixed-width sidebar | fluid main content.
+   On small screens collapses to single column (see responsive section).
+   ========================================================================== */
+
+.app {
+    height: 100%;
+    display: grid;
+    grid-template-columns: var(--sidebar) 1fr var(--sidebar);
+    transition: grid-template-columns 0.25s ease;
+}
+
+.app.sidebar-collapsed {
+    grid-template-columns: 0px 1fr var(--sidebar);
+}
+
+/* Right column collapses in two distinct situations:
+    - toc-empty:      the current page has no sub-headings to list
+    - toc-collapsed:  the reader has explicitly collapsed the pane
+   Either is sufficient to hide it; the latter persists across pages. */
+.app.toc-empty,
+.app.toc-collapsed {
+    grid-template-columns: var(--sidebar) 1fr 0px;
+}
+
+.app.sidebar-collapsed.toc-empty,
+.app.sidebar-collapsed.toc-collapsed {
+    grid-template-columns: 0px 1fr 0px;
+}
+
+/* Sidebar: scrollable, subtle background tint. Shared styling for left
+   and right sidebars so the ToC pane mirrors the nav pane. */
+aside {
+    border-right: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    overflow: auto;
+    padding: 14px 10px;
+    min-width: 0;
+    transition: opacity 0.2s ease, padding 0.25s ease;
+}
+
+/* Right ToC pane: mirror of the left sidebar — same tint, border on the
+   opposite edge so it frames the main content symmetrically. */
+aside.toc-aside {
+    border-right: none;
+    border-left: 1px solid var(--border);
+}
+
+.sidebar-collapsed > aside:not(.toc-aside) {
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    border-right: none;
+}
+
+/* Hide the ToC pane for either reason (no content / user collapsed). */
+.toc-empty .toc-aside,
+.toc-collapsed .toc-aside {
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    border-left: none;
+}
+
+/* Main content pane: independently scrollable */
+main {
+    overflow: auto;
+}
+
+/* --- Width toggle bar --- */
+.width-toggle {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+    padding: 8px 0 0;
+}
+
+.width-btn {
+    width: 28px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.width-btn:hover {
+    background: var(--h1bg);
+    color: var(--text);
+}
+
+.width-btn.active {
+    background: var(--h1bg);
+    color: var(--heading);
+}
+
+/* Centres content within main, with max-width constraint */
+.wrap {
+    max-width: var(--maxw);
+    margin: 18px auto;
+    padding: 0 32px 40px;
+}
+
+/* Width presets toggled by JS */
+main[data-width="narrow"] .wrap { max-width: 60%; }
+main[data-width="medium"] .wrap { max-width: 80%; }
+main[data-width="wide"]   .wrap { max-width: 100%; }
+
+/* ==========================================================================
+   CARD
+   The main content panel that holds the rendered policy.
+   ========================================================================== */
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 18px 30px;
+}
+
+/* ==========================================================================
+   META BAR
+   Top bar inside the card: breadcrumb on the left, export buttons on the right.
+   ========================================================================== */
+
+.meta {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 0 0 8px;
+}
+
+.meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 8px;
+}
+
+/* ==========================================================================
+   PDF EXPORT STYLES
+   Applied to the off-screen staging container when generating PDFs.
+   Forces a white background with print-friendly typography and pagination.
+   ========================================================================== */
+
+.pdf-export {
+    background: #fff;
+    color: #000;
+    padding: 22px 24px;
+    font: 12px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+}
+
+.pdf-export a {
+    color: #0645ad;
+    text-decoration: underline;
+    word-break: break-word;
+}
+
+.pdf-export h1, .pdf-export h2, .pdf-export h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.pdf-export p { margin: 0 0 10px; }
+.pdf-export ul, .pdf-export ol { margin: 0 0 10px 20px; }
+.pdf-export li { margin: 0 0 4px; }
+
+/* PDF header block (title + subtitle at top of export) */
+.pdf-export .pdf-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.pdf-export .pdf-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 4px;
+}
+
+.pdf-export .pdf-subtitle {
+    font-size: 12px;
+    margin: 0;
+    color: #444;
+}
+
+/* H1: starts a new page, sticks to whatever follows (H2 or body) */
+.pdf-export h1 {
+    color: #000;
+    break-before: page;
+    page-break-before: always;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* H2: starts a new page when following body content, but not after a header */
+.pdf-export h2 {
+    color: #000;
+    break-before: page;
+    page-break-before: always;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* H2 directly after H1 — no page break, stay together */
+.pdf-export h1 + h2 {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+/* H3–H5: no breaks, stick to following content */
+.pdf-export h3,
+.pdf-export h4,
+.pdf-export h5 {
+    color: #000;
+    break-before: avoid;
+    page-break-before: avoid;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* Prevent content blocks from being split across pages */
+.pdf-export p,
+.pdf-export li,
+.pdf-export blockquote,
+.pdf-export pre,
+.pdf-export code,
+.pdf-export table,
+.pdf-export img,
+.pdf-export figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.pdf-export img {
+    max-width: 100%;
+    height: auto;
+}
+
+.pdf-export table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Repeat table headers on each page */
+.pdf-export thead { display: table-header-group; }
+.pdf-export tfoot { display: table-footer-group; }
+
+.pdf-export th,
+.pdf-export td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    vertical-align: top;
+}
+
+.pdf-export pre,
+.pdf-export code {
+    background: #f6f8fa;
+    border: 1px solid #e5e7eb;
+}
+
+/* ==========================================================================
+   SIDEBAR: BRAND
+   Document title and classification label at the top of the sidebar.
+   ========================================================================== */
+
+.brand {
+    padding: 6px 10px 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.brand strong {
+    display: block;
+    font-size: 14px;
+}
+
+.brand span {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   SIDEBAR: BOOK SELECTOR
+   Dropdown to switch between different books loaded from Books/books.json.
+   ========================================================================== */
+
+.book-select {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 0;
+}
+
+.book-select select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    outline: none;
+    font-size: 13px;
+    cursor: pointer;
+    /* Remove native dropdown arrow and replace with custom SVG chevron */
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239fb0c0' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+
+/* Light-mode override: darker chevron arrow for visibility */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .book-select select {
+        background-color: rgba(2, 6, 23, 0.02);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+    }
+}
+
+:root[data-theme="light"] .book-select select {
+    background-color: rgba(2, 6, 23, 0.02);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+/* Dropdown option styling to match theme */
+.book-select select option {
+    background: var(--panel);
+    color: var(--text);
+}
+
+/* ==========================================================================
+   SIDEBAR: SEARCH
+   Full-text search input and results list.
+   ========================================================================== */
+
+.search {
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 10px;
+}
+
+.search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    outline: none;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .search input {
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-theme="light"] .search input {
+    background: rgba(2, 6, 23, 0.02);
+}
+
+.search input::placeholder {
+    color: rgba(159, 176, 192, 0.8);
+}
+
+/* Results container: hidden by default, shown when search has input */
+.results {
+    margin-top: 10px;
+    display: none;
+}
+
+.results.on {
+    display: block;
+}
+
+/* Match count label */
+.results .count {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 8px;
+}
+
+/* Individual search result item */
+.result {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    margin: 6px 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.result:hover {
+    border-color: rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* Result title */
+.result strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+/* Result snippet / breadcrumb */
+.result small {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+/* ==========================================================================
+   SIDEBAR: NAVIGATION
+   H1 groups (section headers) and H2 links (individual policies).
+   ========================================================================== */
+
+.nav-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+}
+
+.nav-toggle-all {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 0;
+    opacity: 0.7;
+    font-family: inherit;
+}
+
+.nav-toggle-all:hover {
+    color: var(--link);
+    opacity: 1;
+}
+
+/* H1 section header in the nav */
+.nav-h1 {
+    margin: 10px 6px 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--h1bg);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* H2 policy link in the nav */
+.nav-h2 {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    margin: 2px 6px;
+    font-size: 13.5px;
+}
+
+.nav-h2:hover {
+    border-color: rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* Currently selected policy */
+.nav-h2.active {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.10);
+}
+
+/* ==========================================================================
+   SIDEBAR: PLATFORM VERSION FOOTER
+   Subtle version label pinned to the bottom of the sidebar content.
+   ========================================================================== */
+
+.sidebar-footer {
+    margin-top: 14px;
+    padding: 10px 10px 4px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ==========================================================================
+   DOCUMENT CONTENT (.doc)
+   Styles for the rendered markdown inside the main content area.
+   ========================================================================== */
+
+/* --- Heading sizes --- */
+
+.doc h1 {
+    font-size: 36px;
+    margin: 0 0 10px;
+}
+
+.doc h2 {
+    font-size: 36px;
+    margin: 18px 0 8px;
+}
+
+.doc h3 {
+    font-size: 22px;
+    margin: 16px 0 6px;
+}
+
+.doc h4 {
+    font-size: 20px;
+    margin: 16px 0 6px;
+}
+
+.doc h5 {
+    font-size: 18px;
+    margin: 16px 0 6px;
+}
+
+/* Heading colour and subtle glow effect */
+.doc h1,
+.doc h2,
+.doc h3,
+.doc h4,
+.doc h5,
+.doc h6 {
+    color: var(--heading);
+    text-shadow: 0 0 0.6px rgba(125, 211, 252, 0.65);
+}
+
+/* --- Indentation levels ---
+   Applied by JS (applyIndent) based on heading hierarchy.
+   H3 content gets indent 1, H4 gets indent 2, H5/H6 gets indent 3.
+   Tables and ordered lists use margin-left instead of padding-left
+   so their internal formatting (borders, number gutters) stays intact. */
+
+.doc [data-indent="1"] {
+    padding-left: 20px;
+}
+
+.doc [data-indent="2"] {
+    padding-left: 35px;
+}
+
+.doc [data-indent="3"] {
+    padding-left: 50px;
+}
+
+/* Tables: margin-left keeps the table border/background whole */
+.doc table[data-indent="1"] { padding-left: 0; margin-left: 20px; width: calc(100% - 20px); }
+.doc table[data-indent="2"] { padding-left: 0; margin-left: 35px; width: calc(100% - 35px); }
+.doc table[data-indent="3"] { padding-left: 0; margin-left: 50px; width: calc(100% - 50px); }
+
+/* Ordered lists: margin-left preserves the number gutter */
+.doc ol[data-indent="1"] { padding-left: 0; margin-left: 38px; }
+.doc ol[data-indent="2"] { padding-left: 0; margin-left: 53px; }
+.doc ol[data-indent="3"] { padding-left: 0; margin-left: 68px; }
+
+/* Code blocks: margin-left so padding: 12px inside is not overridden */
+.doc pre[data-indent="1"] { padding-left: 12px; margin-left: 20px; }
+.doc pre[data-indent="2"] { padding-left: 12px; margin-left: 35px; }
+.doc pre[data-indent="3"] { padding-left: 12px; margin-left: 50px; }
+
+/* Horizontal rules: void elements ignore padding, need margin-left */
+.doc hr[data-indent="1"] { padding-left: 0; margin-left: 20px; }
+.doc hr[data-indent="2"] { padding-left: 0; margin-left: 35px; }
+.doc hr[data-indent="3"] { padding-left: 0; margin-left: 50px; }
+
+/* Blockquotes: margin-left keeps the left border at the indent position */
+.doc blockquote[data-indent="1"] { padding-left: 16px; margin-left: 20px; }
+.doc blockquote[data-indent="2"] { padding-left: 16px; margin-left: 35px; }
+.doc blockquote[data-indent="3"] { padding-left: 16px; margin-left: 50px; }
+
+/* --- Block elements --- */
+
+.doc p {
+    margin: 10px 0;
+}
+
+.doc ul {
+    margin: 8px 0 8px 18px;
+}
+
+.doc ol {
+    margin: 8px 0 8px 18px;
+}
+
+.doc li {
+    margin: 4px 0;
+}
+
+.doc a {
+    color: var(--link);
+}
+
+/* Blockquote base style */
+.doc blockquote {
+    margin: 12px 0;
+    padding: 8px 16px;
+    border-left: 3px solid var(--heading);
+    background: var(--h1bg);
+    border-radius: 0 8px 8px 0;
+}
+
+.doc blockquote p:first-child { margin-top: 0; }
+.doc blockquote p:last-child  { margin-bottom: 0; }
+
+/* --- Callout variants --- */
+.doc blockquote.callout {
+    padding: 12px 16px 12px 52px !important;
+    position: relative;
+}
+
+.doc blockquote.callout::before {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    line-height: 1;
+    width: 20px;
+    text-align: center;
+}
+
+/* Warning: yellow accent */
+.doc .callout-warning {
+    border-left-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.doc .callout-warning::before {
+    content: "\26A0";
+}
+
+/* Info: blue accent */
+.doc .callout-info {
+    border-left-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.doc .callout-info::before {
+    content: "\2139";
+}
+
+/* Tip: green accent */
+.doc .callout-tip {
+    border-left-color: #22c55e;
+    background: rgba(34, 197, 94, 0.08);
+}
+
+.doc .callout-tip::before {
+    content: "\270E";
+}
+
+/* Danger: red accent */
+.doc .callout-danger {
+    border-left-color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.doc .callout-danger::before {
+    content: "\2715";
+}
+
+/* Note: purple accent */
+.doc .callout-note {
+    border-left-color: #a855f7;
+    background: rgba(168, 85, 247, 0.08);
+}
+
+.doc .callout-note::before {
+    content: "\2731";
+}
+
+/* Code blocks (fenced / pre) */
+.doc pre {
+    background: var(--bg);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 12px;
+    overflow: auto;
+    border: 1px solid var(--border);
+}
+
+/* Inline code */
+.doc code {
+    background: var(--h1bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+}
+
+/* --- Tables --- */
+
+.doc table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 12px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-tone]) .doc table {
+        border: 1px solid rgba(2, 6, 23, 0.14);
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-tone="light"] .doc table {
+    border: 1px solid rgba(2, 6, 23, 0.14);
+    background: rgba(2, 6, 23, 0.02);
+}
+
+.doc th,
+.doc td {
+    padding: 8px 10px;
+    vertical-align: top;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+
+    :root:not([data-tone]) .doc th,
+    :root:not([data-tone]) .doc td {
+        border-right: 1px solid rgba(2, 6, 23, 0.12);
+        border-bottom: 1px solid rgba(2, 6, 23, 0.12);
+    }
+}
+
+:root[data-tone="light"] .doc th,
+:root[data-tone="light"] .doc td {
+    border-right: 1px solid rgba(2, 6, 23, 0.12);
+    border-bottom: 1px solid rgba(2, 6, 23, 0.12);
+}
+
+/* Remove bottom border on last row, right border on last column */
+.doc tr:last-child td {
+    border-bottom: none;
+}
+
+.doc th:last-child,
+.doc td:last-child {
+    border-right: none;
+}
+
+/* Table header row */
+.doc th {
+    background: rgba(125, 211, 252, 0.14);
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Zebra-striped rows */
+.doc tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-tone]) .doc tbody tr:nth-child(even) td {
+        background: rgba(2, 6, 23, 0.02);
+    }
+}
+
+:root[data-tone="light"] .doc tbody tr:nth-child(even) td {
+    background: rgba(2, 6, 23, 0.02);
+}
+
+/* --- Images --- */
+
+.doc img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.10);
+}
+
+/* --- Search highlight (mark) --- */
+
+.doc mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   COLLAPSIBLE NAV SECTIONS
+   H1 headers toggle visibility of their child H2 links.
+   ========================================================================== */
+
+/* Chevron indicator on H1 headers */
+.nav-h1 {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-h1::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+/* Collapsed state: chevron rotated to point right */
+.nav-h1.collapsed::after {
+    transform: rotate(-90deg);
+}
+
+/* Container for H2 links within a group */
+.nav-group {
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+
+.nav-group.collapsed {
+    max-height: 0 !important;
+}
+
+/* ==========================================================================
+   BACK TO TOP BUTTON
+   Fixed button that scrolls main content to the top.
+   ========================================================================== */
+
+.back-to-top {
+    position: fixed;
+    /* Shifted inward from the right edge to clear the settings tab, which
+       now occupies roughly the outer 50px of the bottom-right corner. */
+    bottom: 24px;
+    right: 80px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.08);
+}
+
+.back-to-top:active {
+    transform: translateY(1px);
+}
+
+/* --- Cross-book return button --- */
+.cross-book-return {
+    position: sticky;
+    bottom: 24px;
+    z-index: 7000;
+    display: block;
+    margin: 16px auto;
+    appearance: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--link);
+    font-size: 13px;
+    padding: 8px 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.cross-book-return:hover {
+    border-color: var(--heading);
+    background: color-mix(in srgb, var(--heading) 10%, transparent);
+}
+
+.cross-book-return .cross-book-dismiss {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0 2px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.cross-book-return .cross-book-dismiss:hover {
+    color: var(--text);
+}
+
+@keyframes crossBookPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); border-color: var(--border); }
+    25% { transform: scale(1.06); box-shadow: 0 0 20px color-mix(in srgb, var(--heading) 50%, transparent); border-color: var(--heading); }
+    50% { transform: scale(1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); border-color: var(--border); }
+    75% { transform: scale(1.06); box-shadow: 0 0 20px color-mix(in srgb, var(--heading) 50%, transparent); border-color: var(--heading); }
+}
+
+.cross-book-return.pulse {
+    animation: crossBookPulse 1.5s ease;
+}
+
+/* ==========================================================================
+   THEME PICKER
+   Dropdown selector in the sidebar footer for colour themes.
+   ========================================================================== */
+
+.theme-picker {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+
+.theme-picker:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    color: var(--text);
+}
+
+.theme-picker option {
+    background: var(--panel);
+    color: var(--text);
+}
+
+/* ==========================================================================
+   IN-POLICY TABLE OF CONTENTS
+   Auto-generated ToC from H3/H4/H5 headings within the rendered policy.
+   ========================================================================== */
+
+/* Right-pane ToC heading. Mirrors the muted label styling used in the left
+   sidebar's brand block so the two panes visually match. */
+.toc-aside-title {
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 4px 10px 10px;
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 8px;
+}
+
+/* ToC link list: styled to match the left sidebar's H2 links so both
+   panes feel like one coherent navigation surface. */
+.toc-nav a {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    margin: 2px 6px;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.toc-nav a:hover {
+    border-color: rgba(125, 211, 252, 0.35);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* Scroll-spy: the heading currently in view is highlighted. */
+.toc-nav a.active {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.10);
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Indent levels mirror the heading hierarchy inside the page. */
+.toc-nav a[data-level="3"] { padding-left: 10px; }
+.toc-nav a[data-level="4"] { padding-left: 26px; }
+.toc-nav a[data-level="5"] { padding-left: 42px; }
+
+/* ==========================================================================
+   COPY / SHARE LINK ICON
+   Small link icon next to the H2 heading for copying the deep link.
+   ========================================================================== */
+
+.heading-link {
+    display: inline-block;
+    margin-left: 8px;
+    color: var(--muted);
+    opacity: 0;
+    cursor: pointer;
+    font-size: 0.6em;
+    vertical-align: middle;
+    text-decoration: none;
+    transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.doc h2:hover .heading-link,
+.heading-link:focus {
+    opacity: 0.7;
+}
+
+.heading-link:hover {
+    opacity: 1 !important;
+    color: var(--link);
+}
+
+/* Brief "Copied!" tooltip feedback */
+.heading-link.copied::after {
+    content: "Copied!";
+    position: absolute;
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   TOME BRANDING
+   Shared wordmark used on the loading splash and fallback pages.
+   ========================================================================== */
+
+.tome-wordmark {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.55;
+    margin: 0 0 4px;
+    user-select: none;
+    text-align: center;
+}
+
+.tome-nav {
+    font-size: 18px;
+    padding: 12px 0 4px;
+    margin: 0;
+}
+
+/* --- Full-screen splash overlay: covers the entire viewport on load --- */
+
+.tome-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    transition: opacity 0.4s ease;
+}
+
+.tome-overlay.dismissed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- Splash animation --- */
+
+.splash-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px 28px;
+    margin: 0 0 16px;
+    transition: gap 0.5s ease, padding 0.5s ease, border-radius 0.5s ease;
+}
+
+.splash-letter {
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text);
+    opacity: 0.7;
+    display: inline-block;
+    min-width: 0.7em;
+    text-align: center;
+    transition: opacity 0.2s;
+}
+
+.splash-letter.resolved {
+    opacity: 1;
+}
+
+.splash-letter.cycling {
+    opacity: 0.4;
+}
+
+/* --- Merge: letters tighten into the final wordmark --- */
+
+.splash-box.merged {
+    gap: 2px;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+
+.splash-box.merged .splash-letter {
+    animation: splashPulse 1.6s ease-in-out 0.5s infinite;
+}
+
+@keyframes splashPulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+}
+
+.tome-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    opacity: 0;
+    letter-spacing: 0.1em;
+    animation: taglineFadeIn 0.4s ease 0.8s forwards;
+}
+
+@keyframes tomeFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes taglineFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 0.5; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   BROKEN HASH FALLBACK
+   Notice shown when a URL hash doesn't match any known policy.
+   ========================================================================== */
+
+.hash-fallback {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+}
+
+.hash-fallback .tome-wordmark {
+    margin-bottom: 12px;
+}
+
+.hash-fallback-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 8px;
+}
+
+.hash-fallback-detail {
+    font-size: 14px;
+    margin: 0 0 16px;
+}
+
+.hash-fallback-action {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--link);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+}
+
+.hash-fallback-action:hover {
+    border-color: rgba(125, 211, 252, 0.55);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+/* ==========================================================================
+   HAMBURGER BUTTON
+   Hidden on desktop, shown on mobile in the meta bar.
+   ========================================================================== */
+
+/* Sidebar collapse toggle: visible on desktop, top of sidebar */
+.sidebar-collapse-btn,
+.toc-collapse-btn {
+    appearance: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    width: 28px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: background 0.15s, color 0.15s;
+}
+
+/* Right-pane collapse button sits at the top of the ToC aside, pushed
+   to the right edge so it mirrors the left pane's button position. */
+.toc-collapse-btn {
+    margin-left: auto;
+}
+
+.sidebar-collapse-btn:hover,
+.toc-collapse-btn:hover {
+    background: var(--h1bg);
+    color: var(--text);
+}
+
+.nav-hamburger,
+.toc-hamburger {
+    display: none;
+    appearance: none;
+    background: var(--h1bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    position: fixed;
+    top: 10px;
+    z-index: 9000;
+    width: 28px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: background 0.15s, color 0.15s;
+}
+
+.nav-hamburger { left: 10px; }
+.toc-hamburger { right: 10px; }
+
+.nav-hamburger:hover,
+.toc-hamburger:hover {
+    background: var(--h1bg);
+    color: var(--text);
+    opacity: 1;
+}
+
+/* Show the right hamburger only when the pane is explicitly collapsed and
+   the current page actually has a ToC to reveal — never when the pane is
+   hidden because there's no content, and never on mobile. */
+.app.toc-collapsed:not(.toc-empty) .toc-hamburger {
+    display: flex;
+}
+
+/* Mobile nav backdrop */
+.nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.nav-backdrop[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   On screens narrower than 980px, sidebar becomes a slide-out drawer.
+   ========================================================================== */
+
+@media (max-width: 980px) {
+    .app,
+    .app.sidebar-collapsed,
+    .app.toc-empty,
+    .app.sidebar-collapsed.toc-empty {
+        grid-template-columns: 1fr;
+    }
+
+    /* Sidebar becomes a fixed left drawer */
+    aside:not(.toc-aside) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 300px;
+        max-width: 85vw;
+        max-height: none;
+        z-index: 8001;
+        background: var(--panel);
+        border-right: 1px solid var(--border);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        overflow-y: auto;
+    }
+
+    aside:not(.toc-aside).drawer-open {
+        transform: translateX(0);
+    }
+
+    /* Right ToC pane is hidden below 980px — the main content already
+       scrolls on mobile and a third column would crowd the viewport. */
+    aside.toc-aside {
+        display: none;
+    }
+
+    /* Show hamburger on mobile */
+    .nav-hamburger {
+        display: flex;
+    }
+
+    /* Hide internal collapse buttons on mobile (drawer handles the left
+       pane, the right pane is fully hidden). */
+    .sidebar-collapse-btn,
+    .toc-collapse-btn {
+        display: none;
+    }
+
+    /* The right hamburger is hidden on mobile — the pane itself is hidden
+       below 980px so there's nothing to reopen. */
+    .toc-hamburger {
+        display: none !important;
+    }
+}
+
+/* Show hamburger on desktop when sidebar is collapsed */
+.sidebar-collapsed .nav-hamburger {
+    display: flex;
+}
+
+/* ==========================================================================
+   PRINT
+   Hides chrome and renders only the document content for Ctrl+P.
+   ========================================================================== */
+
+/* ==========================================================================
+   SETTINGS PANEL
+   Slide-out panel from the right with tabs for Settings, Guide, About.
+   ========================================================================== */
+
+/* --- Fixed settings button: top-right pill with tube to screen edge --- */
+
+.settings-btn-fixed {
+    position: fixed;
+    bottom: -10px;
+    right: 6px;
+    z-index: 200;
+    appearance: none;
+    height: 50px;
+    width: 90px;
+    padding: 0 20px 0 18px;
+    border: 2px solid var(--border);
+    border-radius: 25px;
+    background: var(--heading);
+    color: var(--bg);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* Shadow offsets mirrored on Y so the shadow still sits behind the
+       visible (upper) end of the tab after counter-clockwise rotation. */
+    box-shadow: -3px -3px 14px rgba(0, 0, 0, 0.4);
+    opacity: 0.85;
+    /* Counter-clockwise rotation so flex-end content (the gear) ends up
+       at the TOP of the rotated pill, i.e. the visible end that pokes
+       into the viewport from the bottom edge. */
+    transform: rotate(-90deg);
+    transform-origin: center center;
+    transition: opacity 0.2s, color 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Keep the gear icon upright despite the -90deg container rotation. */
+.settings-btn-fixed::before {
+    content: "\2699";
+    display: block;
+    transform: rotate(90deg);
+}
+
+.settings-btn-fixed:hover {
+    opacity: 1;
+    color: var(--heading);
+    background: var(--h1bg);
+    border-color: var(--heading);
+    box-shadow: -4px -4px 18px rgba(0, 0, 0, 0.5);
+}
+
+.settings-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+}
+
+.settings-backdrop[hidden] {
+    display: none;
+}
+
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px;
+    max-width: 90vw;
+    z-index: 9001;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    overflow: hidden;
+}
+
+.settings-panel[hidden] {
+    display: flex;
+    transform: translateX(100%);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.settings-panel.open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.settings-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.settings-close {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.settings-close:hover {
+    color: var(--text);
+}
+
+/* --- Tabs --- */
+
+.settings-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.settings-tab {
+    flex: 1;
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-family: inherit;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.settings-tab:hover {
+    color: var(--text);
+}
+
+.settings-tab.active {
+    color: var(--link);
+    border-bottom-color: var(--link);
+}
+
+/* --- Tab content --- */
+
+.settings-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.settings-content[hidden] {
+    display: none;
+}
+
+.settings-group {
+    margin: 0 0 20px;
+}
+
+.settings-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin: 0 0 8px;
+}
+
+.settings-group .theme-picker {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+/* --- Export buttons in settings --- */
+
+.settings-export-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.settings-action {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.settings-action:hover {
+    border-color: var(--link);
+    background: rgba(125, 211, 252, 0.06);
+}
+
+.settings-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.settings-checkbox-label input[type="checkbox"] {
+    accent-color: var(--link);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+/* --- Guide tab --- */
+
+.settings-guide h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 10px;
+}
+
+.settings-guide h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 18px 0 6px;
+}
+
+.settings-guide p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0 0 8px;
+}
+
+.settings-guide ul {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    padding-left: 20px;
+    margin: 0 0 8px;
+}
+
+.settings-guide li {
+    margin: 0 0 4px;
+}
+
+.settings-guide code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.settings-guide pre {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    overflow-x: auto;
+    margin: 0 0 8px;
+}
+
+.settings-guide table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 0 0 8px;
+}
+
+.settings-guide th,
+.settings-guide td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-guide th {
+    font-weight: 700;
+    color: var(--heading);
+}
+
+/* --- Guide accordion --- */
+
+.guide-accordion {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0 0 6px;
+    overflow: hidden;
+}
+
+.guide-toggle {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: none;
+    width: 100%;
+    padding: 12px 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.guide-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.guide-toggle.open {
+    border-bottom: 1px solid var(--border);
+}
+
+.guide-toggle-title {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 2px;
+}
+
+.guide-toggle-desc {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+}
+
+.guide-body {
+    padding: 14px;
+}
+
+.guide-body[hidden] {
+    display: none;
+}
+
+/* --- About tab --- */
+
+.settings-about {
+    text-align: center;
+    padding: 20px 0 0;
+}
+
+.settings-about-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 0 0 24px;
+    text-align: left;
+}
+
+.settings-about-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-about-table td:first-child {
+    color: var(--muted);
+    font-weight: 600;
+    width: 45%;
+}
+
+.settings-copyright {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 4px;
+}
+
+.settings-proprietary {
+    font-size: 11px;
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+/* --- Changelog button and sub-view --- */
+
+.changelog-btn {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 16px 0;
+    display: inline-block;
+}
+
+.changelog-btn:hover {
+    border-color: var(--link);
+    color: var(--text);
+}
+
+.changelog-view {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.changelog-view[hidden] {
+    display: none;
+}
+
+.changelog-back {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--link);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 0 16px;
+}
+
+.changelog-back:hover {
+    text-decoration: underline;
+}
+
+.changelog-content h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 12px;
+}
+
+.changelog-content h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--heading);
+    margin: 16px 0 6px;
+}
+
+.changelog-content ul {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text);
+    padding-left: 18px;
+    margin: 0 0 8px;
+}
+
+.changelog-content li {
+    margin: 0 0 3px;
+}
+
+.changelog-content code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11.5px;
+}
+
+/* ==========================================================================
+   EXPORT PROGRESS OVERLAY
+   Full-screen overlay shown during PDF generation.
+   ========================================================================== */
+
+.export-progress {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.export-progress[hidden] {
+    display: none;
+}
+
+.export-progress-inner {
+    text-align: center;
+}
+
+.export-progress-text {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   UPDATE BANNER
+   Dismissible notification shown when a newer Tome version is available.
+   ========================================================================== */
+
+.update-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: var(--heading);
+    color: var(--bg);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.update-banner-dismiss {
+    appearance: none;
+    background: none;
+    border: none;
+    color: var(--bg);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.7;
+}
+
+.update-banner-dismiss:hover {
+    opacity: 1;
+}
+
+@media print {
+    aside,
+    .meta-bar,
+    .back-to-top,
+    .settings-btn-fixed,
+    .update-banner,
+    .tome-overlay,
+    .toc-aside,
+    .heading-link,
+    .settings-panel,
+    .settings-backdrop,
+    .nav-backdrop,
+    .nav-hamburger,
+    .toc-hamburger,
+    .sidebar-collapse-btn,
+    .toc-collapse-btn,
+    .cross-book-return {
+        display: none !important;
+    }
+
+    .app {
+        display: block;
+    }
+
+    main {
+        padding: 0;
+    }
+
+    .wrap {
+        max-width: 100%;
+    }
+
+    .card {
+        box-shadow: none;
+        border: none;
+        background: none;
+        padding: 0;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    .doc a {
+        color: #000;
+        text-decoration: underline;
+    }
+}
