@@ -65,7 +65,8 @@
           "POL-05-02-password-and-credential-handling-policy.md",
           "POL-05-03-information-security-and-data-handling-policy.md",
           "POL-05-04-vendor-and-third-party-access-policy.md",
-          "POL-05-05-tooling-and-asset-management-standards.md"
+          "POL-05-05-tooling-and-asset-management-standards.md",
+          "POL-05-06-customer-equipment-chain-of-custody.md"
         ]
       },
       {
@@ -120,5 +121,9 @@
         ]
       }
     ]
+  },
+  {
+    "file": "Books/Matrix Documentation/Skills Matrix Workbook Documentation.md",
+    "title": "Skills Matrix Workbook Documentation"
   }
 ]

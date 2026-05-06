@@ -6,7 +6,7 @@ This register is the central index for all policy documents within the Helpdesk 
 
 | Property | Details |
 | -------- | ------- |
-| Last Updated | 18/04/2026 |
+| Last Updated | 05/05/2026 |
 | Updated By | Jason Mcdill |
 | Owner | Jason Mcdill |
 
@@ -77,6 +77,7 @@ Regenerate whenever a document is added, retired, re-versioned, renamed, or has 
 | `POL-05-03` | <a href="../POL-05 - IT Operations/POL-05-03-information-security-and-data-handling-policy.md">Information Security and Data Handling Policy</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-05 - IT Operations/POL-05-03-information-security-and-data-handling-policy.md` |
 | `POL-05-04` | <a href="../POL-05 - IT Operations/POL-05-04-vendor-and-third-party-access-policy.md">Vendor and Third-Party Access Policy</a> | 1.1 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Placeholder | `POL-05 - IT Operations/POL-05-04-vendor-and-third-party-access-policy.md` |
 | `POL-05-05` | <a href="../POL-05 - IT Operations/POL-05-05-tooling-and-asset-management-standards.md">Tooling & Asset Management Standards</a> | 1.1 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Placeholder | `POL-05 - IT Operations/POL-05-05-tooling-and-asset-management-standards.md` |
+| `POL-05-06` | <a href="../POL-05 - IT Operations/POL-05-06-customer-equipment-chain-of-custody.md">Customer Equipment Chain of Custody</a> | 0.3 | 05/05/2026 | Jason Mcdill | - | Draft | `POL-05 - IT Operations/POL-05-06-customer-equipment-chain-of-custody.md` |
 
 ## Customer Service
 
@@ -133,9 +134,9 @@ Regenerate whenever a document is added, retired, re-versioned, renamed, or has 
 
 | Metric | Count |
 | ------ | ----- |
-| Total documents | 59 |
+| Total documents | 60 |
 | Published | 45 |
-| Draft | 4 |
+| Draft | 5 |
 | Placeholder | 9 |
 | Not Enforced | 1 |
 
@@ -150,6 +151,8 @@ Forms are templates that become records once completed. Each form is governed by
 | `FRM-03` | <a href="../Forms/frm-03-event-summary-report-esr.docx" download>Event Summary Report (ESR)</a> | <a href="../POL-06 - Customer Service/POL-06-03-event-summary-report-esr.md">`POL-06-03` Event Summary Report (ESR)</a> | `POL-01 - Overview/POL-01-03-related-documents.md` | `public/Governance/Forms/FRM-03 - Event Summary Report (ESR).docx` |
 | `FRM-04` | <a href="../Forms/frm-04-swarm-leaderchecklist.docx" download>Swarm Leader Checklist</a> | <a href="../POL-04 - Critical & Major Incident Handling/POL-04-04-major-incident-escalation-policy-swarm-team.md">`POL-04-04` Major Incident Escalation Policy (Swarm Team)</a> | `POL-01 - Overview/POL-01-03-related-documents.md` | `public/Governance/Forms/FRM-04 - Swarm Leader Checklist.docx` |
 | `FRM-05` | <a href="../Forms/frm-05-development-plan.docx" download>Development Plan (DP)</a> | <a href="../POL-09 - Discipline/POL-09-03-development-plan-policy.md">`POL-09-03` Development Plan Policy</a> | - | `public/Governance/Forms/FRM-05 - Development Plan (DP).docx` |
+| `FRM-06` | <a href="../Forms/frm-06-customer-equipment-chain-of-custody.docx" download>Customer Equipment Chain of Custody Form</a> | <a href="../POL-05 - IT Operations/POL-05-06-customer-equipment-chain-of-custody.md">`POL-05-06` Customer Equipment Chain of Custody</a> | `POL-01 - Overview/POL-01-03-related-documents.md` | `public/Governance/Forms/FRM-06 - Customer Equipment Chain of Custody Form.docx` |
+| `FRM-07` | <a href="../Forms/frm-07-customer-equipment-chain-of-custody-log.xlsx" download>Customer Equipment Chain of Custody Register</a> (template for reference only; authoritative register held by Helpdesk Leadership) | <a href="../POL-05 - IT Operations/POL-05-06-customer-equipment-chain-of-custody.md">`POL-05-06` Customer Equipment Chain of Custody</a> | `POL-01 - Overview/POL-01-03-related-documents.md` | `public/Governance/Forms/FRM-07 - Customer Equipment Chain of Custody Register.xlsx` (template); authoritative register held by Helpdesk Leadership |
 
 ## Diagrams
 
