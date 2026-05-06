@@ -6,7 +6,7 @@
 
 | Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 26/03/2026   |
+| Last Updated | 06/05/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
@@ -18,6 +18,8 @@
 | 1.1     | Jason Mcdill | 13/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
 | 1.3     | Jason Mcdill | 26/03/2026 | 01/04/2026  |
+| 1.4     | Jason Mcdill | 06/05/2026 | 01/08/2026  |
+| 1.5     | Jason Mcdill | 06/05/2026 | 01/08/2026  |
 
 ### 1.2.1.3 Executive Sponsors
 
@@ -53,3 +55,5 @@
 | VE.17 | 29/03/2026 | Jason Mcdill | Added Major Incident Escalation Policy and integrated it (as triggers) to the Escalation policy - further integration is required; re-named Critical Incident Handling to Major Incident Handling |
 | VE.18 | 16/04/2026 | Jason Mcdill | Re-wrote and focussed Major Incident Escalation Policy, refined process; renamed PIR and AIR to PRR and ESR respectively (see policies) but maintained old names for reference |
 | VE.19 | 19/04/2026 | Jason Mcdill | Implemented and documented full change control and registration across all helpdesk documentation, ISO27000 naming convention and full formal hierarchical  legal numbering throughout; added documentation to describe how changes work (POL-01-04-document-control-policy.md), to describe the naming convention (naming convention.md) and a document register for each volume (document-register-governance.md) restructured the monolith md files for migration in to vitepress (for alignment with standard business practice) |
+| VE.20 | 06/05/2026 | Jason Mcdill | Added Daily Walk-Arounds to Ticket Hygiene Tooling (POL-07-01) as a new Informal check (section 7.1.13), defining a semi-formal agent-facing queue review conducted by the Team Leader during the shift, risk-prioritised with a weekly minimum coverage floor and inter-TL cover when unavailable; bumped POL-07-01 to v2.0; added cross-reference from Queue Management (POL-03-06 section 3.6.4.3 Team Leader oversight) and bumped POL-03-06 to v1.3 |
+| VE.21 | 06/05/2026 | Jason Mcdill | Created new Guidelines book at `Books/Guidelines/` as a sibling to Governance, adopting the previously reserved GDL prefix from the Naming Convention; added the first guideline GDL-01-01 Helpdesk Team Leader Guide as a comprehensive index-and-commentary orientation to the Team Leader role, covering the operating cadence, operational duties, people leadership, incident handling, decision authority, documentation responsibilities, continuous improvement, and a per-policy TL responsibility index; created `GDL-01 - Role Guides` section to host future role guides (Agent, CLS, etc.); created Guidelines document register (`document-register-guidelines.md`); updated Naming Convention to mark GDL (and STD, which was already in use) as in-use; updated `books.json` to include the new book and its sections |

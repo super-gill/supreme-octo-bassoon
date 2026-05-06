@@ -6,7 +6,7 @@
 
 | Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 19/03/2026   |
+| Last Updated | 06/05/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
@@ -16,6 +16,7 @@
 | ------- | ------------ | ---------- | ----------- |
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
+| 2.0     | Jason Mcdill | 06/05/2026 | 01/08/2026  |
 
 ### 7.1.1.3 Executive Sponsors
 
@@ -23,14 +24,16 @@
 | ------- | ------------------ | ---------- |
 | 1.1     | Stephen Richardson | 19/03/2026 |
 | 1.1     | Rupert Evans       | 19/03/2026 |
+| 2.0     | Stephen Richardson | 06/05/2026 |
+| 2.0     | Rupert Evans       | 06/05/2026 |
 
 ### 7.1.1.4 Stakeholder / Distribution List
 
 | Name          | Title                | Business Unit     | Date       |
 | ------------- | -------------------- | ----------------- | ---------- |
-| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 06/05/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 06/05/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 06/05/2026 |
 
 ## 7.1.2 Purpose
 
@@ -297,3 +300,53 @@ Team Leaders support dredging by:
 - Highlighting systemic issues (repeat blockers, capacity constraints, recurring request types)
 
 Outcome: tickets do not stagnate, customers receive regular high-quality communication, and potential SLA risk is identified early and managed proactively.
+
+## 7.1.13 Daily Walk-Arounds (Informal)
+
+Daily Walk-Arounds are an agent-facing queue review conducted by the Team Leader during the shift. They sit alongside Bread and Dredging as a daily leadership check, but differ in that they are conducted **with the agent**, in person or via call/screen-share, rather than as a desk review.
+
+Walk-Arounds are semi-formal: outcomes are not directly used in the disciplinary process, but per the Formal vs Informal distinction in 7.1.4, results may be used to identify and evidence performance shortfall over time.
+
+The intent is twofold:
+
+- Confirm that every assigned ticket is progressing, has a clear next action, and is being communicated in line with the Documentation Standards and the Ticket Status Usage Policy
+- Surface blockers, capacity pressure, and coaching needs in a low-friction setting before they manifest as SLA risk or quality shortfall
+
+### 7.1.13.1 How it works
+
+- Walk-Arounds are conducted at the Team Leader's discretion during the working day, but **at minimum once per shift** on a working day
+- Coverage is **risk-prioritised**: agents with rising queue depth, growing Breadboard scores, recent SLA risk, or recent quality concerns are seen first
+- Every agent receives a Walk-Around at least once per week regardless of risk profile
+- During each Walk-Around the Team Leader and the agent review:
+  - The agent's full open queue
+  - All status-held tickets (With User, With Vendor, With Testbench, Scheduled, Field Visit Scheduled, With Internal Team) against the expectations in 7.1.5
+  - Any tickets contributing to the agent's Breadboard score
+  - All P1/P2 tickets and any others within close range of an SLA milestone
+- Where issues are identified, the agent is expected to address them in real time, or to record a clear next action and timeframe before the Walk-Around concludes
+- The Team Leader uses the Walk-Around to remove blockers, support escalation, and surface coaching opportunities
+
+### 7.1.13.2 Coverage when the Team Leader is unavailable
+
+If the assigned Team Leader is unavailable (off, on leave, or engaged with a Major Incident), the other Team Leader on shift covers Walk-Arounds for both teams. Where neither Team Leader is available, the Helpdesk Manager is notified and decides whether to delegate or to defer.
+
+### 7.1.13.3 Relationship to other checks
+
+Walk-Arounds complement, but do not replace:
+
+- The twice-daily formal Ticket Status Checks (7.1.5)
+- Dredging (7.1.12), which is desk-based ticket grooming
+- Manual Bread (7.1.11), which is on-demand and typically targeted
+
+Walk-Arounds are also distinct from one-to-ones: wellbeing, development, and structured performance discussions belong in scheduled one-to-ones per the Agent Wellbeing and Workload Management policy.
+
+### 7.1.13.4 How we measure compliance
+
+The Team Leader maintains a lightweight log of which agents were seen on which day. Weekly, the Helpdesk Team Leader confirms that every agent has had at least one Walk-Around in the preceding seven calendar days, and that risk-prioritised agents have been seen with appropriate frequency. Walk-Around coverage is reported in the weekly statistics.
+
+### 7.1.13.5 Record keeping and documentation
+
+Walk-Arounds are an Informal check; their content is not formally recorded. Specific issues identified during a Walk-Around that require ticket-level follow-up are recorded against the relevant ticket as a private note. Patterns of repeated shortfall identified across multiple Walk-Arounds are fed into the agent's monthly one-to-one and, where required, the development plan or disciplinary process.
+
+### 7.1.13.6 How we address shortfall
+
+Where a Walk-Around identifies an isolated issue (a stale ticket, a missing next action), it is corrected at the time. Where Walk-Arounds repeatedly surface the same issue with the same agent, the matter is escalated to the agent's monthly one-to-one and, if required, to the development plan or disciplinary process. Failure by a Team Leader to conduct Walk-Arounds with the required frequency is addressed by the Helpdesk Manager during weekly review.

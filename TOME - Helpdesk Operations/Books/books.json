@@ -120,5 +120,23 @@
         ]
       }
     ]
+  },
+  {
+    "directory": "Books/Guidelines",
+    "title": "Helpdesk Operations Manual - Guidelines",
+    "sections": [
+      {
+        "title": "Book Reference",
+        "pages": [
+          "document-register-guidelines.md"
+        ]
+      },
+      {
+        "title": "GDL-01 - Role Guides",
+        "pages": [
+          "GDL-01-01-helpdesk-team-leader.md"
+        ]
+      }
+    ]
   }
 ]
