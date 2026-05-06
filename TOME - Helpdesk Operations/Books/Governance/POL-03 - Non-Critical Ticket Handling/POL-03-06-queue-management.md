@@ -6,7 +6,7 @@
 
 | Property     | Details      |
 | ------------ | ------------ |
-| Last Updated | 19/03/2026   |
+| Last Updated | 06/05/2026   |
 | Updated By   | Jason Mcdill |
 | Owner        | Jason Mcdill |
 
@@ -17,6 +17,7 @@
 | 1.0     | Jason Mcdill | 10/02/2026 |             |
 | 1.1     | Jason Mcdill | 16/03/2026 |             |
 | 1.2     | Jason Mcdill | 19/03/2026 | 01/04/2026  |
+| 1.3     | Jason Mcdill | 06/05/2026 | 01/08/2026  |
 
 ### 3.6.1.3 Executive Sponsors
 
@@ -29,9 +30,9 @@
 
 | Name          | Title                | Business Unit     | Date       |
 | ------------- | -------------------- | ----------------- | ---------- |
-| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 19/03/2026 |
-| Neels Steyn   | Technical Manager    | Customer Helpdesk | 19/03/2026 |
+| Jason Mcdill  | Helpdesk Team Leader | Customer Helpdesk | 06/05/2026 |
+| Scott Jenkins | Helpdesk Team Leader | Customer Helpdesk | 06/05/2026 |
+| Neels Steyn   | Technical Manager    | Customer Helpdesk | 06/05/2026 |
 
 ## 3.6.2 Purpose
 
@@ -60,6 +61,7 @@ This policy applies to all Helpdesk agents, CLS staff, and Team Leaders. It cove
 
 - Team Leaders are responsible for monitoring overall queue health throughout the day, including queue depth, age distribution, and SLA risk
 - Team Leaders must conduct the twice-daily formal ticket status checks defined in the Ticket Hygiene Tooling policy
+- Team Leaders conduct Daily Walk-Arounds with each agent to review their queue with them directly - see the Daily Walk-Arounds section of the Ticket Hygiene Tooling policy
 - Where queue health deteriorates (e.g. rising stale ticket count, increasing SLA risk, unassigned tickets building up), Team Leaders must intervene - this may include reassigning tickets, adjusting dispatch priorities, or escalating to the Helpdesk Manager
 
 ### 3.6.4.4 Queue grooming

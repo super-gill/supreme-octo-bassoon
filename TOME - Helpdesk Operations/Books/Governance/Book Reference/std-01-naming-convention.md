@@ -6,7 +6,7 @@ This document defines the naming convention used across the Helpdesk Operations 
 
 | Property | Details |
 | -------- | ------- |
-| Last Updated | 18/04/2026 |
+| Last Updated | 06/05/2026 |
 | Updated By | Jason Mcdill |
 | Owner | Jason Mcdill |
 
@@ -24,7 +24,7 @@ Fourth, **reserved prefixes are defined up front** to prevent collisions as the 
 
 ## Type Prefixes
 
-The ISO 27000-series defines a hierarchy of documented information types. The convention allocates a three-letter prefix to each recognised type. Currently in use are **POL**, **PRC**, **FRM**, and **DIA**. The remaining prefixes are reserved so that they can be adopted consistently when the document set expands.
+The ISO 27000-series defines a hierarchy of documented information types. The convention allocates a three-letter prefix to each recognised type. Currently in use are **POL**, **PRC**, **FRM**, **DIA**, **STD**, and **GDL**. The remaining prefixes are reserved so that they can be adopted consistently when the document set expands.
 
 | Prefix | Type | Definition | In use? |
 | ------ | ---- | ---------- | ------- |
@@ -32,8 +32,8 @@ The ISO 27000-series defines a hierarchy of documented information types. The co
 | `PRC` | Procedure | An authoritative sequence of steps that instructs how a specific task or activity is carried out. Subordinate to policy. | Yes - Procedures book |
 | `FRM` | Form | A template used to capture information in a consistent structure. Becomes a record once completed. | Yes - supporting documents |
 | `DIA` | Diagram | A visual reference (flowchart, matrix, framework, interactive diagram) embedded within or linked from policies and procedures. | Yes - supporting assets |
-| `STD` | Standard | Mandatory specifics that support and expand a policy (e.g. a password complexity standard under a password policy). | Reserved |
-| `GDL` | Guideline | Recommended (non-mandatory) good practice. | Reserved |
+| `STD` | Standard | Mandatory specifics that support and expand a policy (e.g. a password complexity standard under a password policy). | Yes - Governance book reference |
+| `GDL` | Guideline | Recommended (non-mandatory) good practice. | Yes - Guidelines book |
 | `WIN` | Work Instruction | Step-by-step detail for a single action, narrower than a procedure. | Reserved |
 | `REC` | Record | A completed form or evidence artefact retained to demonstrate compliance. | Reserved |
 

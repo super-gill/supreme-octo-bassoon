@@ -6,7 +6,7 @@ This register is the central index for all policy documents within the Helpdesk 
 
 | Property | Details |
 | -------- | ------- |
-| Last Updated | 05/05/2026 |
+| Last Updated | 06/05/2026 |
 | Updated By | Jason Mcdill |
 | Owner | Jason Mcdill |
 
@@ -50,7 +50,7 @@ Regenerate whenever a document is added, retired, re-versioned, renamed, or has 
 | `POL-03-03` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-03-ticket-communication-policy.md">Ticket Communication Policy</a> | 1.4 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-03-ticket-communication-policy.md` |
 | `POL-03-04` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-04-ticket-closure-reopen-and-recurrence.md">Ticket Closure, Reopen and Recurrence</a> | 1.5 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-04-ticket-closure-reopen-and-recurrence.md` |
 | `POL-03-05` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-05-ticket-ownership-and-handover-policy.md">Ticket Ownership and Handover Policy</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-05-ticket-ownership-and-handover-policy.md` |
-| `POL-03-06` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-06-queue-management.md">Queue Management</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-06-queue-management.md` |
+| `POL-03-06` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-06-queue-management.md">Queue Management</a> | 1.3 | 06/05/2026 | Jason Mcdill | 01/08/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-06-queue-management.md` |
 | `POL-03-07` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-07-escalation-policy.md">Escalation Policy</a> | 2.0 | 30/03/2026 | Jason Mcdill | 01/07/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-07-escalation-policy.md` |
 | `POL-03-08` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-08-problem-management.md">Problem Management</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-08-problem-management.md` |
 | `POL-03-09` | <a href="../POL-03 - Non-Critical Ticket Handling/POL-03-09-change-management-customer-side.md">Change Management (Customer-side)</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-03 - Non-Critical Ticket Handling/POL-03-09-change-management-customer-side.md` |
@@ -92,7 +92,7 @@ Regenerate whenever a document is added, retired, re-versioned, renamed, or has 
 
 | ID | Document | Version | Last Updated | Owner | Next Review | Status | Location |
 | -- | -------- | ------- | ------------ | ----- | ----------- | ------ | -------- |
-| `POL-07-01` | <a href="../POL-07 - Quality Assurance/POL-07-01-ticket-hygiene-tooling.md">Ticket Hygiene Tooling</a> | 1.1 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-07 - Quality Assurance/POL-07-01-ticket-hygiene-tooling.md` |
+| `POL-07-01` | <a href="../POL-07 - Quality Assurance/POL-07-01-ticket-hygiene-tooling.md">Ticket Hygiene Tooling</a> | 2.0 | 06/05/2026 | Jason Mcdill | 01/08/2026 | Published | `POL-07 - Quality Assurance/POL-07-01-ticket-hygiene-tooling.md` |
 | `POL-07-02` | <a href="../POL-07 - Quality Assurance/POL-07-02-policy-retrospective-review-prr.md">Policy Retrospective Review (PRR)</a> | 1.5 | 26/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-07 - Quality Assurance/POL-07-02-policy-retrospective-review-prr.md` |
 | `POL-07-03` | <a href="../POL-07 - Quality Assurance/POL-07-03-projects-to-helpdesk-handover.md">Projects to Helpdesk Handover</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Published | `POL-07 - Quality Assurance/POL-07-03-projects-to-helpdesk-handover.md` |
 | `POL-07-04` | <a href="../POL-07 - Quality Assurance/POL-07-04-ticket-quality-sampling.md">Ticket Quality Sampling</a> | 1.2 | 19/03/2026 | Jason Mcdill | 01/04/2026 | Not Enforced | `POL-07 - Quality Assurance/POL-07-04-ticket-quality-sampling.md` |
